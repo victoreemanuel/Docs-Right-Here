@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { response } from 'express';
+import { TemplateLateralLogin } from '../../components/template-lateral-login/template-lateral-login';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ FormsModule ],
+  imports: [ FormsModule, TemplateLateralLogin],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
