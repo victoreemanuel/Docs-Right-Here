@@ -1,7 +1,26 @@
 .background-gradient{
-  background: linear-gradient(180deg,rgba(42, 128, 181, 1) 0%, rgba(21, 191, 146, 1) 100%);
+  background: linear-gradient(180deg,#2a80b5 0%, #15bf92 100%);
 }
 
 .text-green{
   color: #4ADE80;
+}
+
+.background-dark{
+  background-color: #1B1F27;
+}
+
+.background-gray{
+  background-color: #252A32;
+}
+
+.text-gradient{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.btn-background{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
 }
