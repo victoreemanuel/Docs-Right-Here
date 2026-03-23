@@ -1,3 +1,7 @@
 .background-gradient{
   background: linear-gradient(180deg,rgba(42, 128, 181, 1) 0%, rgba(21, 191, 146, 1) 100%);
 }
+
+.text-green{
+  color: #4ADE80;
+}
