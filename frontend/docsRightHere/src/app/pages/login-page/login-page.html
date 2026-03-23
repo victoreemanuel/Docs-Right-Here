@@ -60,11 +60,11 @@
           </div>
           <div class="m-3">
             <p class="m-0">email</p>
-            <input type="text" placeholder="seulogin@gmaill.com">
+            <input type="text" placeholder="seulogin@gmaill.com" [(ngModel)]="email">
             <p class="m-0">senha</p>
-            <input type="text" placeholder="*********">
+            <input type="password" placeholder="*********" [(ngModel)]="password">
           </div>
-          <button class="w-50 btn btn-dark btn-background">Entrar</button>
+          <button class="w-50 btn btn-dark btn-background" (click)="realizarlogin()">Entrar</button>
 
         </div>
       </div>
