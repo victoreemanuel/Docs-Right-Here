@@ -1,0 +1,52 @@
+.layout-principal {
+  display: flex;
+  height: 100vh;
+  overflow: hidden; 
+}
+
+.menu-lateral {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.conteudo-principal {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.area-perfil {
+  display: flex;
+  align-items: center;
+}
+
+.info-usuario {
+  line-height: 1.2;
+}
+
+.area-tela {
+  flex-grow: 1;
+  overflow-y: auto; 
+  background-color: #f8f9fa; 
+}
+
+.botao-suporte {
+  margin-top: auto;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; 
+  width: 100vw;
+  overflow: hidden; 
+  background-color: #f8f9fa; 
+}
