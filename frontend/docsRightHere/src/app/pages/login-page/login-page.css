@@ -1,3 +1,23 @@
+
+.background-dark{
+  background-color: #1B1F27;
+}
+
+.background-gray{
+  background-color: #252A32;
+}
+
+.text-gradient{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.btn-background{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+}
+
 :host {
   display: block;
   width: 100%;

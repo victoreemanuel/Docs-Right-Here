@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TemplateLateralLogin } from '../../template-lateral-login/template-lateral-login';
+import { TemplateLateralLogin } from '../../components/template-lateral-login/template-lateral-login';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, TemplateLateralLogin],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
