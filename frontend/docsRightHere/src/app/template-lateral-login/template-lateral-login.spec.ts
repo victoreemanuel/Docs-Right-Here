@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoginPage } from './login-page';
+import { TemplateLateralLogin } from './template-lateral-login';
 
-describe('LoginPage', () => {
-  let component: LoginPage;
-  let fixture: ComponentFixture<LoginPage>;
+describe('TemplateLateralLogin', () => {
+  let component: TemplateLateralLogin;
+  let fixture: ComponentFixture<TemplateLateralLogin>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginPage]
+      imports: [TemplateLateralLogin]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LoginPage);
+    fixture = TestBed.createComponent(TemplateLateralLogin);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
