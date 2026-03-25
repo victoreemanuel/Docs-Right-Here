@@ -1,0 +1,25 @@
+:host{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.form-input-dark {
+  background-color: #2a3038 !important;
+  border: 1px solid #3c444f !important;
+  color: white !important;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-input-dark::placeholder {
+  color: #a0aab6 !important;
+}
+
+/* Garante que o input não mude de cor no foco */
+.form-input-dark:focus {
+  background-color: #313740 !important;
+  border-color: #15bf92 !important; /* Cor verde da sua marca no foco */
+  box-shadow: 0 0 0 0.25rem rgba(21, 191, 146, 0.25) !important;
+}
