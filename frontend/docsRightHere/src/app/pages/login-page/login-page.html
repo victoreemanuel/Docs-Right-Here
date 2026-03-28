@@ -1,0 +1,42 @@
+<div class="d-flex align-items-center justify-content-center w-100 h-100 flex-column relative">
+
+  <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
+
+    <div class="mb-4">
+      <h1 class="text-gradient fs-2 fw-bold m-0">Bem-Vindo de volta</h1>
+      <p class="fs-6 opacity-75 mt-2">Acesse sua conta para continuar</p>
+    </div>
+
+    <form class="w-100 mt-4">
+      <div class="form-group mb-4">
+        <label class="form-label opacity-75">E-mail</label>
+        <input type="email" class="form-control form-input-dark" placeholder="seu@email.com" [(ngModel)]="email" name="email">
+      </div>
+
+      <div class="form-group mb-4">
+        <label class="form-label opacity-75">Senha</label>
+        <input type="password" class="form-control form-input-dark" placeholder="********" [(ngModel)]="password" name="password">
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-5 mt-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="lembrarMe">
+          <label class="form-check-label text-light opacity-75" for="lembrarMe">Lembrar-me</label>
+        </div>
+        <a routerLink="/recuperar-senha" class="link-brand text-decoration-none">Esqueceu a senha?</a>
+      </div>
+
+      <button routerLink="" type="submit" class="btn-background w-100 p-2 rounded-3 fs-5 border-0 text-white fw-bold mb-4" (click)="realizarlogin()">Entrar</button>
+
+      <div class="text-center mt-3">
+        <span class="text-light opacity-75">Não possui conta?</span>
+        <a routerLink="/Auth/cadastro" class="link-brand ms-1 text-decoration-none fw-bold">Solicitar acesso</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="mt-4">
+    <p class="text-light opacity-50" style="font-size: 0.8rem;">© 2025 DocsRightHere. Todos os direitos reservados.</p>
+  </div>
+
+</div>
