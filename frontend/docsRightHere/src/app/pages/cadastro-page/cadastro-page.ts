@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './cadastro-page.html',
   styleUrl: './cadastro-page.css',
 })
+
 export class CadastroPage {
 
 }

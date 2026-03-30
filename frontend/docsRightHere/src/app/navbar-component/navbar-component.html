@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="layout-principal d-flex" style="height: 100vh;">
+
+  <div class="menu-lateral bg-dark text-white d-flex flex-column" style="width: 250px;"> <!-- Menu Lateral Aqui usei um modelo pego do bootstrap, tirei algumas coisa para deixar modelo parecido com mockup -->
+    <div class="p-3">
+      <a routerLink="" class="logo-area text-white text-decoration-none">
+        <img src="assets/logo.png" width="20" class="me-2">
+        <h4>DocsRightHere</h4>
+      </a>
+      <hr>
+      <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+         <a routerLink="/Auth1/dashboard" class="nav-link text-white">
+          <i class="bi bi-lightning-fill me-2"></i> DashBoard
+         </a>
+        </li>
+        <li><a routerLink="/Auth1/meus-cards" class="nav-link text-white"><i class="bi bi-book me-2"></i> Meus Cards</a></li>
+        <li><a routerLink="" class="nav-link text-white"><i class="bi bi-bell me-2"></i> Notificações</a></li>
+        <li><a routerLink="" class="nav-link text-white"><i class="bi bi-people me-2"></i> Colaborativo</a></li>
+        <li><a routerLink="" class="nav-link text-white"><i class="bi bi-building me-2"></i> Secretaria</a></li>
+        <li><a routerLink="" class="nav-link text-white"><i class="bi bi-calendar-event me-2"></i> Calendário</a></li>
+      </ul>
+    </div>
+
+    <div class="botao-suporte bg-black mt-auto p-3 text-center" style="cursor: pointer;">
+      <i class="bi bi-person-circle me-2"></i> Suporte
+    </div>
+  </div>
+
+  <div class="conteudo-principal d-flex flex-column" style="flex-grow: 1; min-height: 0;"> <!-- navbar do parte de cima do site aqui também foi pego dentro bootstrap, foi adaptado para ficar igual modelo do mockup -->
+
+    <nav class="navbar navbar-light bg-light border-bottom">
+      <div class="container-fluid">
+
+        <form class="d-flex">
+          <div class="input-group">
+            <input class="form-control" type="search" placeholder="Pesquisar">  <!-- Barra de Pesquisa -->
+            <button class="btn btn-secondary" type="button"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+
+        <div class="area-perfil d-flex align-items-center">
+          <i class="bi bi-bell me-3 fs-5"></i>
+          <i class="bi bi-calendar3 me-3 fs-5"></i>
+
+          <img src="assets/perfil.jpg" alt="Foto" width="40" height="40" class="rounded-circle me-2">
+          <div class="info-usuario me-3" style="line-height: 1.2;">
+            <b>Paula</b><br>
+            <small>Perfil</small>
+          </div>
+
+
+          <div class="bimestre bg-secondary text-white p-2 me-3 rounded">
+            1º Bimestre
+          </div>
+
+
+          <i class="bi bi-box-arrow-right text-danger fs-4" style="cursor: pointer;"></i>
+        </div>
+      </div>
+    </nav>
+
+    <main class="area-tela bg-light" style="flex-grow: 1; overflow-y: auto; min-height: 0; padding: 20px;">
+      <router-outlet></router-outlet>
+    </main>
+
+
+  </div>
+</div>

@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './template-lateral-login.css',
   standalone: true
 })
+
 export class TemplateLateralLogin {
 
 }
