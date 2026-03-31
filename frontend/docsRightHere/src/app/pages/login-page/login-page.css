@@ -33,3 +33,9 @@
   color: #2a80b5;
   text-decoration: underline !important;
 }
+
+button:disabled {
+  cursor: not-allowed !important;
+  pointer-events: auto !important; /* Força o mouse a reconhecer o botão */
+  opacity: 0.6; /* Deixa ele mais "apagadinho" */
+}
