@@ -15,15 +15,47 @@
   <h2>Meus Cards</h2>
   <hr>
 
-<div class="row">
+  <div class="row">
+    
     <div class="col-md-6 mb-3">
-      <div class="card bg-dark text-white text-center p-5 cursor-pointer h-100 d-flex justify-content-center align-items-center">
-        <i class="bi bi-plus-lg display-3 mb-0"></i>
+      <div class="card bg-dark text-white p-4 h-100 d-flex justify-content-center align-items-center">
+
+
+        // Para não esquecer ngIf vai fazer função abri o card de forma mais simples, forma mais técnica ele se comunica com com CommonModule Uma das funcinalidade do angular 
+        // que chama quando clicar nele, desenhando na tela o forms logo abaixo
+
+        <div *ngIf="!mostrarForm" class="w-100 h-100 d-flex justify-content-center align-items-center" style="cursor: pointer;" (click)="abrirForm()">
+          <i class="bi bi-plus-lg display-3 mb-0"></i>
+        </div>
+
+
+        
+        <div *ngIf="mostrarForm" class="w-100"> 
+          <form [formGroup]="meuFormulario" (ngSubmit)="salvarCard()"> <!-- Aqui temos foi criação do formulario reativo que um funcinalidade do proprio angular  -->
+                                                                        <!--podemos usar para colocar dados e salvar eles. Fiz teste direto pelo console do google para testar ele -->
+            <div class="mb-3">
+              <label class="form-label">Título</label>
+              <input type="text" class="form-control" formControlName="titulo" placeholder="Digite o título">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tag</label>
+              <input type="text" class="form-control" formControlName="tag" placeholder="Digite a tag">
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <button type="button" class="btn btn-outline-light" (click)="cancelar()">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+
+          </form>
+        </div>
+
+
+
       </div>
     </div>
 
     <div class="col-md-6 mb-3">
-      <div class="card bg-dark text-white text-center p-5 cursor-pointer h-100 d-flex justify-content-center align-items-center">
+      <div class="card bg-dark text-white text-center p-5 h-100 d-flex justify-content-center align-items-center" style="cursor: pointer;">
         <h4 class="mb-0">Acessar todos Cards</h4>
       </div>
     </div>
