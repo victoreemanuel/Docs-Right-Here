@@ -5,17 +5,18 @@ import { Dashboard } from './dashboard/dashboard';
 import { MeusCards } from './meus-cards/meus-cards';
 import { Auth1 } from './auth/auth1';
 import { LoginForm } from './components/login-form/login-form';
+import { RegisterForm } from './components/register-form/register-form';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: 'Auth/login', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
 
   {
     path: 'auth',
     component: Auth,
     children: [
       { path: 'login', component: LoginForm },
-      { path: 'cadastro', component: CadastroPage }
+      { path: 'cadastro', component: RegisterForm }
     ]
   },
 
