@@ -1,17 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TemplateLateralLogin } from '../../components/template-lateral-login/template-lateral-login';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login-page',
-  imports: [FormsModule, RouterLink, ReactiveFormsModule],
-  templateUrl: './login-page.html',
-  styleUrl: './login-page.css',
+  selector: 'app-login-form',
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
+  templateUrl: './login-form.html',
+  styleUrl: './login-form.css',
 })
-
-export class LoginPage {
+export class LoginForm {
   constructor(private HttpClient: HttpClient){}
 
   formLogin = new FormGroup({
