@@ -6,8 +6,7 @@ import { AuthPlaceholder } from '../components/auth-placeholder/auth-placeholder
 
 @Component({
   selector: 'app-auth',
-  standalone: true,
-  imports: [RouterModule, AuthPlaceholder],
+  imports: [RouterModule, ],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
 })
