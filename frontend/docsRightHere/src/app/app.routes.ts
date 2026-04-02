@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { MeusCards } from './meus-cards/meus-cards';
 import { LoginForm } from './components/login-form/login-form';
 import { RegisterForm } from './components/register-form/register-form';
 import { Auth } from './pages/auth/auth';
 import { Home } from './pages/home/home';
 import { Dashboard } from './components/dashboard/dashboard';
+import { Cards } from './components/cards/cards';
 
 export const routes: Routes = [
 
@@ -24,7 +24,7 @@ export const routes: Routes = [
     component: Home,
     children: [
       { path: 'dashboard', component: Dashboard },
-      { path: 'meus-cards', component: MeusCards }
+      { path: 'cards', component: Cards }
     ]
   },
 
