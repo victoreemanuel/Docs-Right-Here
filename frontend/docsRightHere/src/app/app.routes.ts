@@ -5,6 +5,7 @@ import { CadastroPage } from './pages/cadastro-page/cadastro-page';
 import { Dashboard } from './dashboard/dashboard';
 import { MeusCards } from './meus-cards/meus-cards';
 import { Notificacoes } from './notificacoes/notificacoes';
+import { Calendario } from './calendario/calendario';
 import { Auth1 } from './auth/auth1';
 
 export const routes: Routes = [
@@ -27,7 +28,8 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'meus-cards', component: MeusCards },
-      { path: 'Notificacoes', component: Notificacoes },
+      { path: 'notificacoes', component: Notificacoes },
+      { path: 'calendario', component: Calendario },
     ]
   },
 
