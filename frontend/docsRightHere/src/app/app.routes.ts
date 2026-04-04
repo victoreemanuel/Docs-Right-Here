@@ -4,6 +4,7 @@ import { LoginPage } from './pages/login-page/login-page';
 import { CadastroPage } from './pages/cadastro-page/cadastro-page';
 import { Dashboard } from './dashboard/dashboard';
 import { MeusCards } from './meus-cards/meus-cards';
+import { Notificacoes } from './notificacoes/notificacoes';
 import { Auth1 } from './auth/auth1';
 
 export const routes: Routes = [
@@ -15,7 +16,8 @@ export const routes: Routes = [
     component: Auth,
     children: [
       { path: 'login', component: LoginPage },
-      { path: 'cadastro', component: CadastroPage }
+      { path: 'cadastro', component: CadastroPage },
+
     ]
   },
 
@@ -24,7 +26,8 @@ export const routes: Routes = [
     component: Auth1,
     children: [
       { path: 'dashboard', component: Dashboard },
-      { path: 'meus-cards', component: MeusCards }
+      { path: 'meus-cards', component: MeusCards },
+      { path: 'Notificacoes', component: Notificacoes },
     ]
   },
 

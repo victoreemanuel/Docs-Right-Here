@@ -1,1 +1,46 @@
-<p>dashboard works!</p>
+<div class="container-fluid p-4">
+  <header class="d-flex align-items-center mb-4">
+    <div class="badge-user me-2">Paula Schmitt</div>
+    <div class="badge-role">Professor(a)</div>
+  </header>
+
+
+
+  <section class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold m-0">DashBoard</h2>
+    <div class="d-flex gap-2 align-items-center">
+      <span class="badge-filter prof">Professor</span>
+      <span class="badge-filter sec">Secretaria</span>
+      <span class="badge-filter dir">Diretor</span>
+      <button class="btn btn-light btn-sm border px-3">
+        <i class="bi bi-filter"></i> Filtros
+      </button>
+    </div>
+  </section>
+
+  <div class="grid-layout">
+    @for (item of [1,2,3,4,5,6,7,8,9]; track $index) {
+      <article class="card-aviso">
+        <div class="card-header">
+          <i class="bi bi-circle-fill dot-prof"></i>
+          <div class="info">
+            <h6>Agendamento - Prova</h6>
+            <small>por Professora Paula</small>
+          </div>
+        </div>
+        <div class="card-body-text">
+          <p>Prova de Literatura</p>
+          <p>dia 14/03/2026</p>
+        </div>
+        <div class="card-footer-icons">
+          <i class="bi bi-check-all"></i>
+        </div>
+      </article>
+    }
+  </div>
+
+  <footer class="footer-actions">
+    <button class="btn-custom">Histórico</button>
+    <button class="btn-custom">Novo aviso</button>
+  </footer>
+</div>

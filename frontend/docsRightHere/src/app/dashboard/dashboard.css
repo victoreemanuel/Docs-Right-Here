@@ -1,0 +1,66 @@
+:host {
+  --blue-dark: #2c343e;
+  --gray-card: #5c6b7a;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 360px);
+  grid-template-rows: repeat(3, 130px);
+  gap: 25px;
+  margin: 30px 0;
+  justify-content: center;
+}
+
+.card-aviso {
+  background: var(--gray-card);
+  color: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 360px;
+  height: 130px;
+}
+
+.card-header { display: flex; gap: 10px; }
+.card-header h6 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+.card-header small { font-size: 0.85rem; opacity: 0.8; }
+
+.card-body-text p { font-size: 0.95rem; margin: 0; }
+.card-footer-icons { text-align: right; color: #00f2ff; font-size: 1.3rem; }
+
+.badge-user { background: #0dcaf0; color: #fff; padding: 6px 15px; border-radius: 4px; font-weight: 500; }
+.badge-role { background: #198754; color: #fff; padding: 6px 15px; border-radius: 4px; }
+
+.badge-filter {
+  padding: 8px 20px;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 14px;
+  background: #8a8a8a;
+}
+
+.badge-filter::before { content: "●"; margin-right: 8px; }
+.prof::before { color: #3b5bdb; }
+.sec::before { color: #b533f1; }
+.dir::before { color: #f03e3e; }
+
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  max-width: 1130px;
+  margin: 40px auto 0;
+}
+
+.btn-custom {
+  background: var(--blue-dark);
+  color: #fff;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+}
