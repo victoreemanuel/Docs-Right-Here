@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TemplateLateralLogin } from './template-lateral-login';
+import { Home } from './home';
 
-describe('TemplateLateralLogin', () => {
-  let component: TemplateLateralLogin;
-  let fixture: ComponentFixture<TemplateLateralLogin>;
+describe('Home', () => {
+  let component: Home;
+  let fixture: ComponentFixture<Home>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TemplateLateralLogin],
+      imports: [Home],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TemplateLateralLogin);
+    fixture = TestBed.createComponent(Home);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

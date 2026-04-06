@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CadastroPage } from './cadastro-page';
+import { AuthPlaceholder } from './auth-placeholder';
 
-describe('CadastroPage', () => {
-  let component: CadastroPage;
-  let fixture: ComponentFixture<CadastroPage>;
+describe('AuthPlaceholder', () => {
+  let component: AuthPlaceholder;
+  let fixture: ComponentFixture<AuthPlaceholder>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CadastroPage]
-    })
-    .compileComponents();
+      imports: [AuthPlaceholder],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(CadastroPage);
+    fixture = TestBed.createComponent(AuthPlaceholder);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

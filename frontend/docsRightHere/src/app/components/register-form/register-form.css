@@ -23,3 +23,18 @@
   border-color: #15bf92 !important; /* Cor verde da sua marca no foco */
   box-shadow: 0 0 0 0.25rem rgba(21, 191, 146, 0.25) !important;
 }
+
+.background-gray{
+  background-color: #252A32;
+}
+
+.btn-background{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+}
+
+.text-gradient{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
