@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core'; 
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms'; 
-import { CardService } from './card.service'; 
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { CardService } from './card.service';
 
 @Component({
   selector: 'app-meus-cards',
@@ -11,14 +11,13 @@ import { CardService } from './card.service';
   styleUrl: './meus-cards.css',
 })
 export class MeusCards {
-  // Injeção de dependência moderna
   private cardService = inject(CardService);
 
   mostrarForm = false;
 
   meuFormulario = new FormGroup({
-    titulo: new FormControl('', [Validators.required, Validators.minLength(3)]), 
-    tag: new FormControl('', [Validators.required])     
+    titulo: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    tag: new FormControl('', [Validators.required])
   });
 
   get titulo() { return this.meuFormulario.get('titulo'); }
@@ -28,16 +27,22 @@ export class MeusCards {
 
   cancelar() {
     this.mostrarForm = false;
-    this.meuFormulario.reset(); 
+    this.meuFormulario.reset();
   }
 
   salvarCard() {
     if (this.meuFormulario.valid) {
-     
-      this.cardService.adicionarCard(this.meuFormulario.value);
-      
-      this.mostrarForm = false;
-      this.meuFormulario.reset();
+      this.cardService.adicionarCard(this.meuFormulario.value).subscribe({
+        next: (response) => {
+          console.log('Salvo com sucesso no servidor!', response);
+          this.mostrarForm = false;
+          this.meuFormulario.reset();
+        },
+        error: (err) => {
+          console.error('Erro ao salvar card:', err);
+          alert('Erro ao conectar com o servidor.');
+        }
+      });
     } else {
       this.meuFormulario.markAllAsTouched();
     }
