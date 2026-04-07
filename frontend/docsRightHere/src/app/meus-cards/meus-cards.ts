@@ -23,28 +23,31 @@ export class MeusCards {
   get titulo() { return this.meuFormulario.get('titulo'); }
   get tag() { return this.meuFormulario.get('tag'); }
 
-  abrirForm() { this.mostrarForm = true; }
+  abrirForm() { 
+    this.mostrarForm = true; 
+  }
 
   cancelar() {
     this.mostrarForm = false;
-    this.meuFormulario.reset();
+    this.meuFormulario.reset(); 
   }
 
   salvarCard() {
+    this.meuFormulario.markAllAsTouched();
+
+
     if (this.meuFormulario.valid) {
       this.cardService.adicionarCard(this.meuFormulario.value).subscribe({
         next: (response) => {
-          console.log('Salvo com sucesso no servidor!', response);
+          console.log('Salvo com sucesso!', response);
           this.mostrarForm = false;
-          this.meuFormulario.reset();
+          this.meuFormulario.reset(); 
         },
         error: (err) => {
-          console.error('Erro ao salvar card:', err);
-          alert('Erro ao conectar com o servidor.');
+          console.error('Erro de conexão:', err);
+          alert('Não foi possível salvar. Verifique se o servidor está rodando.');
         }
       });
-    } else {
-      this.meuFormulario.markAllAsTouched();
     }
   }
 }
