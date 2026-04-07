@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; // CommonModule - Essa função é um recuso do angular para ele ensinar como o angular deve se comportar ao tentar se comunicar com html como fechar ou abrir um botão.
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CardService } from './card.service';
 
@@ -10,9 +11,14 @@ import { CardService } from './card.service';
   templateUrl: './meus-cards.html',
   styleUrl: './meus-cards.css',
 })
-export class MeusCards {
-  private cardService = inject(CardService);
 
+export class MeusCards implements OnInit {
+
+  private cardService = inject(CardService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  idParaEdicao: string | null = null;
   mostrarForm = false;
 
   meuFormulario = new FormGroup({
@@ -23,31 +29,62 @@ export class MeusCards {
   get titulo() { return this.meuFormulario.get('titulo'); }
   get tag() { return this.meuFormulario.get('tag'); }
 
-  abrirForm() { 
-    this.mostrarForm = true; 
+  ngOnInit() { // Assim que componente é criado ele é chamado. Ele busca ID pela URL para carregar algo na página.
+
+    this.idParaEdicao = this.route.snapshot.paramMap.get('id'); // Aqui vai extair o valor do parâmetro que defini no id
+
+    if (this.idParaEdicao) {
+
+      this.mostrarForm = true;
+
+      this.cardService.buscarPorId(this.idParaEdicao).subscribe({
+        next: (card) => {
+          this.meuFormulario.patchValue(card); // faz o envio para os campos que vem da api para formulario.
+        },
+        error: () => alert('Erro ao carregar dados para edição.')
+      });
+
+    }
+
+  }
+
+  salvarCard() {
+
+    this.meuFormulario.markAllAsTouched();
+
+    if (this.meuFormulario.valid) {
+      const servico = this.idParaEdicao
+        ? this.cardService.atualizarCard(this.idParaEdicao, this.meuFormulario.value)
+        : this.cardService.adicionarCard(this.meuFormulario.value);
+
+      servico.subscribe({
+        next: () => {
+          console.log('Operação realizada com sucesso!');
+          this.cancelar();
+        },
+        error: () => alert('Erro ao salvar as alterações.')
+      });
+    }
   }
 
   cancelar() {
     this.mostrarForm = false;
-    this.meuFormulario.reset(); 
+    this.idParaEdicao = null;
+    this.meuFormulario.reset();
+    this.router.navigate(['/Auth1/meus-cards']);
   }
 
-  salvarCard() {
-    this.meuFormulario.markAllAsTouched();
+  abrirForm() { this.mostrarForm = true; }
 
-
-    if (this.meuFormulario.valid) {
-      this.cardService.adicionarCard(this.meuFormulario.value).subscribe({
-        next: (response) => {
-          console.log('Salvo com sucesso!', response);
-          this.mostrarForm = false;
-          this.meuFormulario.reset(); 
+  excluirCard(id: string) {
+    if (confirm('Tem certeza que deseja excluir este card?')) {
+      this.cardService.removerCard(id).subscribe({
+        next: () => {
+          console.log('Card removido!');
         },
-        error: (err) => {
-          console.error('Erro de conexão:', err);
-          alert('Não foi possível salvar. Verifique se o servidor está rodando.');
-        }
+        error: () => alert('Erro ao tentar excluir o card.')
       });
     }
   }
+
 }

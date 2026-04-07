@@ -24,7 +24,8 @@ export const routes: Routes = [
     component: Auth1,
     children: [
       { path: 'dashboard', component: Dashboard },
-      { path: 'meus-cards', component: MeusCards }
+      { path: 'meus-cards', component: MeusCards },
+      { path: 'meus-cards/editar/:id', component: MeusCards } 
     ]
   },
 
