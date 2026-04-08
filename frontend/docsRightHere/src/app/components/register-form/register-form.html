@@ -1,47 +1,118 @@
-<div class="w-100 h-100 overflow-y-auto d-flex flex-column align-items-center pt-5">
-
-  <div class="background-gray w-75 p-5 rounded-4 text-white shadow mb-5">
-
-    <div class="text-center mb-5">
-      <h1 class="text-gradient fs-2 fw-bold">Cadastro</h1>
+<div
+  class="d-flex align-items-center justify-content-center w-100 h-100 flex-column relative background-dark"
+>
+  <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
+    <div class="mb-4">
+      <h1 class="text-gradient fs-2 fw-bold m-0">Cadastro</h1>
     </div>
 
-    <form class="w-100">
-
+    <form class="w-100 mt-4" [formGroup]="formCadastro" (ngSubmit)="realizarCadastro()">
       <div class="form-group mb-4">
-        <label class="form-label opacity-75">Nome completo</label>
-        <input type="text" class="form-control form-input-dark" placeholder="Nome completo">
+        <label class="form-label opacity-75">Nome Completo</label>
+        <input
+          type="text"
+          class="form-control form-input-dark"
+          placeholder="Seu nome completo"
+          formControlName="nome"
+        />
+
+        @if (formCadastro.get('nome')?.invalid && formCadastro.get('nome')?.touched) {
+          @if (formCadastro.get('nome')?.hasError('nome')) {
+            <small class="text-danger">Nome invalido</small>
+          }
+
+          @if (formCadastro.get('nome')?.hasError('required')) {
+            <small class="text-danger">Nome obrigatório</small>
+          }
+        }
       </div>
 
       <div class="form-group mb-4">
         <label class="form-label opacity-75">CPF</label>
-        <input type="text" class="form-control form-input-dark" placeholder="000.000.000-00">
+        <input
+          type="text"
+          class="form-control form-input-dark"
+          placeholder="000.000.000-00"
+          formControlName="cpf"
+        />
+
+        @if (formCadastro.get('cpf')?.invalid && formCadastro.get('cpf')?.touched) {
+
+          @if (formCadastro.get('cpf')?.hasError('pattern')) {
+            <small class="text-danger">CPF inválido</small>
+          }
+
+          @if (formCadastro.get('cpf')?.hasError('required')) {
+            <small class="text-danger">CPF obrigatório</small>
+          }
+        }
       </div>
 
       <div class="form-group mb-4">
         <label class="form-label opacity-75">Data de Nascimento</label>
-        <input type="text" class="form-control form-input-dark" placeholder="00/00/0000">
+        <input
+          type="text"
+          class="form-control form-input-dark"
+          placeholder="00/00/0000"
+          formControlName="dataNascimento"
+        />
+
+        @if (
+          this.formCadastro.get('dataNascimento')?.invalid &&
+          this.formCadastro.get('dataNascimento')?.touched
+        ) {
+          @if (this.formCadastro.get('dataNascimento')?.hasError('pattern')) {
+            <div class="text-danger">Data de nascimento inválida</div>
+          }
+
+          @if (this.formCadastro.get('dataNascimento')?.hasError('required')) {
+            <div class="text-danger">Data de nascimento é obrigatório</div>
+          }
+        }
       </div>
 
-      <div class="form-group mb-5">
+      <div class="form-group mb-4">
         <label class="form-label opacity-75">Celular</label>
-        <input type="text" class="form-control form-input-dark" placeholder="(dd) 00000-0000">
+        <input
+          type="text"
+          class="form-control form-input-dark"
+          placeholder="(00) 00000-0000"
+          formControlName="celular"
+        />
+
+        @if (
+          this.formCadastro.get('celular')?.invalid && this.formCadastro.get('celular')?.touched
+        ) {
+          @if (this.formCadastro.get('celular')?.hasError('pattern')) {
+            <div class="text-danger">Número de celular inválido</div>
+          }
+
+          @if (this.formCadastro.get('celular')?.hasError('required')) {
+            <div class="text-danger">Número de celular é obrigatório</div>
+          }
+        }
       </div>
 
       <div class="text-center mt-4">
-        <button type="submit" class="btn-background w-50 p-2 rounded-pill fs-5 border-0 text-white fw-bold">Proximo</button>
+        <button
+          type="submit"
+          [disabled]="formCadastro.invalid"
+          class="btn-background w-50 p-2 rounded-pill fs-5 border-0 text-white fw-bold"
+        >
+          Proximo
+        </button>
       </div>
 
-      <div class="text-center mt-4">
+      <div class="text-center mt-3">
         <span class="text-light opacity-75">Já possui conta?</span>
         <a routerLink="" class="link-brand ms-1 text-decoration-none fw-bold">Entrar</a>
       </div>
-
     </form>
   </div>
 
-  <div class="mt-auto mb-4">
-    <p class="text-light opacity-50" style="font-size: 0.8rem;">© 2025 DocsRightHere. Todos os direitos reservados.</p>
+  <div class="mt-4">
+    <p class="text-light opacity-50" style="font-size: 0.8rem">
+      © 2025 DocsRightHere. Todos os direitos reservados.
+    </p>
   </div>
-
 </div>
