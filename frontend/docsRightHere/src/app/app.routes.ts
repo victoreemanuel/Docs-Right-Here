@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { Notificacoes } from './notificacoes/notificacoes';
-import { Calendario } from './calendario/calendario';
+import { Notificacoes } from './components/notificacoes/notificacoes';
+import { Calendario } from './components/calendario/calendario';
 import { LoginForm } from './components/login-form/login-form';
 import { RegisterForm } from './components/register-form/register-form';
 import { Auth } from './pages/auth/auth';
