@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { Notificacoes } from './components/notificacoes/notificacoes';
+import { Calendario } from './components/calendario/calendario';
 import { LoginForm } from './components/login-form/login-form';
 import { RegisterForm } from './components/register-form/register-form';
 import { Auth } from './pages/auth/auth';
@@ -24,6 +26,8 @@ export const routes: Routes = [
     component: Home,
     children: [
       { path: 'dashboard', component: Dashboard },
+      { path: 'notificacoes', component: Notificacoes },
+      { path: 'calendario', component: Calendario },
       { path: 'cards', component: Cards }
     ]
   },
