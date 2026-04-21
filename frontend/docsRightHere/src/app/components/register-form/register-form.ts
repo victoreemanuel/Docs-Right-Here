@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
-  imports: [FormsModule,RouterOutlet,ReactiveFormsModule],
+  imports: [FormsModule,ReactiveFormsModule],
   templateUrl: './register-form.html',
   styleUrl: './register-form.css',
 })
