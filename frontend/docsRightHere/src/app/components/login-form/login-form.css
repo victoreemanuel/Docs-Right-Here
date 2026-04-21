@@ -1,0 +1,61 @@
+.background-dark{
+  background-color: #1B1F27;
+}
+
+.background-gray{
+  background-color: #252A32;
+}
+
+.text-gradient{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.btn-background{
+  background: linear-gradient(to left, #15bf92, #2a80b5);
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.link-brand {
+  color: #15bf92;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.link-brand:hover {
+  color: #2a80b5;
+  text-decoration: underline !important;
+}
+
+button:disabled {
+  cursor: not-allowed !important;
+  pointer-events: auto !important; /* Força o mouse a reconhecer o botão */
+  opacity: 0.6; /* Deixa ele mais "apagadinho" */
+}
+
+.form-input-dark {
+  background-color: #2a3038 !important;
+  border: 1px solid #3c444f !important;
+  color: white !important;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-input-dark::placeholder {
+  color: #a0aab6 !important;
+}
+
+/* Garante que o input não mude de cor no foco */
+.form-input-dark:focus {
+  background-color: #313740 !important;
+  border-color: #15bf92 !important; /* Cor verde da sua marca no foco */
+  box-shadow: 0 0 0 0.25rem rgba(21, 191, 146, 0.25) !important;
+}
