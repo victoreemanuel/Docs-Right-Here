@@ -1,0 +1,62 @@
+:host {
+  --gray-bg: #bdc5cf;
+  --blue-btn: #3b71ca;
+  background-color: #292D32;
+}
+
+.main-wrapper {
+  height: calc(100vh - 80px);
+  overflow: hidden;
+}
+
+.support-panel, .info-panel, .chat-panel {
+  background: white;
+  border: 1px solid #000;
+  border-radius: 5px; 
+}
+
+.custom-field {
+  background-color: var(--gray-bg);
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.area-fix {
+  height: 180px;
+  resize: none;
+  border-radius: 5px;
+}
+
+.obs-box {
+  font-size: 0.80rem;
+  line-height: 0.7
+}
+
+.btn-primary-alt {
+  background-color: var(--blue-btn);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  padding: 4px 10px;
+}
+
+.chat-content {
+  background-color: var(--gray-bg);
+}
+
+.chat-panel {
+  overflow: hidden;
+}
+
+.chat-input-area {
+  border-top: 1px solid #dee2e6;
+}
+
+input::placeholder {
+  font-size: 0.85rem;
+}
+
+ul li {
+  margin-bottom: 5px;
+}
