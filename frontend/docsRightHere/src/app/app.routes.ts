@@ -7,6 +7,7 @@ import { Auth } from './pages/auth/auth';
 import { Home } from './pages/home/home';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Cards } from './components/cards/cards';
+import { Suporte } from './components/suporte/suporte';
 
 export const routes: Routes = [
 
@@ -28,7 +29,8 @@ export const routes: Routes = [
       { path: 'dashboard', component: Dashboard },
       { path: 'notificacoes', component: Notificacoes },
       { path: 'calendario', component: Calendario },
-      { path: 'cards', component: Cards }
+      { path: 'cards', component: Cards },
+      { path: 'suporte', component: Suporte }
     ]
   },
 
