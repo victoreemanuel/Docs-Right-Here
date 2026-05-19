@@ -5,9 +5,9 @@ import { LoginForm } from './components/login-form/login-form';
 import { RegisterForm } from './components/register-form/register-form';
 import { Auth } from './pages/auth/auth';
 import { Home } from './pages/home/home';
-import { Dashboard } from './components/dashboard/dashboard';
 import { Cards } from './components/cards/cards';
 import { Suporte } from './components/suporte/suporte';
+import { Mural } from './components/mural/mural';
 
 export const routes: Routes = [
 
@@ -26,7 +26,7 @@ export const routes: Routes = [
     path: 'home',
     component: Home,
     children: [
-      { path: 'dashboard', component: Dashboard },
+      { path: 'mural', component: Mural },
       { path: 'notificacoes', component: Notificacoes },
       { path: 'calendario', component: Calendario },
       { path: 'cards', component: Cards },
