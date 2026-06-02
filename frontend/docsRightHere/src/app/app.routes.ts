@@ -1,13 +1,16 @@
 import { Routes } from '@angular/router';
-import { Notificacoes } from './components/notificacoes/notificacoes';
-import { Calendario } from './components/calendario/calendario';
-import { LoginForm } from './components/login-form/login-form';
-import { RegisterForm } from './components/register-form/register-form';
+import { Notificacoes } from './pages/home/components/notificacoes/notificacoes';
+import { Calendario } from './pages/home/components/calendario/calendario';
+import { LoginForm } from './pages/auth/components/login-form/login-form';
+import { RegisterForm } from './pages/auth/components/register-form/register-form';
 import { Auth } from './pages/auth/auth';
 import { Home } from './pages/home/home';
-import { Cards } from './components/cards/cards';
-import { Suporte } from './components/suporte/suporte';
-import { Mural } from './components/mural/mural';
+import { Cards } from './pages/home/components/cards/cards';
+import { Suporte } from './pages/home/components/suporte/suporte';
+import { Mural } from './pages/home/components/mural/mural';
+import { Endereco } from './pages/auth/components/endereco/endereco';
+import { DadosPessoais } from './pages/auth/components/dados-pessoais/dados-pessoais';
+import { ReturnLogin } from './pages/auth/components/return-login/return-login';
 
 export const routes: Routes = [
 
@@ -18,7 +21,10 @@ export const routes: Routes = [
     component: Auth,
     children: [
       { path: 'login', component: LoginForm },
-      { path: 'cadastro', component: RegisterForm }
+      { path: 'cadastro', component: RegisterForm },
+      { path: 'endereco', component: Endereco},
+      { path: 'dados-pessoais', component: DadosPessoais},
+      { path: 'retorno-login', component: ReturnLogin},
     ]
   },
 

@@ -1,0 +1,85 @@
+<div class="d-flex align-items-center justify-content-center w-100 h-100 flex-column relative background-dark">
+
+  <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
+    
+    <div class="text-center mb-4">
+      <h1 class="text-gradient fs-2 fw-bold m-0">Cadastro</h1>
+    </div>
+
+    <form class="w-100 mt-4" [formGroup]="formCadastro" (ngSubmit)="realizarCadastro()">
+      <div class="form-group mb-4">
+        <label class="form-label opacity-75">Nome Completo</label>
+        <input type="text" class="form-control form-input-dark" placeholder="Seu nome completo" formControlName="nome"/>
+
+        @if (nome?.invalid && nome?.touched) {
+          @if (nome?.hasError('required')) {
+            <small class="text-danger">Nome é obrigatório</small>
+          }
+
+          @if (nome?.hasError('minLength')) {
+            <small class="text-danger">Nome muito curto</small>
+          }
+        }
+      </div>
+
+      <div class="form-group mb-4">
+        <label class="form-label opacity-75">CPF</label>
+        <input type="text" class="form-control form-input-dark" placeholder="000.000.000-00" formControlName="cpf" mask="000.000.000-00"/>
+
+        @if (cpf?.invalid && cpf?.touched) {
+
+          @if (cpf?.hasError('required')) {
+            <small class="text-danger">CPF obrigatório</small>
+          }
+
+          @if (cpf?.hasError('pattern')) {
+            <small class="text-danger">CPF está inválido</small>
+          }
+        }
+      </div>
+
+      <div class="form-group mb-4">
+        <label class="form-label opacity-75">Data de Nascimento</label>
+        <input type="text" class="form-control form-input-dark" placeholder="00/00/0000" formControlName="dataNascimento" mask="00/00/0000"/>
+
+        @if (dataNascimento?.invalid && dataNascimento?.touched) {
+
+          @if (dataNascimento?.hasError('required')) {
+            <div class="text-danger">Data de nascimento obrigatório</div>
+          }
+
+          @if (dataNascimento?.hasError('minLength')) {
+            <div class="text-danger">Data de nascimento muito curta</div>
+          }
+        }
+      </div>
+
+      <div class="form-group mb-4">
+        <label class="form-label opacity-75">Celular</label>
+        <input type="text" class="form-control form-input-dark" placeholder="(00) 00000-0000" formControlName="celular" mask="(00) 00000-0000"/>
+
+        @if (celular?.invalid && celular?.touched) {
+          @if (celular?.hasError('required')) {
+            <div class="text-danger">Número de celular obrigatório</div>
+          }
+
+          @if (celular?.hasError('minLength')) {
+            <div class="text-danger">Número de celular inválido</div>
+          }
+        }
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" [disabled]="formCadastro.invalid"
+          class="btn-background w-50 p-2 rounded-pill fs-5 border-0 text-white fw-bold">
+          Proximo
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="text-light opacity-50 copyright-text" style="font-size: 0.8rem">
+      © 2025 DocsRightHere. Todos os direitos reservados.
+    </p>
+  </div>

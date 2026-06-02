@@ -38,3 +38,7 @@
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
+
+.copyright-text{
+  color:  #a0aab6;
+}

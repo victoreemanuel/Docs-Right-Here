@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthPlaceholder } from '../../components/auth-placeholder/auth-placeholder';
+import { AuthPlaceholder } from './components/auth-placeholder/auth-placeholder';
 import { RouterModule } from '@angular/router';
 
 @Component({

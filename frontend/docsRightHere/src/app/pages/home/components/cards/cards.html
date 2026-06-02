@@ -24,7 +24,7 @@
           style="cursor: pointer;" (click)="abrirForm()">
           <!-- Para não esquecer ngIf vai fazer função abrir o card sendo forma mais simples, forma mais técnica ele se comunica com com CommonModule Uma das funcinalidade do angular -->
           <!-- que chama quando clicar nele, desenhando na tela o forms logo abaixo -->
-          <i class="bi bi-plus-lg display-3 mb-0"></i>
+          <i class="ib bi-plus-lg display-3 mb-0"></i>
         </div>
 
         <div *ngIf="mostrarForm" class="w-100">
@@ -36,7 +36,7 @@
                 formControlName="titulo" placeholder="Digite o título">
 
               <!-- Nessa parte do codigo é validação se caso usuario não escrever algo no titulo, ele dispara que é obrigatório colocar tres caracteres ou uma palavra -->
-              <!-- Logo abaixo temos tag que vai ser similar caso usuario não escrer algo vai indicar um erro para usuario colocar --> 
+              <!-- Logo abaixo temos tag que vai ser similar caso usuario não escrer algo vai indicar um erro para usuario colocar -->
 
               @if (titulo?.invalid && titulo?.touched) {
               <div class="text-danger small mt-1">
@@ -60,7 +60,7 @@
 
             <div class="d-flex justify-content-end gap-2 mt-3">
               <button type="button" class="btn btn-outline-light" (click)="cancelar()">Cancelar</button>
-              <button type="submit" class="btn btn-primary" [disabled]="meuFormulario.invalid"> <!-- Aqui ele vai validar se caso tiver algum erro de digitação do usuario ele faz bloqueio, para o usuario ajusta. 
+              <button type="submit" class="btn btn-primary" [disabled]="meuFormulario.invalid"> <!-- Aqui ele vai validar se caso tiver algum erro de digitação do usuario ele faz bloqueio, para o usuario ajusta.
                 É para envitar de mandar cardService e json -->
                 Salvar
               </button>
