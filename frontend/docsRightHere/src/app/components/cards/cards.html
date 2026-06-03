@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-  <div class="row g-4">
+  <div class="row g-3">
     <div class="col-12">
       <div class="TopoPagina d-flex gap-2 ">
 
@@ -20,36 +20,49 @@
   </div>
 
   <div class="row g-4">
-    <div class="col-11 mt-3">
-      <div class="CebeçaSegundariaPagina mb-5 d-flex justify-content-between align-items-center">
+    <div class="col-11 mt-4">
+      <div class="CebeçaSegundariaPagina mb-0 d-flex justify-content-between mt-3">
 
-        <div class="ms-3 d-flex gap-3 fw-bold text-black" style="font-size: 50px; font-weight: bold; ">Meus Cards</div>
+        <div class="ms-3 d-flex fw-bold text-black align-items-start" style="font-size: 45px; font-weight: bold; ">Meus Cards</div>
 
-        <div class="row mt-5">
-        <div class="ExcluirCard">
-          <button class="btn bi bi-trash text-white gap-2 align-items-center justify-content-center d-flex "
-            type="submit" style="background-color: #3a3f44; height: 70px; font-size: 20px;">
-            Cards Excluídos</button>
+        <div class="ExcluirCard justify-content-center">
+          <button class="btn bi bi-trash text-white mt-5 gap-2 align-items-center d-flex rounded-4"
+            type="submit" style="background-color: #3a3f44; height: 65px; font-size: 20px; margin-top: 30px;">
+            Cards Excluídos
+          </button>
         </div>
-        </div>
+
       </div>
     </div>
   </div>
 
-  <div class="LinhaPrincipal row mb-5 g-4 justify-content-center">
+  <div class="LinhaPrincipal row mb-5 g-4 justify-content-center text-wrap" style="margin-top: -15px;">
     <div class="col-md-5">
-      <button class="btn text-white gap-2 mb-4 fw-bold w-100 h-100"
+      <button (click)="abrirJanela()" class="btn text-white gap-2 mb-2 fw-bold w-100 h-100 text-wrap"
         style=" background-color:#3a3f44; border-radius: 15px; justify-content: center; align-items: center; display: flex; color: white; font-size: 100px;">
         +
       </button>
     </div>
 
     <div class="col-md-5">
-      <button class="btn text-white gap-2 mb-4 fw-bold w-100 h-100"
+      <button class="btn text-white gap-2 mb-2 fw-bold w-100 h-100 text-wrap"
         style="background-color:#3a3f44; border-radius: 15px; justify-content: center; align-items: center; display: flex; color: white; font-size: 35px;">
         Acessar todos Cards
       </button>
     </div>
+  </div>
+
+  <div class="JanelaCriarCards">
+  @if (exibirJanela){
+    <div class="row justify-content-center">
+      <div class="col-10">
+        <h2>Minha Janela Flutuante</h2>
+      <p>Aqui você coloca o texto ou formulário que precisar.</p>
+      
+      <button (click)="exibirJanela = false" class="btn btn-danger">Fechar</button>
+      </div>
+    </div>
+  }
   </div>
 
 </div>

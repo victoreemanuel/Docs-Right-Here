@@ -1,6 +1,5 @@
 import { Component} from '@angular/core';
 
-
 @Component({
   selector: 'app-meus-cards',
   standalone: true,
@@ -9,4 +8,15 @@ import { Component} from '@angular/core';
   styleUrl: './cards.css',
 })
 
-export class Cards {}
+export class Cards {
+
+  exibirJanela: boolean = false;
+
+  constructor(){}
+
+  abrirJanela(){
+    this.exibirJanela = true;
+     
+  }
+
+}
