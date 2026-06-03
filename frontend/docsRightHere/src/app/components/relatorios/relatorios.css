@@ -1,0 +1,51 @@
+/* fundo da página */
+.main-bg {
+  background-color: #f0f0f0;
+  min-height: 100vh;
+}
+
+/* bloco do topo (nome do usuário e cargo) */
+.topo-item {
+  display: flex;
+  gap: 10px;
+  height: 60px;
+  background: linear-gradient(to right, #2b76b9, #09d37f);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 35px;
+}
+
+/* badges de usuário e cargo (não usados agora mas podem ser úteis) */
+.badge-user {
+  background: #0dcaf0;
+  color: #fff;
+  padding: 6px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.badge-role {
+  background: #198754;
+  color: #fff;
+  padding: 6px 15px;
+  border-radius: 4px;
+}
+
+/* filtros (bolinha colorida + texto) */
+.filtro {
+  padding: 8px 20px;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 14px;
+  background: #8a8a8a;
+}
+
+.filtro::before {
+  content: "●";
+  margin-right: 8px;
+}
+
+.f-prof::before { color: #3b5bdb; }
+.f-sec::before  { color: #b533f1; }
+.f-dir::before  { color: #f03e3e; }
