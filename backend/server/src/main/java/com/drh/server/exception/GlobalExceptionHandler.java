@@ -33,4 +33,11 @@ public class GlobalExceptionHandler {
                 .body(ErrorDTO.of(exception.getMessage()));
     }
 
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    public ResponseEntity<ErrorDTO> handleIncorrectCredentials(IncorrectCredentialsException exception){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorDTO.of(exception.getMessage()));
+    }
+
 }
