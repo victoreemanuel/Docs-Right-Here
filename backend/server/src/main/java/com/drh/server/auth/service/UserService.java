@@ -5,6 +5,7 @@ import com.drh.server.auth.model.RoleModel;
 import com.drh.server.auth.model.UserModel;
 import com.drh.server.auth.repository.RoleRepository;
 import com.drh.server.auth.repository.UserRepository;
+import com.drh.server.exception.EmailAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ public class UserService {
 
         var userExists = userRepository.findByEmail(userCreateDTO.email());
         if (userExists.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new EmailAlreadyExistsException();
         }
 
         var user = new UserModel();
