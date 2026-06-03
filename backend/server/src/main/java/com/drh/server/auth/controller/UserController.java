@@ -1,8 +1,9 @@
 package com.drh.server.auth.controller;
 
-import com.drh.server.auth.dto.CreateuserDTO;
+import com.drh.server.auth.dto.UserCreateDTO;
 import com.drh.server.auth.model.UserModel;
 import com.drh.server.auth.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<Void> newUser(@RequestBody CreateuserDTO createuserDTO){
-        this.userService.createUser(createuserDTO);
+    public ResponseEntity<Void> newUser(@Valid @RequestBody UserCreateDTO userCreateDTO){
+        this.userService.createUser(userCreateDTO);
         return ResponseEntity.ok().build();
     }
 

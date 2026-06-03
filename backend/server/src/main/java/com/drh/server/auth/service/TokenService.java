@@ -32,7 +32,7 @@ public class TokenService {
 
     public LoginResponseDTO createToken(LoginRequestDTO loginRequestDTO){
 
-        var user = userRepository.findByUsername(loginRequestDTO.username());
+        var user = userRepository.findByEmail(loginRequestDTO.email());
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, bCryptPasswordEncoder)){
             throw  new BadCredentialsException("usuário ou senha invalida");
         }
