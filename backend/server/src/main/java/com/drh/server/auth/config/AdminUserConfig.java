@@ -5,6 +5,7 @@ import com.drh.server.auth.model.UserModel;
 import com.drh.server.auth.repository.RoleRepository;
 import com.drh.server.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,11 @@ public class AdminUserConfig implements CommandLineRunner {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Value("${admin.email}")
+    private String adminEmail;
+    @Value("${admin.password}")
+    private String adminPassword;
 
 
     public AdminUserConfig(
@@ -32,8 +38,7 @@ public class AdminUserConfig implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         var roleAdmin = roleRepository.findByName(RoleModel.Values.ADMIN.name());
-        System.out.println(roleAdmin.getName());
-        var userAdmin = userRepository.findByEmail("admin@drh.com");
+        var userAdmin = userRepository.findByEmail(adminEmail);
 
         userAdmin.ifPresentOrElse(
                 userModel -> {
@@ -41,8 +46,8 @@ public class AdminUserConfig implements CommandLineRunner {
                 },
                 () ->{
                     var user = new UserModel();
-                    user.setEmail("admin@drh.com");
-                    user.setPassword(passwordEncoder.encode("admin"));
+                    user.setEmail(adminEmail);
+                    user.setPassword(passwordEncoder.encode(adminPassword));
                     user.setRoles(Set.of(roleAdmin));
                     userRepository.save(user);
                     System.out.println("Admin criado");
