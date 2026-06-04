@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" style="position: relative; min-height: 100vh;">
 
   <div class="row g-3">
 
@@ -28,7 +28,8 @@
           Cards</div>
 
         <div class="ExcluirCard justify-content-center">
-          <button class="btn bi bi-trash text-white mt-5 gap-2 align-items-center d-flex rounded-4" type="submit"
+          <button (click)="abrirJanelaExcluir()"
+            class="btn bi bi-trash text-white mt-5 gap-2 align-items-center d-flex rounded-4" type="submit"
             style="background-color: #3a3f44; height: 65px; font-size: 20px; margin-top: 30px;">
             Cards Excluídos
           </button>
@@ -47,7 +48,7 @@
     </div>
 
     <div class="col-md-5">
-      <button class="btn text-white gap-2 mb-2 fw-bold w-100 h-100 text-wrap"
+      <button (click)="abrirJanelaAcessar()" class="btn text-white gap-2 mb-2 fw-bold w-100 h-100 text-wrap"
         style="background-color:#3a3f44; border-radius: 15px; justify-content: center; align-items: center; display: flex; color: white; font-size: 35px;">
         Acessar todos Cards
       </button>
@@ -55,36 +56,58 @@
   </div>
 
   <div class="JanelaCriarCards">
-    @if (exibirJanelaCriar){
-    <div class="row justify-content-center">
-      <div class="col-10">
-        <h2>Minha Janela Flutuante</h2>
-        <p>Aqui você coloca o texto ou formulário que precisar.</p>
+    @if (exibirJanelaCriar) {
+    <div class="SobreposiçãoJanela">
 
-        <button (click)="exibirJanelaCriar = false" class="btn btn-danger">Fechar</button>
+      <div class="CartãoFlutuante">
+
+
+        <div class="dadoTitulo" style=" display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <h2>Titulo: </h2>
+          <input type="text" class="flex-grow-1">
+        </div>
+
+        <div class="dadoDescrição" style=" display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <h2>Descrição: </h2>
+          <input class="flex-grow-1" type="text">
+        </div>
+
+        <div d-flex justify-content-end gap-3 mt-4>
+          <h2>Icones: </h2>
+          <i class="bi bi-mortarboard"></i>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3" style="margin-top: 185px;">
+          <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Cancelar</button>
+
+          <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Criar</button>
+        </div>
+
       </div>
+
     </div>
     }
   </div>
 
   <div class="JanelaAcessarCards">
     @if (exibirJanelaAcessar){
-    <div class="row justify-content-center">
-      <div class="col-10">
-        <h2>Minha Janela Flutuante</h2>
+    <div class="SobreposiçãoJanela">
+      <div class="CartãoFlutuante">
+        <h2>Todos os seus cards</h2>
         <p>Aqui você coloca o texto ou formulário que precisar.</p>
 
         <button (click)="exibirJanelaAcessar = false" class="btn btn-danger">Fechar</button>
       </div>
+
     </div>
     }
   </div>
 
   <div class="JanelaExcluirCards">
     @if (exibirJanelaExcluir){
-    <div class="row justify-content-center">
-      <div class="col-10">
-        <h2>Minha Janela Flutuante</h2>
+    <div class="SobreposiçãoJanela">
+      <div class="CartãoFlutuante">
+        <h2>Todos os seus cards excluídos</h2>
         <p>Aqui você coloca o texto ou formulário que precisar.</p>
 
         <button (click)="exibirJanelaExcluir = false" class="btn btn-danger">Fechar</button>
@@ -92,4 +115,4 @@
     </div>
     }
 
-</div>
+  </div>

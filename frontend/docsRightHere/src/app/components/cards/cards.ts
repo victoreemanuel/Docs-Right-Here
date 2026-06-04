@@ -18,7 +18,6 @@ export class Cards {
 
   abrirJanelaCriar(){
     this.exibirJanelaCriar = true;
-
   }
 
   abrirJanelaAcessar(){
@@ -28,6 +27,5 @@ export class Cards {
   abrirJanelaExcluir(){
     this.exibirJanelaExcluir = true;
   }
-
 
 }
