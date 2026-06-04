@@ -10,13 +10,24 @@ import { Component} from '@angular/core';
 
 export class Cards {
 
-  exibirJanela: boolean = false;
+  exibirJanelaAcessar: boolean = false;
+  exibirJanelaCriar: boolean = false;
+  exibirJanelaExcluir: boolean = false;
 
   constructor(){}
 
-  abrirJanela(){
-    this.exibirJanela = true;
-     
+  abrirJanelaCriar(){
+    this.exibirJanelaCriar = true;
+
   }
+
+  abrirJanelaAcessar(){
+    this.exibirJanelaAcessar = true;
+  }
+
+  abrirJanelaExcluir(){
+    this.exibirJanelaExcluir = true;
+  }
+
 
 }
