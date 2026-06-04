@@ -3,6 +3,7 @@ package com.drh.server.auth.controller;
 import com.drh.server.auth.dto.LoginRequestDTO;
 import com.drh.server.auth.dto.LoginResponseDTO;
 import com.drh.server.auth.service.TokenService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class TokenController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO){
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO){
 
         LoginResponseDTO responseDTO = tokenService.createToken(loginRequestDTO);
         return ResponseEntity.ok(responseDTO);

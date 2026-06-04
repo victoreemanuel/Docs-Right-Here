@@ -1,10 +1,11 @@
 package com.drh.server.auth.service;
 
-import com.drh.server.auth.dto.CreateuserDTO;
+import com.drh.server.auth.dto.UserCreateDTO;
 import com.drh.server.auth.model.RoleModel;
 import com.drh.server.auth.model.UserModel;
 import com.drh.server.auth.repository.RoleRepository;
 import com.drh.server.auth.repository.UserRepository;
+import com.drh.server.exception.EmailAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,18 +27,18 @@ public class UserService {
 
 
 
-    public void createUser(CreateuserDTO createuserDTO){
+    public void createUser(UserCreateDTO userCreateDTO){
 
         var userRole = roleRepository.findByName(RoleModel.Values.USER.name());
 
-        var userExists = userRepository.findByUsername(createuserDTO.username());
+        var userExists = userRepository.findByEmail(userCreateDTO.email());
         if (userExists.isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new EmailAlreadyExistsException();
         }
 
         var user = new UserModel();
-        user.setUsername(createuserDTO.username());
-        user.setPassword(passwordEncoder.encode(createuserDTO.password()));
+        user.setEmail(userCreateDTO.email());
+        user.setPassword(passwordEncoder.encode(userCreateDTO.password()));
         user.setRoles(Set.of(userRole));
         userRepository.save(user);
     }

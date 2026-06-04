@@ -4,6 +4,7 @@ import com.drh.server.auth.dto.LoginRequestDTO;
 import com.drh.server.auth.dto.LoginResponseDTO;
 import com.drh.server.auth.model.RoleModel;
 import com.drh.server.auth.repository.UserRepository;
+import com.drh.server.exception.IncorrectCredentialsException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -32,9 +33,9 @@ public class TokenService {
 
     public LoginResponseDTO createToken(LoginRequestDTO loginRequestDTO){
 
-        var user = userRepository.findByUsername(loginRequestDTO.username());
+        var user = userRepository.findByEmail(loginRequestDTO.email());
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, bCryptPasswordEncoder)){
-            throw  new BadCredentialsException("usuário ou senha invalida");
+            throw  new IncorrectCredentialsException();
         }
 
         var scopes = user.get().getRoles()

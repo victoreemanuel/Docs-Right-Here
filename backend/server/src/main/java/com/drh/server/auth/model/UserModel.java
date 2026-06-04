@@ -20,8 +20,9 @@ public class UserModel {
     @Column(name = "user_id")
     private UUID userId;
 
-    @Column(unique = true)
-    private String username;
+    @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
