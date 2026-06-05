@@ -1,5 +1,4 @@
-<div class="container-fluid" style="position: relative; min-height: 100vh;">
-
+<div class="container-fluid" style="position: relative; min-height: calc(100vh - 90px);">
   <div class="row g-3">
 
     <div class="col-12">
@@ -24,7 +23,8 @@
     <div class="col-11 mt-4">
       <div class="CebeçaSegundariaPagina mb-0 d-flex justify-content-between mt-3">
 
-        <div class="ms-3 d-flex fw-bold text-black align-items-start" style="font-size: 45px; font-weight: bold; ">Meus
+        <div class="ms-3 d-flex fw-bold text-black align-items-start" style="font-size: 45px; font-weight: bold; ">
+          Meus
           Cards</div>
 
         <div class="ExcluirCard justify-content-center">
@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <div class="LinhaPrincipal row mb-5 g-4 justify-content-center text-wrap" style="margin-top: -15px;">
+  <div class="LinhaPrincipal row g-4 justify-content-center text-wrap" style="margin-top: -15px;">
     <div class="col-md-5">
       <button (click)="abrirJanelaCriar()" class="btn text-white gap-2 mb-2 fw-bold w-100 h-100 text-wrap"
         style=" background-color:#3a3f44; border-radius: 15px; justify-content: center; align-items: center; display: flex; color: white; font-size: 100px;">
@@ -55,32 +55,64 @@
     </div>
   </div>
 
+
+  <div class="row g-4 justify-content-center mt-2">
+
+   @for (Card of meusCards; track Card) {
+
+    <div class="col-md-5">
+      <div style="background-color: #3a3f44; min-height: 150px; border-radius: 15px; color: white; padding: 20px;">
+
+        <h3 class="fw-bold">{{ Card.titulo}}</h3>
+        <p class="text-muted">{{ Card.descricao }}</p>
+
+      </div>
+    </div>
+   }
+
+  </div>
+
+
   <div class="JanelaCriarCards">
     @if (exibirJanelaCriar) {
     <div class="SobreposiçãoJanela">
 
       <div class="CartãoFlutuante">
 
-
-        <div class="dadoTitulo" style=" display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-          <h2>Titulo: </h2>
-          <input type="text" class="flex-grow-1">
+        <div class="CriaçãoDados" style="display: flex; align-items: center; gap: 15px; justify-content:center;">
+          <h2 class="m-0" style="font-size: 40px;">Criação de Card</h2>
         </div>
 
-        <div class="dadoDescrição" style=" display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-          <h2>Descrição: </h2>
-          <input class="flex-grow-1" type="text">
+        <div class="dadoTitulo"
+          style="display: flex; align-items: center; gap: 15px; margin-top: 70px; margin-bottom: 35px; padding-right: 50px;">
+          <h2 class="m-0">Titulo: </h2>
+          <input type="text" [(ngModel)]="novoTitulo" name="novoTitulo" class="flex-grow-1">
         </div>
 
-        <div d-flex justify-content-end gap-3 mt-4>
-          <h2>Icones: </h2>
+        <div class="dadoDescrição"
+          style="display: flex; align-items: center; gap: 15px; margin-bottom: 35px; padding-right: 50px;">
+          <h2 class="m-0">Descrição: </h2>
+          <input type="text" [(ngModel)]="novaDescricao" name="novaDescricao" class="flex-grow-1">
+        </div>
+
+        <h2>Icones: </h2>
+        <div class="d-flex align-items-center gap-3 fs-2 text-white mt-2">
           <i class="bi bi-mortarboard"></i>
+          <i class="bi bi-book"></i>
+          <i class="bi bi-calendar3"></i>
+          <i class="bi bi-envelope"></i>
+          <i lass="bi bi-camera"></i>
+          <i class="bi bi-eye"></i>
+          <i class="bi bi-file-earmark-text"></i>
+          <i class="bi bi-image"></i>
+          <i class="bi bi-people"></i>
+          <i class="bi bi-person-workspace"></i>
         </div>
 
-        <div class="d-flex justify-content-end gap-3" style="margin-top: 185px;">
+        <div class="d-flex justify-content-end gap-3" style="margin-top: 80px;">
           <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Cancelar</button>
 
-          <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Criar</button>
+          <button (click)="criarNovoCard()" class="btn btn-modal">Criar</button>
         </div>
 
       </div>
@@ -93,7 +125,7 @@
     @if (exibirJanelaAcessar){
     <div class="SobreposiçãoJanela">
       <div class="CartãoFlutuante">
-        <h2>Todos os seus cards</h2>
+        <h2>Cards</h2>
         <p>Aqui você coloca o texto ou formulário que precisar.</p>
 
         <button (click)="exibirJanelaAcessar = false" class="btn btn-danger">Fechar</button>
@@ -106,13 +138,35 @@
   <div class="JanelaExcluirCards">
     @if (exibirJanelaExcluir){
     <div class="SobreposiçãoJanela">
-      <div class="CartãoFlutuante">
-        <h2>Todos os seus cards excluídos</h2>
-        <p>Aqui você coloca o texto ou formulário que precisar.</p>
+      <div class="CartãoFlutuante" style="display: flex; flex-direction: column;">
 
-        <button (click)="exibirJanelaExcluir = false" class="btn btn-danger">Fechar</button>
+        <div class="ExcluidoDados"
+          style="display: flex; align-items: center; gap: 15px; justify-content:center; margin-bottom: 30px;">
+          <i class="bi bi-trash3" style="font-size: 40px;"></i>
+          <h2 class="m-0" style="font-size: 40px;">Cards Excluídos</h2>
+        </div>
+
+        <div style="max-height: 400px; overflow-y: auto; width: 100%; padding-right: 10px;">
+
+          <div class="row g-3">
+
+            <div class="col-md-6">
+            </div>
+
+            <div class="col-md-6">
+            </div>
+
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3" style="margin-top: auto;">
+          <button (click)="exibirJanelaExcluir = false" class="btn btn-modal">
+            Fechar</button>
+        </div>
       </div>
+
     </div>
     }
-
   </div>
+
+</div>

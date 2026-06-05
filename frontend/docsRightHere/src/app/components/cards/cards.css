@@ -55,3 +55,8 @@
   border-radius: 10px;
 
 }
+
+body {
+  overflow: hidden;
+  height: 100vh;
+}

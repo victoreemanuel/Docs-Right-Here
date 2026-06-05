@@ -1,31 +1,57 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-meus-cards',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './cards.html',
   styleUrl: './cards.css',
 })
 
 export class Cards {
 
+
   exibirJanelaAcessar: boolean = false;
   exibirJanelaCriar: boolean = false;
   exibirJanelaExcluir: boolean = false;
 
-  constructor(){}
+  constructor() { }
 
-  abrirJanelaCriar(){
+  abrirJanelaCriar() {
     this.exibirJanelaCriar = true;
   }
 
-  abrirJanelaAcessar(){
+  abrirJanelaAcessar() {
     this.exibirJanelaAcessar = true;
   }
 
-  abrirJanelaExcluir(){
+  abrirJanelaExcluir() {
     this.exibirJanelaExcluir = true;
+  }
+
+  meusCards: any[] = [];
+
+  novoTitulo: string = ' ';
+  novaDescricao: string = ' ';
+
+  criarNovoCard() {
+
+    const cardCriado = {
+
+      titulo: this.novoTitulo,
+      descricao: this.novaDescricao
+  
+    };
+
+    this.meusCards.push(cardCriado);
+
+    this.novoTitulo = '';
+    this.novaDescricao = '';
+
+    this.exibirJanelaCriar = false;
+
   }
 
 }
