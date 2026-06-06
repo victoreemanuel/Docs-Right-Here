@@ -41,20 +41,23 @@ export class Cards {
   novoTitulo: string = ' ';
   novaDescricao: string = ' ';
 
+  arquivo: any[] = []; 
+
   criarNovoCard() {
 
     const cardCriado = {
 
       titulo: this.novoTitulo,
-      descricao: this.novaDescricao
-
+      descricao: this.novaDescricao,
+      arquivos: []
     };
 
-    this.meusCards.push(cardCriado);
+    this.meusCards.unshift(cardCriado);
+    this.cardSelecionado = cardCriado;
+    this.exibirJanelaCards = true;
 
     this.novoTitulo = '';
     this.novaDescricao = '';
-
     this.exibirJanelaCriar = false;
 
   }
@@ -67,7 +70,29 @@ export class Cards {
 
   abrirCard(Card: any) {
     this.cardSelecionado = Card;
-    this.exibirJanelaCards;
+    this.exibirJanelaCards = true;
+  }
+
+  get cardsRecentes() {
+  return this.meusCards.slice(0, 8);
+}
+
+anexarArquivo(event: any) {
+    const arquivoDoPC = event.target.files[0];
+
+    if (arquivoDoPC && this.cardSelecionado) {
+      
+      if (!this.cardSelecionado.arquivos) {
+        this.cardSelecionado.arquivos = [];
+      }
+
+      this.cardSelecionado.arquivos = [
+        ...this.cardSelecionado.arquivos,
+        { nome: arquivoDoPC.name, tipo: 'PDF' }
+      ];
+
+      event.target.value = '';
+    }
   }
 
 }
