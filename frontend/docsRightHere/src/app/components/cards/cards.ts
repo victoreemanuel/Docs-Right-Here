@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export class Cards {
 
-
   exibirJanelaAcessar: boolean = false;
   exibirJanelaCriar: boolean = false;
   exibirJanelaExcluir: boolean = false;
