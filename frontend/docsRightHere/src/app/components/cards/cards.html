@@ -55,23 +55,39 @@
     </div>
   </div>
 
-
   <div class="row g-4 justify-content-center mt-2">
 
-   @for (Card of meusCards; track Card) {
-
+    @for (Card of meusCards; track Card; let i = $index) {
     <div class="col-md-5">
-      <div style="background-color: #3a3f44; min-height: 150px; border-radius: 15px; color: white; padding: 20px;">
+      <div class="d-flex flex-column justify-content-between"
+        style="background-color: #3a3f44; min-height: 150px; border-radius: 15px; color: white; padding: 20px;">
 
-        <h3 class="fw-bold">{{ Card.titulo}}</h3>
-        <p class="text-muted">{{ Card.descricao }}</p>
+        <div class="d-flex gap-3 align-items-start">
+
+          <div class="rounded-3 d-flex align-items-center justify-content-center"
+            style="background-color: #7b2cbf; width: 45px; height: 45px; min-width: 45px;">
+            <i class="bi bi-file-earmark-text fs-4"></i>
+          </div>
+
+          <div class="d-flex flex-column">
+            <h3 class="fw-bold m-0" style="font-size: 20px; line-height: 1.2;">{{ Card.titulo }}</h3>
+
+            <p class="mt-2 mb-0" style="font-size: 15px; color: #ced4da;">{{ Card.descricao }}</p>
+          </div>
+
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button (click)="excluirCard(i)" class="btn btn-sm text-white px-3"
+            style="background-color: #5a6268; border-radius: 8px;">Excluir</button>
+
+          <button (click)="abrirJanelaCards()" class="btn btn-sm text-white px-3"
+            style="background-color: #5a6268; border-radius: 8px;">Abrir</button>
+        </div>
 
       </div>
     </div>
-   }
-
+    }
   </div>
-
 
   <div class="JanelaCriarCards">
     @if (exibirJanelaCriar) {
@@ -126,7 +142,7 @@
     <div class="SobreposiçãoJanela">
       <div class="CartãoFlutuante">
         <h2>Cards</h2>
-        <p>Aqui você coloca o texto ou formulário que precisar.</p>
+        <p>Não sei ainda</p>
 
         <button (click)="exibirJanelaAcessar = false" class="btn btn-danger">Fechar</button>
       </div>
@@ -168,5 +184,36 @@
     </div>
     }
   </div>
+
+  <div class="JanelaDoCardAberto">
+    @if (exibirJanelaCards){
+    <div class="SobreposiçãoJanela">
+      <div class="CartãoFlutuante" style="width: 75%; background-color: #343a40; border: 20px; padding: 25px;">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+          <div class="d-flex gap-3 align-items">
+
+            <div class="rounded-3 d-flex align-items-center justify-content-center"
+              style="background-color:#9e9d24; width: 45px; height: 45px;">
+              <i class="bi bi-file-earmark-text fs-4 text-white"> </i>
+
+            </div>
+
+            <div>
+              <h2 class="m-0 fw-bold text-white" style="font-size: 22px;">{{ cardSelecionado?.titulo }}</h2>
+              <p class="m-0 text-secondary" style="font-size: 15px;">{{ cardSelecionado?.descricao }}</p>
+            </div>
+
+          </div>
+
+          <button (click)="exibirJanelaCards = false" class="btn btn-modal">Fechar</button>
+        </div>
+
+      </div>
+    </div>
+    }
+  </div>
+
 
 </div>

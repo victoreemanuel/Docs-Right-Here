@@ -16,6 +16,7 @@ export class Cards {
   exibirJanelaAcessar: boolean = false;
   exibirJanelaCriar: boolean = false;
   exibirJanelaExcluir: boolean = false;
+  exibirJanelaCards: boolean = false;
 
   constructor() { }
 
@@ -31,6 +32,10 @@ export class Cards {
     this.exibirJanelaExcluir = true;
   }
 
+  abrirJanelaCards() {
+    this.exibirJanelaCards = true;
+  }
+
   meusCards: any[] = [];
 
   novoTitulo: string = ' ';
@@ -42,7 +47,7 @@ export class Cards {
 
       titulo: this.novoTitulo,
       descricao: this.novaDescricao
-  
+
     };
 
     this.meusCards.push(cardCriado);
@@ -52,6 +57,17 @@ export class Cards {
 
     this.exibirJanelaCriar = false;
 
+  }
+
+  cardSelecionado: any = null;
+
+  excluirCard(index: number) {
+    this.meusCards.splice(index, 1);
+  }
+
+  abrirCard(Card: any) {
+    this.cardSelecionado = Card;
+    this.exibirJanelaCards;
   }
 
 }
