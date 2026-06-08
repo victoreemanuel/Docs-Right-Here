@@ -13,8 +13,8 @@ export class AuthService {
   private readonly tokenKey = 'access_token';
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    localStorage.removeItem(this.tokenKey);
-    
+    this.logout();
+
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, request)
     .pipe(
       tap(response => this.storeToken(response.accesToken))
