@@ -85,13 +85,50 @@ anexarArquivo(event: any) {
         this.cardSelecionado.arquivos = [];
       }
 
+      const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
+
+      const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
+
       this.cardSelecionado.arquivos = [
         ...this.cardSelecionado.arquivos,
-        { nome: arquivoDoPC.name, tipo: 'PDF' }
+        { nome: arquivoDoPC.name, tipo: 'PDF', url: urlRealDoArquivo }
       ];
 
       event.target.value = '';
     }
   }
+
+  verArquivo(arquivo: any) {
+    if (arquivo.url) {
+
+      window.open(arquivo.url, '_blank');
+    } else {
+      alert('Link do arquivo não encontrado.');
+    }
+  }
+
+baixarArquivo(arquivo: any) {
+    if (arquivo && arquivo.url) {
+
+      const link = document.createElement('a');
+      link.href = arquivo.url;
+      
+      link.download = arquivo.nome; 
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
+excluirArquivo(index: number) {
+    if (this.cardSelecionado && this.cardSelecionado.arquivos) {
+
+      this.cardSelecionado.arquivos.splice(index, 1);
+
+      this.cardSelecionado.arquivos = [...this.cardSelecionado.arquivos];
+    }
+  }
+
 
 }
