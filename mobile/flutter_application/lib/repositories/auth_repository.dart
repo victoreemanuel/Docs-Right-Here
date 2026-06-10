@@ -16,7 +16,14 @@ class AuthRepository {
       );
       return LoginResponse.fromJson(response.data);
     } on DioException catch(e) {
-      throw Exception(e.error);
+      final message = e.response?.data['message'];
+
+      if (e.response?.statusCode == 401 || e.response?.statusCode == 404){
+        throw Exception(message ?? 'Email ou senha incorretos');
+      } else if (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.unknown){
+        throw Exception('Não foi possível conectar ao servidor');
+      }
+      throw Exception('Erro ao fazer login');
     }
   }
 }
