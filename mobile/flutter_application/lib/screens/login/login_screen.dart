@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/models/login_request.dart';
 import 'package:flutter_application/repositories/auth_repository.dart';
 import 'package:flutter_application/screens/example_screen.dart';
+import 'package:flutter_application/screens/login/widgets/email_field.dart';
+import 'package:flutter_application/screens/login/widgets/login_header.dart';
+import 'package:flutter_application/screens/login/widgets/password_field.dart';
 import 'package:flutter_application/services/auth_service.dart';
 import 'package:flutter_application/services/dio_client.dart';
 
@@ -102,50 +105,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     spacing: 10,
                     children: [
-                      Icon(Icons.school, size: 140, color: Colors.white),
-                      Text(
-                        "Bem vindo de volta!",
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty)
-                            return 'Informe o email';
-                          if (!value.contains('@')) return 'Email inválido';
-                          return null;
-                        },
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(),
-                          hintText: "Email",
-                        ),
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty)
-                            return 'Informe a senha';
-                          if (value.length < 6) return 'Mínimo 6 caracteres';
-                          return null;
-                        },
-                        controller: _passwordController,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          hintText: "Senha",
-                        ),
-                      ),
+                      LoginHeader(),
+                      EmailField(controller: _emailController),
+                      PasswordField(controller: _passwordController),
                       if (_errorMessage != null)
                         Text(
                           _errorMessage!,
