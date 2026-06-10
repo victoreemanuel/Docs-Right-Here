@@ -40,7 +40,7 @@ export class Cards {
   novoTitulo: string = ' ';
   novaDescricao: string = ' ';
 
-  arquivo: any[] = []; 
+  arquivo: any[] = [];
 
   criarNovoCard() {
 
@@ -70,17 +70,20 @@ export class Cards {
   abrirCard(Card: any) {
     this.cardSelecionado = Card;
     this.exibirJanelaCards = true;
+    this.modoEdicao = false;
+    this.termoBuscaArquivo = '';
+    this.filtroTipoSelecionado = 'TODOS';
   }
 
   get cardsRecentes() {
-  return this.meusCards.slice(0, 8);
-}
+    return this.meusCards.slice(0, 8);
+  }
 
-anexarArquivo(event: any) {
+  anexarArquivo(event: any) {
     const arquivoDoPC = event.target.files[0];
 
     if (arquivoDoPC && this.cardSelecionado) {
-      
+
       if (!this.cardSelecionado.arquivos) {
         this.cardSelecionado.arquivos = [];
       }
@@ -91,7 +94,8 @@ anexarArquivo(event: any) {
 
       this.cardSelecionado.arquivos = [
         ...this.cardSelecionado.arquivos,
-        { nome: arquivoDoPC.name, tipo: 'PDF', url: urlRealDoArquivo }
+        { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
+
       ];
 
       event.target.value = '';
@@ -107,21 +111,21 @@ anexarArquivo(event: any) {
     }
   }
 
-baixarArquivo(arquivo: any) {
+  baixarArquivo(arquivo: any) {
     if (arquivo && arquivo.url) {
 
       const link = document.createElement('a');
       link.href = arquivo.url;
-      
-      link.download = arquivo.nome; 
-      
+
+      link.download = arquivo.nome;
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
   }
 
-excluirArquivo(index: number) {
+  excluirArquivo(index: number) {
     if (this.cardSelecionado && this.cardSelecionado.arquivos) {
 
       this.cardSelecionado.arquivos.splice(index, 1);
@@ -130,5 +134,50 @@ excluirArquivo(index: number) {
     }
   }
 
+  termoBuscaArquivo: string = '';
+  filtroTipoSelecionado: string = 'TODOS' ;
+  exibirFiltros: boolean = false;
+
+  modoEdicao: Boolean = false;
+  tituloEdicao: string = '';
+  descricaoEdicao: string = '';
+
+ get arquivosFiltrados() {
+    if (!this.cardSelecionado || !this.cardSelecionado.arquivos) return [];
+
+    return this.cardSelecionado.arquivos.filter((arq: any) => {
+
+      const bateComBusca = arq.nome.toLowerCase().includes(this.termoBuscaArquivo.toLowerCase());
+
+
+      if (this.filtroTipoSelecionado === 'TODOS') {
+        return bateComBusca;
+      }
+
+      const extensoesMapa: { [key: string]: string[] } = {
+        'PDF': ['PDF'],
+        'WORD': ['DOC', 'DOCX'],
+        'EXCEL': ['XLS', 'XLSX', 'CSV'],
+        'POWERPOINT': ['PPT', 'PPTX']
+      };
+
+      const listaExtensoes = extensoesMapa[this.filtroTipoSelecionado] || [];
+      const bateComTipo = listaExtensoes.includes(arq.tipo.toUpperCase());
+
+      return bateComBusca && bateComTipo;
+    });
+  }
+
+alternarEdicao() {
+    if (!this.modoEdicao) {
+      this.tituloEdicao = this.cardSelecionado.titulo;
+      this.descricaoEdicao = this.cardSelecionado.descricao;
+      this.modoEdicao = true;
+    } else {
+      this.cardSelecionado.titulo = this.tituloEdicao;
+      this.cardSelecionado.descricao = this.descricaoEdicao;
+      this.modoEdicao = false;
+    }
+  }
 
 }
