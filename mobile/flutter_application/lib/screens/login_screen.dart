@@ -3,6 +3,7 @@ import 'package:flutter_application/models/login_request.dart';
 import 'package:flutter_application/repositories/auth_repository.dart';
 import 'package:flutter_application/screens/example_screen.dart';
 import 'package:flutter_application/services/auth_service.dart';
+import 'package:flutter_application/services/dio_client.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _errorMessage;
   final _formKey = GlobalKey<FormState>();
 
-  final _authService = AuthService();
+  late final AuthService _authService;
   late final AuthRepository _authRepository;
 
   void _handleLogin() async {
@@ -40,8 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (mounted) {
         Navigator.pushReplacement(
-          context, 
-          MaterialPageRoute(builder: (context) => ExampleScreen()));
+          context,
+          MaterialPageRoute(builder: (context) => ExampleScreen()),
+        );
       }
       //
     } catch (e) {
@@ -58,7 +60,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _authRepository = AuthRepository();
+    final authService = AuthService();
+    final dioClient = DioClient(authService: authService);
+    _authRepository = AuthRepository(dioClient: dioClient);
+    _authService = authService;
   }
 
   @override
