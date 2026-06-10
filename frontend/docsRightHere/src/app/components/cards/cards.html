@@ -67,29 +67,26 @@
             <div class="d-flex gap-3 align-items-start">
 
               <div class="rounded-3 d-flex align-items-center justify-content-center"
-                style="background-color: #7b2cbf; width: 45px; height: 45px; min-width: 45px;">
-                <i class="bi bi-file-earmark-text fs-4"></i>
+                [style.background-color]="Card.cor || '#7b2cbf'" style="width: 45px; height: 45px; min-width: 45px;">
+
+                <i [class]="'bi ' + (Card.icone || 'bi-file-earmark-text') + ' fs-4'"></i>
               </div>
 
               <div class="d-flex flex-column">
                 <h3 class="fw-bold m-0" style="font-size: 20px; line-height: 1.2;">{{ Card.titulo }}</h3>
-
                 <p class="mt-2 mb-0" style="font-size: 15px; color: #ced4da;">{{ Card.descricao }}</p>
               </div>
 
             </div>
-            <div class="d-flex justify-content-end gap-2 mt-2">
 
+            <div class="d-flex justify-content-end gap-2 mt-2">
               <button (click)="excluirCard(i)" class="btn btn-sm text-white px-3"
                 style="background-color: #5a6268; border-radius: 8px;">Excluir</button>
-
               <button (click)="abrirCard(Card)" class="btn btn-sm text-white px-3"
                 style="background-color: #5a6268; border-radius: 8px;">Abrir</button>
-
             </div>
 
           </div>
-
         </div>
         }
       </div>
