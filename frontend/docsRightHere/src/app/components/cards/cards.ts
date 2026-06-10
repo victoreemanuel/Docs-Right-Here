@@ -42,23 +42,28 @@ export class Cards {
 
   arquivo: any[] = [];
 
-  criarNovoCard() {
+  
 
+criarNovoCard() {
     const cardCriado = {
-
       titulo: this.novoTitulo,
       descricao: this.novaDescricao,
+      icone: this.iconeSelecionado,
+      cor: this.corSelecionada,
       arquivos: []
     };
 
+  
     this.meusCards.unshift(cardCriado);
     this.cardSelecionado = cardCriado;
     this.exibirJanelaCards = true;
 
+
     this.novoTitulo = '';
     this.novaDescricao = '';
+    this.iconeSelecionado = 'bi-file-earmark-text';
+    this.corSelecionada = '#3a3f44';
     this.exibirJanelaCriar = false;
-
   }
 
   cardSelecionado: any = null;
@@ -135,14 +140,14 @@ export class Cards {
   }
 
   termoBuscaArquivo: string = '';
-  filtroTipoSelecionado: string = 'TODOS' ;
+  filtroTipoSelecionado: string = 'TODOS';
   exibirFiltros: boolean = false;
 
   modoEdicao: Boolean = false;
   tituloEdicao: string = '';
   descricaoEdicao: string = '';
 
- get arquivosFiltrados() {
+  get arquivosFiltrados() {
     if (!this.cardSelecionado || !this.cardSelecionado.arquivos) return [];
 
     return this.cardSelecionado.arquivos.filter((arq: any) => {
@@ -168,7 +173,7 @@ export class Cards {
     });
   }
 
-alternarEdicao() {
+  alternarEdicao() {
     if (!this.modoEdicao) {
       this.tituloEdicao = this.cardSelecionado.titulo;
       this.descricaoEdicao = this.cardSelecionado.descricao;
@@ -179,5 +184,22 @@ alternarEdicao() {
       this.modoEdicao = false;
     }
   }
+
+  iconesDisponiveis: string[] = [
+    'bi-mortarboard', 'bi-book', 'bi-calendar3', 'bi-envelope',
+    'bi-camera', 'bi-eye', 'bi-file-earmark-text', 'bi-image',
+    'bi-people', 'bi-person-workspace'
+  ];
+
+  coresDisponiveis: string[] = [
+    '#3a3f44', 
+    '#1e3d59', 
+    '#4a154b', 
+    '#1b4332', 
+    '#641e16' 
+  ];
+
+  iconeSelecionado: string = 'bi-file-earmark-text';
+  corSelecionada: string = '#3a3f44';
 
 }
