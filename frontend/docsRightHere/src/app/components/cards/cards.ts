@@ -17,6 +17,25 @@ export class Cards {
   exibirJanelaExcluir: boolean = false;
   exibirJanelaCards: boolean = false;
 
+  meusCards: any[] = [];
+
+  novoTitulo: string = ' ';
+  novaDescricao: string = ' ';
+
+  arquivo: any[] = [];
+  cardsExcluidos: any[] = [];
+
+  iconeSelecionado: string = 'bi-file-earmark-text';
+  corSelecionada: string = '#3a3f44';
+
+  termoBuscaArquivo: string = '';
+  filtroTipoSelecionado: string = 'TODOS';
+  exibirFiltros: boolean = false;
+
+  modoEdicao: Boolean = false;
+  tituloEdicao: string = '';
+  descricaoEdicao: string = '';
+
   constructor() { }
 
   abrirJanelaCriar() {
@@ -35,16 +54,7 @@ export class Cards {
     this.exibirJanelaCards = true;
   }
 
-  meusCards: any[] = [];
-
-  novoTitulo: string = ' ';
-  novaDescricao: string = ' ';
-
-  arquivo: any[] = [];
-  cardsExcluidos: any[] = [];
-  
-
-criarNovoCard() {
+  criarNovoCard() {
     const cardCriado = {
       titulo: this.novoTitulo,
       descricao: this.novaDescricao,
@@ -53,11 +63,9 @@ criarNovoCard() {
       arquivos: []
     };
 
-  
     this.meusCards.unshift(cardCriado);
     this.cardSelecionado = cardCriado;
     this.exibirJanelaCards = true;
-
 
     this.novoTitulo = '';
     this.novaDescricao = '';
@@ -71,7 +79,7 @@ criarNovoCard() {
   excluirCard(index: number) {
 
     const cardDeletado = this.meusCards.splice(index, 1)[0];
-    
+
     if (cardDeletado) {
       this.cardsExcluidos.unshift(cardDeletado);
     }
@@ -85,7 +93,7 @@ criarNovoCard() {
   }
 
   get cardsRecentes() {
-    return this.meusCards.slice(0, 8);
+    return this.meusCards.slice(0, 4);
   }
 
   anexarArquivo(event: any) {
@@ -143,14 +151,6 @@ criarNovoCard() {
     }
   }
 
-  termoBuscaArquivo: string = '';
-  filtroTipoSelecionado: string = 'TODOS';
-  exibirFiltros: boolean = false;
-
-  modoEdicao: Boolean = false;
-  tituloEdicao: string = '';
-  descricaoEdicao: string = '';
-
   get arquivosFiltrados() {
     if (!this.cardSelecionado || !this.cardSelecionado.arquivos) return [];
 
@@ -196,15 +196,12 @@ criarNovoCard() {
   ];
 
   coresDisponiveis: string[] = [
-    '#3a3f44', 
-    '#1e3d59', 
-    '#4a154b', 
-    '#1b4332', 
-    '#641e16' 
+    '#7b2cbf',
+    '#0284c7',
+    '#09d37f',
+    '#f59e0b',
+    '#e11d48'
   ];
-
-  iconeSelecionado: string = 'bi-file-earmark-text';
-  corSelecionada: string = '#3a3f44';
 
   recuperarCard(index: number) {
     const cardRestaurado = this.cardsExcluidos.splice(index, 1)[0];
