@@ -41,7 +41,7 @@ export class Cards {
   novaDescricao: string = ' ';
 
   arquivo: any[] = [];
-
+  cardsExcluidos: any[] = [];
   
 
 criarNovoCard() {
@@ -69,9 +69,13 @@ criarNovoCard() {
   cardSelecionado: any = null;
 
   excluirCard(index: number) {
-    this.meusCards.splice(index, 1);
-  }
 
+    const cardDeletado = this.meusCards.splice(index, 1)[0];
+    
+    if (cardDeletado) {
+      this.cardsExcluidos.unshift(cardDeletado);
+    }
+  }
   abrirCard(Card: any) {
     this.cardSelecionado = Card;
     this.exibirJanelaCards = true;
@@ -201,5 +205,16 @@ criarNovoCard() {
 
   iconeSelecionado: string = 'bi-file-earmark-text';
   corSelecionada: string = '#3a3f44';
+
+  recuperarCard(index: number) {
+    const cardRestaurado = this.cardsExcluidos.splice(index, 1)[0];
+    if (cardRestaurado) {
+      this.meusCards.unshift(cardRestaurado);
+    }
+  }
+
+  deletarPermanente(index: number) {
+    this.cardsExcluidos.splice(index, 1);
+  }
 
 }
