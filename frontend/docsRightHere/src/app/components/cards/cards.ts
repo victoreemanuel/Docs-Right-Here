@@ -1,90 +1,217 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; // CommonModule - Essa função é um recuso do angular para ele ensinar como o angular deve se comportar ao tentar se comunicar com html como fechar ou abrir um botão.
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { CardService } from './card.service';
+import { Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-meus-cards',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './cards.html',
   styleUrl: './cards.css',
 })
 
-export class Cards implements OnInit {
+export class Cards {
 
-  private cardService = inject(CardService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  exibirJanelaAcessar: boolean = false;
+  exibirJanelaCriar: boolean = false;
+  exibirJanelaExcluir: boolean = false;
+  exibirJanelaCards: boolean = false;
 
-  idParaEdicao: string | null = null;
-  mostrarForm = false;
+  meusCards: any[] = [];
 
-  meuFormulario = new FormGroup({
-    titulo: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    tag: new FormControl('', [Validators.required])
-  });
+  novoTitulo: string = ' ';
+  novaDescricao: string = ' ';
 
-  get titulo() { return this.meuFormulario.get('titulo'); }
-  get tag() { return this.meuFormulario.get('tag'); }
+  arquivo: any[] = [];
+  cardsExcluidos: any[] = [];
 
-  ngOnInit() { // Assim que componente é criado ele é chamado. Ele busca ID pela URL para carregar algo na página.
+  iconeSelecionado: string = 'bi-file-earmark-text';
+  corSelecionada: string = '#3a3f44';
 
-    this.idParaEdicao = this.route.snapshot.paramMap.get('id'); // Aqui vai extair o valor do parâmetro que defini no id
+  termoBuscaArquivo: string = '';
+  filtroTipoSelecionado: string = 'TODOS';
+  exibirFiltros: boolean = false;
 
-    if (this.idParaEdicao) {
+  modoEdicao: Boolean = false;
+  tituloEdicao: string = '';
+  descricaoEdicao: string = '';
 
-      this.mostrarForm = true;
+  constructor() { }
 
-      this.cardService.buscarPorId(this.idParaEdicao).subscribe({
-        next: (card) => {
-          this.meuFormulario.patchValue(card); // faz o envio para os campos que vem da api para formulario.
-        },
-        error: () => alert('Erro ao carregar dados para edição.')
-      });
-
-    }
-
+  abrirJanelaCriar() {
+    this.exibirJanelaCriar = true;
   }
 
-  salvarCard() {
+  abrirJanelaAcessar() {
+    this.exibirJanelaAcessar = true;
+  }
 
-    this.meuFormulario.markAllAsTouched();
+  abrirJanelaExcluir() {
+    this.exibirJanelaExcluir = true;
+  }
 
-    if (this.meuFormulario.valid) {
-      const servico = this.idParaEdicao
-        ? this.cardService.atualizarCard(this.idParaEdicao, this.meuFormulario.value)
-        : this.cardService.adicionarCard(this.meuFormulario.value);
+  abrirJanelaCards() {
+    this.exibirJanelaCards = true;
+  }
 
-      servico.subscribe({
-        next: () => {
-          console.log('Operação realizada com sucesso!');
-          this.cancelar();
-        },
-        error: () => alert('Erro ao salvar as alterações.')
-      });
+  criarNovoCard() {
+    const cardCriado = {
+      titulo: this.novoTitulo,
+      descricao: this.novaDescricao,
+      icone: this.iconeSelecionado,
+      cor: this.corSelecionada,
+      arquivos: []
+    };
+
+    this.meusCards.unshift(cardCriado);
+    this.cardSelecionado = cardCriado;
+    this.exibirJanelaCards = true;
+
+    this.novoTitulo = '';
+    this.novaDescricao = '';
+    this.iconeSelecionado = 'bi-file-earmark-text';
+    this.corSelecionada = '#3a3f44';
+    this.exibirJanelaCriar = false;
+  }
+
+  cardSelecionado: any = null;
+
+  excluirCard(index: number) {
+
+    const cardDeletado = this.meusCards.splice(index, 1)[0];
+
+    if (cardDeletado) {
+      this.cardsExcluidos.unshift(cardDeletado);
+    }
+  }
+  abrirCard(Card: any) {
+    this.cardSelecionado = Card;
+    this.exibirJanelaCards = true;
+    this.modoEdicao = false;
+    this.termoBuscaArquivo = '';
+    this.filtroTipoSelecionado = 'TODOS';
+  }
+
+  get cardsRecentes() {
+    return this.meusCards.slice(0, 4);
+  }
+
+  anexarArquivo(event: any) {
+    const arquivoDoPC = event.target.files[0];
+
+    if (arquivoDoPC && this.cardSelecionado) {
+
+      if (!this.cardSelecionado.arquivos) {
+        this.cardSelecionado.arquivos = [];
+      }
+
+      const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
+
+      const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
+
+      this.cardSelecionado.arquivos = [
+        ...this.cardSelecionado.arquivos,
+        { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
+
+      ];
+
+      event.target.value = '';
     }
   }
 
-  cancelar() {
-    this.mostrarForm = false;
-    this.idParaEdicao = null;
-    this.meuFormulario.reset();
-    this.router.navigate(['/Auth1/meus-cards']);
+  verArquivo(arquivo: any) {
+    if (arquivo.url) {
+
+      window.open(arquivo.url, '_blank');
+    } else {
+      alert('Link do arquivo não encontrado.');
+    }
   }
 
-  abrirForm() { this.mostrarForm = true; }
+  baixarArquivo(arquivo: any) {
+    if (arquivo && arquivo.url) {
 
-  excluirCard(id: string) {
-    if (confirm('Tem certeza que deseja excluir este card?')) {
-      this.cardService.removerCard(id).subscribe({
-        next: () => {
-          console.log('Card removido!');
-        },
-        error: () => alert('Erro ao tentar excluir o card.')
-      });
+      const link = document.createElement('a');
+      link.href = arquivo.url;
+
+      link.download = arquivo.nome;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
+  }
+
+  excluirArquivo(index: number) {
+    if (this.cardSelecionado && this.cardSelecionado.arquivos) {
+
+      this.cardSelecionado.arquivos.splice(index, 1);
+
+      this.cardSelecionado.arquivos = [...this.cardSelecionado.arquivos];
+    }
+  }
+
+  get arquivosFiltrados() {
+    if (!this.cardSelecionado || !this.cardSelecionado.arquivos) return [];
+
+    return this.cardSelecionado.arquivos.filter((arq: any) => {
+
+      const bateComBusca = arq.nome.toLowerCase().includes(this.termoBuscaArquivo.toLowerCase());
+
+
+      if (this.filtroTipoSelecionado === 'TODOS') {
+        return bateComBusca;
+      }
+
+      const extensoesMapa: { [key: string]: string[] } = {
+        'PDF': ['PDF'],
+        'WORD': ['DOC', 'DOCX'],
+        'EXCEL': ['XLS', 'XLSX', 'CSV'],
+        'POWERPOINT': ['PPT', 'PPTX']
+      };
+
+      const listaExtensoes = extensoesMapa[this.filtroTipoSelecionado] || [];
+      const bateComTipo = listaExtensoes.includes(arq.tipo.toUpperCase());
+
+      return bateComBusca && bateComTipo;
+    });
+  }
+
+  alternarEdicao() {
+    if (!this.modoEdicao) {
+      this.tituloEdicao = this.cardSelecionado.titulo;
+      this.descricaoEdicao = this.cardSelecionado.descricao;
+      this.modoEdicao = true;
+    } else {
+      this.cardSelecionado.titulo = this.tituloEdicao;
+      this.cardSelecionado.descricao = this.descricaoEdicao;
+      this.modoEdicao = false;
+    }
+  }
+
+  iconesDisponiveis: string[] = [
+    'bi-mortarboard', 'bi-book', 'bi-calendar3', 'bi-envelope',
+    'bi-camera', 'bi-eye', 'bi-file-earmark-text', 'bi-image',
+    'bi-people', 'bi-person-workspace'
+  ];
+
+  coresDisponiveis: string[] = [
+    '#7b2cbf',
+    '#0284c7',
+    '#09d37f',
+    '#f59e0b',
+    '#e11d48'
+  ];
+
+  recuperarCard(index: number) {
+    const cardRestaurado = this.cardsExcluidos.splice(index, 1)[0];
+    if (cardRestaurado) {
+      this.meusCards.unshift(cardRestaurado);
+    }
+  }
+
+  deletarPermanente(index: number) {
+    this.cardsExcluidos.splice(index, 1);
   }
 
 }
