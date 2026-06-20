@@ -20,14 +20,20 @@ export class CardsService {
     return this.http.post<any>(this.apiUrl, card);
   }
 
-  moverParaLixeria(card: any){
+  moverParaLixeria(id: number){
     return this.http.put<any>(`${this.apiUrl}/${id}/lixeira`, {})
   }
 
   getCardsExcluidos(card: any){
-    return this.http.get<any[]>(`${this.apiUrl}/&{id}/restaurar`, {});
+    return this.http.get<any[]>(`${this.apiUrl}/&{id}/excluidos`, {});
   }
 
+  recuperarCard(id: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}/restaurar`, {});
+  }
 
+  deletarPermanente(id: number): Observable<any> {
+    return this.http.delete<any>(`${`${this.apiUrl}/${id}`}`);
+  }
 
 }
