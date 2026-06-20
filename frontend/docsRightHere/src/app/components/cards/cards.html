@@ -24,8 +24,8 @@
       <div class="CebeçaSegundariaPagina mb-0 d-flex justify-content-between mt-3">
 
         <div class="ms-3 d-flex fw-bold text-black align-items-start" style="font-size: 45px; font-weight: bold; ">
-          Meus
-          Cards</div>
+          Meus Cards
+        </div>
 
         <div class="ExcluirCard justify-content-center">
           <button (click)="abrirJanelaExcluir()"
@@ -68,7 +68,6 @@
 
               <div class="rounded-3 d-flex align-items-center justify-content-center"
                 [style.background-color]="Card.cor || '#7b2cbf'" style="width: 45px; height: 45px; min-width: 45px;">
-
                 <i [class]="'bi ' + (Card.icone || 'bi-file-earmark-text') + ' fs-4'"></i>
               </div>
 
@@ -136,7 +135,6 @@
 
             <div class="d-flex justify-content-end gap-3" style="margin-top: 15px;">
               <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Cancelar</button>
-
               <button (click)="criarNovoCard()" class="btn btn-modal">Criar</button>
             </div>
 
@@ -156,8 +154,7 @@
               <h2 class="m-0" style="font-size: 40px;">Todos os Cards</h2>
             </div>
 
-            <div
-              style="max-height: 400px; overflow-y: auto; width: 100%; padding-right: 10px; margin-top: 30px; margin-bottom: 15px;">
+            <div style="max-height: 400px; overflow-y: auto; width: 100%; padding-right: 10px; margin-top: 30px; margin-bottom: 15px;">
               <div class="row g-3">
 
                 @for (Card of meusCards; track Card; let i = $index) {
@@ -187,9 +184,9 @@
                   </div>
                 </div>
                 } @empty {
-                <div class="text-center text-white-50 my-4 w-100">
-                  <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
-                  Nenhum card cadastrado no sistema.
+                <div class="col-12 d-flex flex-column align-items-center justify-content-center text-center text-white-50 py-5">
+                  <i class="bi bi-folder-x mb-2" style="font-size: 55px; color: #ced4da;"></i>
+                  <p class="m-0 fs-5 fw-semibold">Nenhum card cadastrado no sistema.</p>
                 </div>
                 }
 
@@ -210,8 +207,7 @@
         @if (exibirJanelaExcluir){
         <div class="SobreposiçãoJanela">
 
-          <div class="CartãoFlutuante"
-            style="display: flex; flex-direction: column; border-radius: 20px; padding: auto;">
+          <div class="CartãoFlutuante" style="display: flex; flex-direction: column; border-radius: 20px; padding: auto;">
 
             <div class="ExcluidoDados"
               style="display: flex; align-items: center; gap: 15px; justify-content:center; margin-bottom: 30px;">
@@ -251,6 +247,11 @@
 
                   </div>
                 </div>
+                } @empty {
+                <div class="col-12 d-flex flex-column align-items-center justify-content-center text-center text-white-50 py-5">
+                  <i class="bi bi-trash-visible mb-2" style="font-size: 55px; color: #ced4da;"></i>
+                  <p class="m-0 fs-5 fw-semibold">Sua lixeira está vazia.</p>
+                </div>
                 }
 
               </div>
@@ -280,7 +281,6 @@
 
                 <div class="rounded-3 d-flex align-items-center justify-content-center"
                   [style.background-color]="cardSelecionado?.cor || '#7b2cbf'" style="width: 45px; height: 45px;">
-
                   <i [class]="'bi ' + (cardSelecionado?.icone || 'bi-file-earmark-text') + ' fs-4 text-white'"></i>
                 </div>
 
@@ -301,7 +301,6 @@
               </div>
 
               <div class="d-flex gap-2 position-relative">
-
                 <style>
                   .caixa-busca::placeholder {
                     color: #a0a5a8 !important;
@@ -382,8 +381,9 @@
                 </div>
 
                 <div class="d-flex gap-4 align-items-center text-white-50">
-                  <span class="badge bg-dark text-white rounded-2 px-2 py-1" style="font-size: 11px;">{{ arquivo.tipo
-                    }}</span>
+                  <span class="badge bg-dark text-white rounded-2 px-2 py-1" style="font-size: 11px;">
+                    {{ arquivo.tipo }}
+                  </span>
 
                   <button class="btn p-0 border-0 bg-transparent text-white" (click)="baixarArquivo(arquivo)">
                     <i class="bi bi-download"></i>
@@ -401,9 +401,9 @@
 
               </div>
               } @empty {
-              <div class="text-center text-white-50 my-4">
-                <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
-                Nenhum arquivo anexado a este card ainda.
+              <div class="text-center text-white-50 my-5 py-3">
+                <i class="bi bi-folder-x fs-1 d-block mb-2" style="color: #ced4da;"></i>
+                <p class="m-0 fs-6">Nenhum arquivo anexado a este card ainda.</p>
               </div>
               }
 
@@ -436,3 +436,5 @@
       </div>
 
     </div>
+  </div>
+</div>

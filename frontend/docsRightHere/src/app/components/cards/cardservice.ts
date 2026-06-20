@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-
 export class CardsService {
 
   private apiUrl = 'http://localhost:8080/api/cards';
@@ -13,19 +12,19 @@ export class CardsService {
   constructor(private http: HttpClient) { }
 
   getCards(): Observable<any[]> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any[]>(this.apiUrl);
   }
 
-  criarCard(card: any){
+  criarCard(card: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, card);
   }
 
-  moverParaLixeria(id: number){
-    return this.http.put<any>(`${this.apiUrl}/${id}/lixeira`, {})
+  moverParaLixeira(id: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}/lixeira`, {});
   }
 
-  getCardsExcluidos(card: any){
-    return this.http.get<any[]>(`${this.apiUrl}/&{id}/excluidos`, {});
+  getCardsExcluidos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/excluidos`);
   }
 
   recuperarCard(id: number): Observable<any> {
@@ -33,7 +32,6 @@ export class CardsService {
   }
 
   deletarPermanente(id: number): Observable<any> {
-    return this.http.delete<any>(`${`${this.apiUrl}/${id}`}`);
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
-
 }

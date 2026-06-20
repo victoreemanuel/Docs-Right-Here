@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CardsService } from './cardservice'; 
 
 
 @Component({
@@ -9,8 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './cards.html',
   styleUrl: './cards.css',
 })
-
-export class Cards {
+export class Cards implements OnInit {
 
   exibirJanelaAcessar: boolean = false;
   exibirJanelaCriar: boolean = false;
@@ -18,12 +18,13 @@ export class Cards {
   exibirJanelaCards: boolean = false;
 
   meusCards: any[] = [];
+  cardsExcluidos: any[] = [];
+  cardSelecionado: any = null;
 
   novoTitulo: string = ' ';
   novaDescricao: string = ' ';
 
   arquivo: any[] = [];
-  cardsExcluidos: any[] = [];
 
   iconeSelecionado: string = 'bi-file-earmark-text';
   corSelecionada: string = '#3a3f44';
@@ -36,23 +37,45 @@ export class Cards {
   tituloEdicao: string = '';
   descricaoEdicao: string = '';
 
-  constructor() { }
+  coresDisponiveis: string[] = [
+    '#7b2cbf',
+    '#0284c7',
+    '#09d37f',
+    '#f59e0b',
+    '#e11d48'
+  ];
 
-  abrirJanelaCriar() {
-    this.exibirJanelaCriar = true;
+  iconesDisponiveis: string[] = [
+    'bi-mortarboard', 'bi-book', 'bi-calendar3', 'bi-envelope',
+    'bi-camera', 'bi-eye', 'bi-file-earmark-text', 'bi-image',
+    'bi-people', 'bi-person-workspace'
+  ];
+
+  constructor(private cardService: CardsService) { }
+
+  ngOnInit() {
+    this.carregarCardsAtivos();
+    this.carregarCardsExcluidos();
   }
 
-  abrirJanelaAcessar() {
-    this.exibirJanelaAcessar = true;
+  carregarCardsAtivos() {
+    this.cardService.getCards().subscribe({
+      next: (dados) => this.meusCards = dados,
+      error: (err) => console.error('Erro ao carregar cards ativos:', err)
+    });
   }
 
-  abrirJanelaExcluir() {
-    this.exibirJanelaExcluir = true;
+  carregarCardsExcluidos() {
+    this.cardService.getCardsExcluidos().subscribe({
+      next: (dados) => this.cardsExcluidos = dados,
+      error: (err) => console.error('Erro ao carregar lixeira:', err)
+    });
   }
 
-  abrirJanelaCards() {
-    this.exibirJanelaCards = true;
-  }
+  abrirJanelaCriar() { this.exibirJanelaCriar = true; }
+  abrirJanelaAcessar() { this.exibirJanelaAcessar = true; }
+  abrirJanelaExcluir() { this.exibirJanelaExcluir = true; }
+  abrirJanelaCards() { this.exibirJanelaCards = true; }
 
   criarNovoCard() {
     const cardCriado = {
@@ -63,27 +86,36 @@ export class Cards {
       arquivos: []
     };
 
-    this.meusCards.unshift(cardCriado);
-    this.cardSelecionado = cardCriado;
-    this.exibirJanelaCards = true;
+    this.cardService.criarCard(cardCriado).subscribe({
+      next: (cardSalvo) => {
+        this.meusCards.unshift(cardSalvo);
+        this.cardSelecionado = cardSalvo;
+        this.exibirJanelaCards = true;
 
-    this.novoTitulo = '';
-    this.novaDescricao = '';
-    this.iconeSelecionado = 'bi-file-earmark-text';
-    this.corSelecionada = '#3a3f44';
-    this.exibirJanelaCriar = false;
+        this.novoTitulo = '';
+        this.novaDescricao = '';
+        this.iconeSelecionado = 'bi-file-earmark-text';
+        this.corSelecionada = '#3a3f44';
+        this.exibirJanelaCriar = false;
+      },
+      error: (err) => console.error('Erro ao salvar card:', err)
+    });
   }
-
-  cardSelecionado: any = null;
 
   excluirCard(index: number) {
+    const card = this.meusCards[index];
 
-    const cardDeletado = this.meusCards.splice(index, 1)[0];
-
-    if (cardDeletado) {
-      this.cardsExcluidos.unshift(cardDeletado);
+    if (card && card.id) {
+      this.cardService.moverParaLixeira(card.id).subscribe({
+        next: () => {
+          const cardDeletado = this.meusCards.splice(index, 1)[0];
+          this.cardsExcluidos.unshift(cardDeletado);
+        },
+        error: (err) => console.error('Erro ao mover para a lixeira:', err)
+      });
     }
   }
+
   abrirCard(Card: any) {
     this.cardSelecionado = Card;
     this.exibirJanelaCards = true;
@@ -100,19 +132,16 @@ export class Cards {
     const arquivoDoPC = event.target.files[0];
 
     if (arquivoDoPC && this.cardSelecionado) {
-
       if (!this.cardSelecionado.arquivos) {
         this.cardSelecionado.arquivos = [];
       }
 
       const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
-
       const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
 
       this.cardSelecionado.arquivos = [
         ...this.cardSelecionado.arquivos,
         { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
-
       ];
 
       event.target.value = '';
@@ -121,7 +150,6 @@ export class Cards {
 
   verArquivo(arquivo: any) {
     if (arquivo.url) {
-
       window.open(arquivo.url, '_blank');
     } else {
       alert('Link do arquivo não encontrado.');
@@ -130,10 +158,8 @@ export class Cards {
 
   baixarArquivo(arquivo: any) {
     if (arquivo && arquivo.url) {
-
       const link = document.createElement('a');
       link.href = arquivo.url;
-
       link.download = arquivo.nome;
 
       document.body.appendChild(link);
@@ -144,9 +170,7 @@ export class Cards {
 
   excluirArquivo(index: number) {
     if (this.cardSelecionado && this.cardSelecionado.arquivos) {
-
       this.cardSelecionado.arquivos.splice(index, 1);
-
       this.cardSelecionado.arquivos = [...this.cardSelecionado.arquivos];
     }
   }
@@ -155,9 +179,7 @@ export class Cards {
     if (!this.cardSelecionado || !this.cardSelecionado.arquivos) return [];
 
     return this.cardSelecionado.arquivos.filter((arq: any) => {
-
       const bateComBusca = arq.nome.toLowerCase().includes(this.termoBuscaArquivo.toLowerCase());
-
 
       if (this.filtroTipoSelecionado === 'TODOS') {
         return bateComBusca;
@@ -189,29 +211,30 @@ export class Cards {
     }
   }
 
-  iconesDisponiveis: string[] = [
-    'bi-mortarboard', 'bi-book', 'bi-calendar3', 'bi-envelope',
-    'bi-camera', 'bi-eye', 'bi-file-earmark-text', 'bi-image',
-    'bi-people', 'bi-person-workspace'
-  ];
-
-  coresDisponiveis: string[] = [
-    '#7b2cbf',
-    '#0284c7',
-    '#09d37f',
-    '#f59e0b',
-    '#e11d48'
-  ];
-
   recuperarCard(index: number) {
-    const cardRestaurado = this.cardsExcluidos.splice(index, 1)[0];
-    if (cardRestaurado) {
-      this.meusCards.unshift(cardRestaurado);
+    const card = this.cardsExcluidos[index];
+
+    if (card && card.id) {
+      this.cardService.recuperarCard(card.id).subscribe({
+        next: () => {
+          const cardRestaurado = this.cardsExcluidos.splice(index, 1)[0];
+          this.meusCards.unshift(cardRestaurado);
+        },
+        error: (err) => console.error('Erro ao restaurar card:', err)
+      });
     }
   }
 
   deletarPermanente(index: number) {
-    this.cardsExcluidos.splice(index, 1);
-  }
+    const card = this.cardsExcluidos[index];
 
+    if (card && card.id) {
+      this.cardService.deletarPermanente(card.id).subscribe({
+        next: () => {
+          this.cardsExcluidos.splice(index, 1);
+        },
+        error: (err) => console.error('Erro ao deletar permanentemente:', err)
+      });
+    }
+  }
 }
