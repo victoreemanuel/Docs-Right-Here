@@ -1,13 +1,17 @@
-package com.drh.server.entities;
+package com.drh.server.components.card.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "tb_cards")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card {
 
     @Id
@@ -20,5 +24,4 @@ public class Card {
     private String cor;
 
     private boolean excluido = false;
-
 }
