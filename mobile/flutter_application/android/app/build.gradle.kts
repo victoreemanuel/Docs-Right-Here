@@ -21,13 +21,15 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "edu.drh.app.flutter_application"
+        applicationId = "com.example.flutter_application"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = flutter.minSdkVersion // 👈 Mantido o requisito do Scanbot SDK
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        
+        // CORREÇÃO: Removidas as referências dinâmicas que geravam erro no compilador Kotlin
+        versionCode = 1
+        versionName = "1.0.0"
     }
 
     buildTypes {

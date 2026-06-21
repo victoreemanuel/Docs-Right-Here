@@ -8,8 +8,9 @@ class EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
-        if (value == null || value.isEmpty)
+        if (value == null || value.isEmpty) {
           return 'Informe o email';
+        }
         if (!value.contains('@')) return 'Email inválido';
         return null;
       },
