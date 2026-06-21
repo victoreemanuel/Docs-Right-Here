@@ -7,19 +7,19 @@
       <p class="fs-6 opacity-75 mt-2">Acesse sua conta para continuar</p>
     </div>
 
-    <form class="w-100 mt-4" [formGroup]="formLogin" (ngSubmit)="realizarlogin()">
+    <form class="w-100 mt-4" [formGroup]="LoginForm" (ngSubmit)="realizarlogin()">
       <div class="form-group mb-4">
         <label class="form-label opacity-75">E-mail</label>
         <input type="email" class="form-control form-input-dark" placeholder="seu@email.com" formControlName="email">
 
         <!-- Checa o campo email para ser validado -->
-        @if (formLogin.get('email')?.invalid && formLogin.get('email')?.touched){
+        @if (LoginForm.get('email')?.invalid && LoginForm.get('email')?.touched){
 
-          @if(formLogin.get('email')?.hasError('email')){
+          @if(LoginForm.get('email')?.hasError('email')){
             <small class="text-danger">Email invalido</small>
           }
 
-          @if(formLogin.get('email')?.hasError('required')){
+          @if(LoginForm.get('email')?.hasError('required')){
             <small class="text-danger">Email obrigatório</small>
           }
         }
@@ -31,13 +31,13 @@
         <input type="password" class="form-control form-input-dark" placeholder="********" formControlName="password">
 
         <!-- Checa o campo email para ser validado -->
-        @if (formLogin.get('password')?.invalid && formLogin.get('password')?.touched){
+        @if (LoginForm.get('password')?.invalid && LoginForm.get('password')?.touched){
 
-          @if(formLogin.get('password')?.hasError('minlength')){
+          @if(LoginForm.get('password')?.hasError('minlength')){
             <small class="text-danger">Minimo de 6 digitos</small>
           }
 
-          @if(formLogin.get('password')?.hasError('required')){
+          @if(LoginForm.get('password')?.hasError('required')){
             <small class="text-danger">Senha obrigatória</small>
           }
         }
@@ -55,7 +55,7 @@
         <a routerLink="/recuperar-senha" class="link-brand text-decoration-none">Esqueceu a senha?</a>
       </div>
 
-      <button routerLink="" type="submit" [disabled]="formLogin.invalid" class="btn-background w-100 p-2 rounded-3 fs-5 border-0 text-white fw-bold mb-4" >Entrar</button>
+      <button routerLink="" type="submit" [disabled]="LoginForm.invalid" class="btn-background w-100 p-2 rounded-3 fs-5 border-0 text-white fw-bold mb-4" >Entrar</button>
 
       <div class="text-center mt-3">
         <span class="text-light opacity-75">Não possui conta?</span>
