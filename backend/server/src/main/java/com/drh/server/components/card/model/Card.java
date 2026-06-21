@@ -1,4 +1,4 @@
-package com.drh.server.components.card.entities;
+package com.drh.server.components.card.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

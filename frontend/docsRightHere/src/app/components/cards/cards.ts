@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core'; 
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CardsService } from './cardservice'; 
+import { CardsService } from './cardservice';
 
 
 @Component({
@@ -21,8 +21,8 @@ export class Cards implements OnInit {
   cardsExcluidos: any[] = [];
   cardSelecionado: any = null;
 
-  novoTitulo: string = ' ';
-  novaDescricao: string = ' ';
+  novoTitulo: string = '';
+  novaDescricao: string = '';
 
   arquivo: any[] = [];
 
@@ -78,6 +78,12 @@ export class Cards implements OnInit {
   abrirJanelaCards() { this.exibirJanelaCards = true; }
 
   criarNovoCard() {
+
+    if (!this.novoTitulo.trim() || !this.novaDescricao.trim()) {
+      console.warn("⚠️ Tentativa de criar um card com campos vazios barrada!");
+      return;
+    }
+
     const cardCriado = {
       titulo: this.novoTitulo,
       descricao: this.novaDescricao,
@@ -102,17 +108,19 @@ export class Cards implements OnInit {
     });
   }
 
-  excluirCard(index: number) {
-    const card = this.meusCards[index];
-
+  excluirCard(card: any) {
     if (card && card.id) {
       this.cardService.moverParaLixeira(card.id).subscribe({
         next: () => {
-          const cardDeletado = this.meusCards.splice(index, 1)[0];
-          this.cardsExcluidos.unshift(cardDeletado);
+
+          this.meusCards = this.meusCards.filter(c => c.id !== card.id);
+
+          this.cardsExcluidos.unshift(card);
         },
         error: (err) => console.error('Erro ao mover para a lixeira:', err)
       });
+    } else {
+      console.warn("⚠️ Não foi possível excluir: Card não possui um ID válido no banco.");
     }
   }
 

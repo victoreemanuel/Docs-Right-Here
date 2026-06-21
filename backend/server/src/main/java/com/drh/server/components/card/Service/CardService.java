@@ -1,7 +1,7 @@
 package com.drh.server.components.card.Service;
 
 import com.drh.server.components.card.dto.CardDTO;
-import com.drh.server.components.card.entities.Card;
+import com.drh.server.components.card.model.Card;
 import com.drh.server.components.card.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

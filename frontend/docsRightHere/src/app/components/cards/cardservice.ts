@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CardsService {
 
-  private apiUrl = 'http://localhost:8080/api/cards';
+  private apiUrl = 'http://localhost:8080/cards';
 
   constructor(private http: HttpClient) { }
 
@@ -33,5 +34,16 @@ export class CardsService {
 
   deletarPermanente(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+  buscarCards() {
+
+    const token = localStorage.getItem('seuTokenAqui');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get('http://localhost:8080/cards', { headers });
   }
 }

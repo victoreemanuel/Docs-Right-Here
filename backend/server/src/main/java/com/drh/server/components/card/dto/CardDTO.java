@@ -1,6 +1,6 @@
 package com.drh.server.components.card.dto;
 
-import com.drh.server.components.card.entities.Card;
+import com.drh.server.components.card.model.Card;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
