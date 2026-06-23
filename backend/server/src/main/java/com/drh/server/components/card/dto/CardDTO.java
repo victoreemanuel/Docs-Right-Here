@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CardDTO {
 
+public class CardDTO {
     private Long id;
     private String titulo;
     private String descricao;
     private String icone;
     private String cor;
+    private boolean excluido;
 
     public CardDTO(Card entity) {
         this.id = entity.getId();
@@ -22,5 +23,6 @@ public class CardDTO {
         this.descricao = entity.getDescricao();
         this.icone = entity.getIcone();
         this.cor = entity.getCor();
+        this.excluido = entity.isExcluido();
     }
 }

@@ -23,6 +23,12 @@ public class CardController {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping(value = "/excluidos")
+    public ResponseEntity<List<CardDTO>> findExcluidos() {
+        List<CardDTO> list = service.findExcluidos();
+        return ResponseEntity.ok().body(list);
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<CardDTO> findById(@PathVariable Long id) {
         CardDTO dto = service.findById(id);
@@ -41,6 +47,18 @@ public class CardController {
     public ResponseEntity<CardDTO> update(@PathVariable Long id, @RequestBody CardDTO dto) {
         dto = service.update(id, dto);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @PutMapping(value = "/{id}/lixeira")
+    public ResponseEntity<Void> moverParaLixeira(@PathVariable Long id) {
+        service.moverParaLixeira(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{id}/restaurar")
+    public ResponseEntity<Void> restaurar(@PathVariable Long id) {
+        service.restaurar(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{id}")

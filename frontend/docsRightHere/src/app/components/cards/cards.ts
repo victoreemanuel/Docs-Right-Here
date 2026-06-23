@@ -119,22 +119,23 @@ export class Cards implements OnInit {
       error: (erro) => console.error('Erro ao salvar card:', erro)
     });
   }
-
   excluirCard(card: any) {
     if (card && card.id) {
       this.cardService.moverParaLixeira(card.id).subscribe({
         next: () => {
-        
           this.meusCards = this.meusCards.filter(item => item.id !== card.id);
-
           this.cardsExcluidos.unshift(card);
-
           this.detectorDeAlteracoes.detectChanges();
         },
-        error: (erro) => console.error('Erro ao mover para a lixeira:', erro)
+
+        error: (erro) => {
+          console.error('Erro completo do servidor:', erro);
+
+          const mensagemDoJava = erro.error?.message || 'Erro inesperado no servidor.';
+
+          alert(`🚨 Ops! ${mensagemDoJava}`);
+        }
       });
-    } else {
-      console.warn("⚠️ O card selecionado não possui um ID válido no banco de dados.");
     }
   }
 

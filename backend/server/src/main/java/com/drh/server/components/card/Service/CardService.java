@@ -17,7 +17,18 @@ public class CardService {
 
     public List<CardDTO> findAll() {
         List<Card> list = repository.findAll();
-        return list.stream().map(x -> new CardDTO(x)).collect(Collectors.toList());
+        return list.stream()
+                .filter(x -> !x.isExcluido())
+                .map(x -> new CardDTO(x))
+                .collect(Collectors.toList());
+    }
+
+    public List<CardDTO> findExcluidos() {
+        List<Card> list = repository.findAll();
+        return list.stream()
+                .filter(x -> x.isExcluido())
+                .map(x -> new CardDTO(x))
+                .collect(Collectors.toList());
     }
 
     public CardDTO findById(Long id) {
@@ -29,6 +40,7 @@ public class CardService {
     public CardDTO insert(CardDTO dto) {
         Card entity = new Card();
         copyDtoToEntity(dto, entity);
+        entity.setExcluido(false);
         entity = repository.save(entity);
         return new CardDTO(entity);
     }
@@ -41,11 +53,24 @@ public class CardService {
         return new CardDTO(entity);
     }
 
-    public void delete(Long id) {
+    public void moverParaLixeira(Long id) {
         Card entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Card não encontrado. ID: " + id));
         entity.setExcluido(true);
         repository.save(entity);
+    }
+
+    public void restaurar(Long id) {
+        Card entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Card não encontrado. ID: " + id));
+        entity.setExcluido(false);
+        repository.save(entity);
+    }
+
+    public void delete(Long id) {
+        Card entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Card não encontrado. ID: " + id));
+        repository.delete(entity);
     }
 
     private void copyDtoToEntity(CardDTO dto, Card entity) {
