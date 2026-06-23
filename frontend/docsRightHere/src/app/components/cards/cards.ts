@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardsService } from './cardservice';
 
@@ -51,7 +51,10 @@ export class Cards implements OnInit {
     'bi-people', 'bi-person-workspace'
   ];
 
-  constructor(private cardService: CardsService) { }
+  constructor(
+    private cardService: CardsService,
+    private detectorDeAlteracoes: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     this.carregarCardsAtivos();
@@ -60,15 +63,22 @@ export class Cards implements OnInit {
 
   carregarCardsAtivos() {
     this.cardService.getCards().subscribe({
-      next: (dados) => this.meusCards = dados,
-      error: (err) => console.error('Erro ao carregar cards ativos:', err)
+      next: (dados) => {
+        this.meusCards = dados;
+
+        this.detectorDeAlteracoes.detectChanges();
+      },
+      error: (erro) => console.error('Erro ao carregar cards ativos:', erro)
     });
   }
 
   carregarCardsExcluidos() {
     this.cardService.getCardsExcluidos().subscribe({
-      next: (dados) => this.cardsExcluidos = dados,
-      error: (err) => console.error('Erro ao carregar lixeira:', err)
+      next: (dados) => {
+        this.cardsExcluidos = dados;
+        this.detectorDeAlteracoes.detectChanges();
+      },
+      error: (erro) => console.error('Erro ao carregar lixeira:', erro)
     });
   }
 
@@ -80,7 +90,7 @@ export class Cards implements OnInit {
   criarNovoCard() {
 
     if (!this.novoTitulo.trim() || !this.novaDescricao.trim()) {
-      console.warn("⚠️ Tentativa de criar um card com campos vazios barrada!");
+      console.warn("⚠️ Não é possível criar um card com campos vazios!");
       return;
     }
 
@@ -103,8 +113,10 @@ export class Cards implements OnInit {
         this.iconeSelecionado = 'bi-file-earmark-text';
         this.corSelecionada = '#3a3f44';
         this.exibirJanelaCriar = false;
+
+        this.detectorDeAlteracoes.detectChanges();
       },
-      error: (err) => console.error('Erro ao salvar card:', err)
+      error: (erro) => console.error('Erro ao salvar card:', erro)
     });
   }
 
@@ -112,15 +124,17 @@ export class Cards implements OnInit {
     if (card && card.id) {
       this.cardService.moverParaLixeira(card.id).subscribe({
         next: () => {
-
-          this.meusCards = this.meusCards.filter(c => c.id !== card.id);
+        
+          this.meusCards = this.meusCards.filter(item => item.id !== card.id);
 
           this.cardsExcluidos.unshift(card);
+
+          this.detectorDeAlteracoes.detectChanges();
         },
-        error: (err) => console.error('Erro ao mover para a lixeira:', err)
+        error: (erro) => console.error('Erro ao mover para a lixeira:', erro)
       });
     } else {
-      console.warn("⚠️ Não foi possível excluir: Card não possui um ID válido no banco.");
+      console.warn("⚠️ O card selecionado não possui um ID válido no banco de dados.");
     }
   }
 
