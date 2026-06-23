@@ -119,25 +119,32 @@ export class Cards implements OnInit {
       error: (erro) => console.error('Erro ao salvar card:', erro)
     });
   }
-  excluirCard(card: any) {
-    if (card && card.id) {
-      this.cardService.moverParaLixeira(card.id).subscribe({
-        next: () => {
-          this.meusCards = this.meusCards.filter(item => item.id !== card.id);
-          this.cardsExcluidos.unshift(card);
-          this.detectorDeAlteracoes.detectChanges();
-        },
 
-        error: (erro) => {
-          console.error('Erro completo do servidor:', erro);
-
-          const mensagemDoJava = erro.error?.message || 'Erro inesperado no servidor.';
-
-          alert(`🚨 Ops! ${mensagemDoJava}`);
-        }
-      });
-    }
+excluirCard(card: any) {
+  // 🔍 Rastreador para ver o que o botão do HTML está injetando aqui
+  console.log('📦 Objeto recebido no excluirCard:', card);
+  
+  if (!card || !card.id) {
+    console.error('❌ Erro: O botão do HTML passou um dado inválido ou sem ID!', card);
+    alert('🚨 Erro no HTML: O botão de excluir passou um índice ou texto em vez do objeto do Card completo.');
+    return;
   }
+
+  this.cardService.moverParaLixeira(card.id).subscribe({
+    next: () => {
+ 
+      this.meusCards = this.meusCards.filter(item => item.id !== card.id);
+      
+      this.cardsExcluidos.unshift(card);
+      
+      this.detectorDeAlteracoes.detectChanges();
+    },
+    error: (erro) => {
+      console.error('Erro ao mover para a lixeira:', erro);
+      alert('Não foi possível excluir o card no servidor.');
+    }
+  });
+}
 
   abrirCard(Card: any) {
     this.cardSelecionado = Card;
@@ -234,29 +241,33 @@ export class Cards implements OnInit {
     }
   }
 
-  recuperarCard(index: number) {
-    const card = this.cardsExcluidos[index];
-
+  recuperarCard(card: any) {
     if (card && card.id) {
       this.cardService.recuperarCard(card.id).subscribe({
         next: () => {
-          const cardRestaurado = this.cardsExcluidos.splice(index, 1)[0];
-          this.meusCards.unshift(cardRestaurado);
+
+          this.cardsExcluidos = this.cardsExcluidos.filter(item => item.id !== card.id);
+
+          this.meusCards.unshift(card);
+
+          this.detectorDeAlteracoes.detectChanges();
+
         },
-        error: (err) => console.error('Erro ao restaurar card:', err)
+        error: (erro) => console.error('Erro ao restaurar card:', erro)
       });
     }
   }
 
-  deletarPermanente(index: number) {
-    const card = this.cardsExcluidos[index];
-
+  deletarPermanente(card: any) {
     if (card && card.id) {
       this.cardService.deletarPermanente(card.id).subscribe({
         next: () => {
-          this.cardsExcluidos.splice(index, 1);
+
+          this.cardsExcluidos = this.cardsExcluidos.filter(item => item.id !== card.id);
+
+          this.detectorDeAlteracoes.detectChanges();
         },
-        error: (err) => console.error('Erro ao deletar permanentemente:', err)
+        error: (erro) => console.error('Erro ao deletar permanentemente:', erro)
       });
     }
   }
