@@ -1,7 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { next } from './../../../../node_modules/@csstools/css-syntax-patches-for-csstree/dist/index.d';
+import { AuthService } from './../../services/auth.service';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LoginRequest } from '../../models/auth-model';
+
 
 @Component({
   selector: 'app-login-form',
@@ -10,38 +13,30 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login-form.css',
 })
 export class LoginForm {
-  constructor(private HttpClient: HttpClient){}
+  private readonly AuthService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  formLogin = new FormGroup({
+  LoginForm = new FormGroup({
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.minLength(6), Validators.required])
   })
-  // email: string = '';
-  // password: string = '';
+
 
 
   realizarlogin(){
-    if (this.formLogin.invalid) console.log("Login invalidado");
+    if (this.LoginForm.invalid) return;
 
-    const credenciais = {
-      login: this.formLogin.get('email')?.value, //Duas formas de acessar o valor
-      password: this.formLogin.value.password
+    const request: LoginRequest = {
+      email: this.LoginForm.value.email!,
+      password: this.LoginForm.value.password!
     };
-    console.log(credenciais);
-    return;
 
+    console.log(request);
 
-    const API_URL = "http://localhost:8080/auth/login";
-
-    this.HttpClient.post(API_URL, credenciais).subscribe({
-      next: (responta: any) => {
-        console.log("Resposta: ", responta);
-        alert("Login realizado: " + responta.token)
-      },
-      error: (error) =>{
-        alert("Erro: " + error);
-      }
-    })
+    this.AuthService.login(request).subscribe({
+      next: ()=> this.router.navigate(['/home']),
+      error: (er) => console.log(er)
+    });
 
   }
 }
