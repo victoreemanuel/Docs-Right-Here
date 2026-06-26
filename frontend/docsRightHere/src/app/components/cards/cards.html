@@ -24,8 +24,8 @@
       <div class="CebeçaSegundariaPagina mb-0 d-flex justify-content-between mt-3">
 
         <div class="ms-3 d-flex fw-bold text-black align-items-start" style="font-size: 45px; font-weight: bold; ">
-          Meus
-          Cards</div>
+          Meus Cards
+        </div>
 
         <div class="ExcluirCard justify-content-center">
           <button (click)="abrirJanelaExcluir()"
@@ -68,7 +68,6 @@
 
               <div class="rounded-3 d-flex align-items-center justify-content-center"
                 [style.background-color]="Card.cor || '#7b2cbf'" style="width: 45px; height: 45px; min-width: 45px;">
-
                 <i [class]="'bi ' + (Card.icone || 'bi-file-earmark-text') + ' fs-4'"></i>
               </div>
 
@@ -80,12 +79,12 @@
             </div>
 
             <div class="d-flex justify-content-end gap-2 mt-2">
-              <button (click)="excluirCard(i)" class="btn btn-sm text-white px-3"
+              <button (click)="excluirCard(Card)" class="btn btn-sm text-white px-3"
                 style="background-color: #5a6268; border-radius: 8px;">Excluir</button>
+
               <button (click)="abrirCard(Card)" class="btn btn-sm text-white px-3"
                 style="background-color: #5a6268; border-radius: 8px;">Abrir</button>
             </div>
-
           </div>
         </div>
         }
@@ -136,7 +135,6 @@
 
             <div class="d-flex justify-content-end gap-3" style="margin-top: 15px;">
               <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Cancelar</button>
-
               <button (click)="criarNovoCard()" class="btn btn-modal">Criar</button>
             </div>
 
@@ -176,20 +174,27 @@
                         <p class="m-0 text-white-50 mt-1" style="font-size: 13px;">{{ Card.descricao }}</p>
                       </div>
                     </div>
-
                     <div class="d-flex justify-content-end gap-2 mt-3">
-                      <button (click)="excluirCard(i)" class="btn btn-sm text-white px-3"
-                        style="background-color: #5a6268; border-radius: 8px; font-size: 12px;">Excluir</button>
+
+                      <button (click)="excluirCard(Card)" class="btn btn-sm text-white px-3"
+                        style="background-color: #5a6268; border-radius: 8px; font-size: 12px;">
+                        Excluir
+                      </button>
+
                       <button (click)="abrirCard(Card); exibirJanelaAcessar = false" class="btn btn-sm text-white px-3"
-                        style="background-color: #5a6268; border-radius: 8px; font-size: 12px;">Abrir</button>
+                        style="background-color: #5a6268; border-radius: 8px; font-size: 12px;">
+                        Abrir
+                      </button>
+
                     </div>
 
                   </div>
                 </div>
                 } @empty {
-                <div class="text-center text-white-50 my-4 w-100">
-                  <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
-                  Nenhum card cadastrado no sistema.
+                <div
+                  class="col-12 d-flex flex-column align-items-center justify-content-center text-center text-white-50 py-5">
+                  <i class="bi bi-folder-x mb-2" style="font-size: 55px; color: #ced4da;"></i>
+                  <p class="m-0 fs-5 fw-semibold">Nenhum card cadastrado no sistema.</p>
                 </div>
                 }
 
@@ -222,7 +227,7 @@
             <div style="max-height: 400px; overflow-y: auto; width: 100%; padding-right: 10px;">
               <div class="row g-3">
 
-                @for (cardDel of cardsExcluidos; track cardDel; let idx = $index) {
+                @for (cardDel of cardsExcluidos; track cardDel) {
                 <div class="col-md-6">
                   <div class="d-flex gap-3 align-items-start p-3 rounded-4"
                     style="background-color: #2c3034; color: white;">
@@ -238,11 +243,11 @@
                       <p class="m-0 text-white-50 mt-1" style="font-size: 13px;">{{ cardDel.descricao }}</p>
 
                       <div class="d-flex justify-content-end gap-2 mt-3">
-                        <button (click)="deletarPermanente(idx)" class="btn btn-sm text-white px-3"
+                        <button (click)="deletarPermanente(cardDel)" class="btn btn-sm text-white px-3"
                           style="background-color: #5a6268; border-radius: 8px; font-size: 13px; font-weight: 500;">
                           Excluir
                         </button>
-                        <button (click)="recuperarCard(idx)" class="btn btn-sm text-white px-3"
+                        <button (click)="recuperarCard(cardDel)" class="btn btn-sm text-white px-3"
                           style="background-color: #5a6268; border-radius: 8px; font-size: 13px; font-weight: 500;">
                           Recuperar
                         </button>
@@ -250,6 +255,12 @@
                     </div>
 
                   </div>
+                </div>
+                } @empty {
+                <div
+                  class="col-12 d-flex flex-column align-items-center justify-content-center text-center text-white-50 py-5">
+                  <i class="bi bi-trash-visible mb-2" style="font-size: 55px; color: #ced4da;"></i>
+                  <p class="m-0 fs-5 fw-semibold">Sua lixeira está vazia.</p>
                 </div>
                 }
 
@@ -280,7 +291,6 @@
 
                 <div class="rounded-3 d-flex align-items-center justify-content-center"
                   [style.background-color]="cardSelecionado?.cor || '#7b2cbf'" style="width: 45px; height: 45px;">
-
                   <i [class]="'bi ' + (cardSelecionado?.icone || 'bi-file-earmark-text') + ' fs-4 text-white'"></i>
                 </div>
 
@@ -301,7 +311,6 @@
               </div>
 
               <div class="d-flex gap-2 position-relative">
-
                 <style>
                   .caixa-busca::placeholder {
                     color: #a0a5a8 !important;
@@ -329,7 +338,6 @@
                     <h3 class="fw-bold mb-3 d-flex align-items-center gap-2" style="font-size: 20px;">
                       <i class="bi bi-funnel"></i> Filtros
                     </h3>
-
                     <div class="d-flex flex-column gap-3 mb-4" style="font-size: 15px;">
                       <label class="d-flex align-items-center gap-3 cursor-pointer">
                         <input type="radio" name="tipoFiltro" (change)="filtroTipoSelecionado = 'PDF'"
@@ -345,7 +353,8 @@
                       </label>
                       <label class="d-flex align-items-center gap-3 cursor-pointer">
                         <input type="radio" name="tipoFiltro" (change)="filtroTipoSelecionado = 'POWERPOINT'"
-                          [checked]="filtroTipoSelecionado === 'POWERPOINT'" style="transform: scale(1.2);"> POWERPOINT
+                          [checked]="filtroTipoSelecionado === 'POWERPOINT'" style="transform: scale(1.2);">
+                        POWERPOINT
                       </label>
                       <label class="d-flex align-items-center gap-3 cursor-pointer">
                         <input type="radio" name="tipoFiltro" (change)="filtroTipoSelecionado = 'TODOS'"
@@ -382,8 +391,9 @@
                 </div>
 
                 <div class="d-flex gap-4 align-items-center text-white-50">
-                  <span class="badge bg-dark text-white rounded-2 px-2 py-1" style="font-size: 11px;">{{ arquivo.tipo
-                    }}</span>
+                  <span class="badge bg-dark text-white rounded-2 px-2 py-1" style="font-size: 11px;">
+                    {{ arquivo.tipo }}
+                  </span>
 
                   <button class="btn p-0 border-0 bg-transparent text-white" (click)="baixarArquivo(arquivo)">
                     <i class="bi bi-download"></i>
@@ -401,9 +411,9 @@
 
               </div>
               } @empty {
-              <div class="text-center text-white-50 my-4">
-                <i class="bi bi-folder-x fs-2 d-block mb-2"></i>
-                Nenhum arquivo anexado a este card ainda.
+              <div class="text-center text-white-50 my-5 py-3">
+                <i class="bi bi-folder-x fs-1 d-block mb-2" style="color: #ced4da;"></i>
+                <p class="m-0 fs-6">Nenhum arquivo anexado a este card ainda.</p>
               </div>
               }
 
@@ -436,3 +446,5 @@
       </div>
 
     </div>
+  </div>
+</div>
