@@ -8,6 +8,7 @@ import { Home } from './pages/home/home';
 import { Cards } from './components/cards/cards';
 import { Suporte } from './components/suporte/suporte';
 import { Mural } from './components/mural/mural';
+import { Relatorios } from './components/relatorios/relatorios';
 
 export const routes: Routes = [
 
@@ -30,6 +31,7 @@ export const routes: Routes = [
       { path: 'notificacoes', component: Notificacoes },
       { path: 'calendario', component: Calendario },
       { path: 'cards', component: Cards },
+      { path: 'relatorios', component: Relatorios },
       { path: 'suporte', component: Suporte }
     ]
   },
