@@ -1,0 +1,11 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "deploy": {
+    "startCommand": "node dist/docsRightHere/server/server.mjs"
+  },
+  "build": {
+    "variables": {
+      "RAILPACK_NO_SPA": "1"
+    }
+  }
+}
