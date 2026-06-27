@@ -4,5 +4,12 @@ export const serverRoutes: ServerRoute[] = [
   {
     path: '**',
     renderMode: RenderMode.Prerender
+    
+  },
+
+  {
+  path: 'home/cards',
+  renderMode: RenderMode.Client
   }
+
 ];
