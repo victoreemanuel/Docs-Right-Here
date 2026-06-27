@@ -19,7 +19,8 @@ export const routes: Routes = [
     component: Auth,
     children: [
       { path: 'login', component: LoginForm },
-      { path: 'cadastro', component: RegisterForm }
+      { path: 'cadastro', component: RegisterForm },
+      { path: 'mural', component: Mural }
     ]
   },
 
