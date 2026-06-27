@@ -1,14 +1,28 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CardsService } from './cardservice';
+import { CardsService } from '../../services/cardService';
+import { CommonModule } from '@angular/common';
 
+import { CardCriarComponent } from './card-criar/card-criar';
+import { CardTodosComponent } from './card-todos/card-todos';
+import { CardLixeiraComponent } from './card-lixeira/card-lixeira';
+import { CardAbrirComponent } from './card-abrir/card-abrir';
 
 @Component({
   selector: 'app-meus-cards',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [
+    ReactiveFormsModule, 
+    FormsModule, 
+    CommonModule,
+    CardCriarComponent,
+    CardTodosComponent,
+    CardLixeiraComponent,
+    CardAbrirComponent
+  ],
   templateUrl: './cards.html',
   styleUrl: './cards.css',
+  encapsulation: ViewEncapsulation.None 
 })
 export class Cards implements OnInit {
 
@@ -33,16 +47,12 @@ export class Cards implements OnInit {
   filtroTipoSelecionado: string = 'TODOS';
   exibirFiltros: boolean = false;
 
-  modoEdicao: Boolean = false;
+  modoEdicao: boolean = false;
   tituloEdicao: string = '';
   descricaoEdicao: string = '';
 
   coresDisponiveis: string[] = [
-    '#7b2cbf',
-    '#0284c7',
-    '#09d37f',
-    '#f59e0b',
-    '#e11d48'
+    '#7b2cbf', '#0284c7', '#09d37f', '#f59e0b', '#e11d48'
   ];
 
   iconesDisponiveis: string[] = [
@@ -65,7 +75,6 @@ export class Cards implements OnInit {
     this.cardService.getCards().subscribe({
       next: (dados) => {
         this.meusCards = dados;
-
         this.detectorDeAlteracoes.detectChanges();
       },
       error: (erro) => console.error('Erro ao carregar cards ativos:', erro)
@@ -88,7 +97,6 @@ export class Cards implements OnInit {
   abrirJanelaCards() { this.exibirJanelaCards = true; }
 
   criarNovoCard() {
-
     if (!this.novoTitulo.trim() || !this.novaDescricao.trim()) {
       console.warn("⚠️ Não é possível criar um card com campos vazios!");
       return;
@@ -120,31 +128,18 @@ export class Cards implements OnInit {
     });
   }
 
-excluirCard(card: any) {
-  // 🔍 Rastreador para ver o que o botão do HTML está injetando aqui
-  console.log('📦 Objeto recebido no excluirCard:', card);
-  
-  if (!card || !card.id) {
-    console.error('❌ Erro: O botão do HTML passou um dado inválido ou sem ID!', card);
-    alert('🚨 Erro no HTML: O botão de excluir passou um índice ou texto em vez do objeto do Card completo.');
-    return;
-  }
+  excluirCard(card: any) {
+    if (!card || !card.id) return;
 
-  this.cardService.moverParaLixeira(card.id).subscribe({
-    next: () => {
- 
-      this.meusCards = this.meusCards.filter(item => item.id !== card.id);
-      
-      this.cardsExcluidos.unshift(card);
-      
-      this.detectorDeAlteracoes.detectChanges();
-    },
-    error: (erro) => {
-      console.error('Erro ao mover para a lixeira:', erro);
-      alert('Não foi possível excluir o card no servidor.');
-    }
-  });
-}
+    this.cardService.moverParaLixeira(card.id).subscribe({
+      next: () => {
+        this.meusCards = this.meusCards.filter(item => item.id !== card.id);
+        this.cardsExcluidos.unshift(card);
+        this.detectorDeAlteracoes.detectChanges();
+      },
+      error: (erro) => console.error('Erro ao mover para a lixeira:', erro)
+    });
+  }
 
   abrirCard(Card: any) {
     this.cardSelecionado = Card;
@@ -160,12 +155,8 @@ excluirCard(card: any) {
 
   anexarArquivo(event: any) {
     const arquivoDoPC = event.target.files[0];
-
     if (arquivoDoPC && this.cardSelecionado) {
-      if (!this.cardSelecionado.arquivos) {
-        this.cardSelecionado.arquivos = [];
-      }
-
+      if (!this.cardSelecionado.arquivos) this.cardSelecionado.arquivos = [];
       const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
       const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
 
@@ -173,17 +164,12 @@ excluirCard(card: any) {
         ...this.cardSelecionado.arquivos,
         { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
       ];
-
       event.target.value = '';
     }
   }
 
   verArquivo(arquivo: any) {
-    if (arquivo.url) {
-      window.open(arquivo.url, '_blank');
-    } else {
-      alert('Link do arquivo não encontrado.');
-    }
+    if (arquivo.url) window.open(arquivo.url, '_blank');
   }
 
   baixarArquivo(arquivo: any) {
@@ -191,7 +177,6 @@ excluirCard(card: any) {
       const link = document.createElement('a');
       link.href = arquivo.url;
       link.download = arquivo.nome;
-
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -245,13 +230,9 @@ excluirCard(card: any) {
     if (card && card.id) {
       this.cardService.recuperarCard(card.id).subscribe({
         next: () => {
-
           this.cardsExcluidos = this.cardsExcluidos.filter(item => item.id !== card.id);
-
           this.meusCards.unshift(card);
-
           this.detectorDeAlteracoes.detectChanges();
-
         },
         error: (erro) => console.error('Erro ao restaurar card:', erro)
       });
@@ -262,9 +243,7 @@ excluirCard(card: any) {
     if (card && card.id) {
       this.cardService.deletarPermanente(card.id).subscribe({
         next: () => {
-
           this.cardsExcluidos = this.cardsExcluidos.filter(item => item.id !== card.id);
-
           this.detectorDeAlteracoes.detectChanges();
         },
         error: (erro) => console.error('Erro ao deletar permanentemente:', erro)

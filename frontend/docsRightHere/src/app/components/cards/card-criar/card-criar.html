@@ -1,0 +1,43 @@
+<div class="SobreposiçãoJanela">
+  <div class="CartãoFlutuante">
+    <div class="CriaçãoDados" style="display: flex; align-items: center; gap: 15px; justify-content:center;">
+      <h2 class="m-0" style="font-size: 40px;">Criação de Card</h2>
+    </div>
+
+    <div class="dadoTitulo" style="display: flex; align-items: center; gap: 15px; margin-top: 20px; margin-bottom: 20px; padding-right: 50px;">
+      <h2 class="m-0">Titulo: </h2>
+      <input type="text" [(ngModel)]="novoTitulo" name="novoTitulo" class="flex-grow-1">
+    </div>
+
+    <div class="dadoDescrição" style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px; padding-right: 50px;">
+      <h2 class="m-0">Descrição: </h2>
+      <input type="text" [(ngModel)]="novaDescricao" name="novaDescricao" class="flex-grow-1">
+    </div>
+
+    <h2>Ícones: </h2>
+    <div class="d-flex align-items-center gap-3 fs-2 text-white mt-2 flex-wrap">
+      @for (icone of iconesDisponiveis; track icone) {
+      <i [class]="'bi ' + icone" (click)="iconeSelecionado = icone" class="p-1 rounded-3"
+        [style.background-color]="iconeSelecionado === icone ? '#7b2cbf' : 'transparent'"
+        [style.transform]="iconeSelecionado === icone ? 'scale(1.2)' : 'scale(1)'"
+        style="cursor: pointer; transition: all 0.2s ease;"></i>
+      }
+    </div>
+
+    <h2 class="mt-4">Cor do Card:</h2>
+    <div class="d-flex align-items-center gap-3 mt-2">
+      @for (cor of coresDisponiveis; track cor) {
+      <div (click)="corSelecionada = cor" class="rounded-circle" [style.background-color]="cor"
+        [style.border]="corSelecionada === cor ? '3px solid #09d37f' : '2px solid transparent'"
+        [style.transform]="corSelecionada === cor ? 'scale(1.15)' : 'scale(1)'"
+        style="width: 38px; height: 38px; cursor: pointer; transition: all 0.2s ease-in-out;">
+      </div>
+      }
+    </div>
+
+    <div class="d-flex justify-content-end gap-3" style="margin-top: 15px;">
+      <button (click)="exibirJanelaCriar = false" class="btn btn-modal">Cancelar</button>
+      <button (click)="criarNovoCard()" class="btn btn-modal">Criar</button>
+    </div>
+  </div>
+</div>
