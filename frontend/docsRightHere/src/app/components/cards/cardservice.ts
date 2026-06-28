@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class CardsService {
 
-  private apiUrl = 'back-end-docs-right-here-production.up.railway.app';
+  private apiUrl = 'http://localhost:8080/cards';
 
   constructor(private http: HttpClient) { }
 
