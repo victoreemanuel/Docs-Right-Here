@@ -1,9 +1,7 @@
 package com.drh.server.auth.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -17,15 +15,21 @@ public class RoleModel {
     private Long roleId;
     private String name;
 
+    public RoleModel() {}
+
+    public RoleModel(String name) {
+        this.name = name;
+    }
 
     public enum Values {
         ADMIN(1L),
-        USER(2L);
+        USER(2L),
+        PROFESSOR(3L),  // <-- NOVO
+        DIRETOR(4L);    // <-- NOVO
 
         Long roleId;
 
         Values(Long roleId){this.roleId = roleId;}
         public Long getRoleId(){return roleId; }
     }
-
 }

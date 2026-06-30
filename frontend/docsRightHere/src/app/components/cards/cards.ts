@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CardsService } from './cardservice';
+import { CardsService } from '../../services/cardservice';
 
 
 @Component({

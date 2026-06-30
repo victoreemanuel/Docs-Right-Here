@@ -5,7 +5,6 @@ import com.drh.server.auth.dto.LoginResponseDTO;
 import com.drh.server.auth.model.RoleModel;
 import com.drh.server.auth.repository.UserRepository;
 import com.drh.server.exception.IncorrectCredentialsException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -21,7 +20,6 @@ public class TokenService {
     private final UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
     public TokenService(
             JwtEncoder jwtEncoder,
             UserRepository userRepository,
@@ -35,13 +33,19 @@ public class TokenService {
 
         var user = userRepository.findByEmail(loginRequestDTO.email());
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, bCryptPasswordEncoder)){
-            throw  new IncorrectCredentialsException();
+            throw new IncorrectCredentialsException();
         }
 
         var scopes = user.get().getRoles()
                 .stream()
                 .map(RoleModel::getName)
                 .collect(Collectors.joining(" "));
+
+        String userRole = user.get().getRoles()
+                .stream()
+                .map(RoleModel::getName)
+                .findFirst()
+                .orElse("USER");
 
         var now = Instant.now();
         var oneHourInSeconds = 3600L;
@@ -54,7 +58,7 @@ public class TokenService {
                 .build();
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-        return new LoginResponseDTO(jwtValue, oneHourInSeconds);
 
+        return new LoginResponseDTO(jwtValue, oneHourInSeconds, userRole);
     }
 }

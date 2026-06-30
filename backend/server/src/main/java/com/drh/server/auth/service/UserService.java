@@ -25,11 +25,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
-
     public void createUser(UserCreateDTO userCreateDTO){
-
-        var userRole = roleRepository.findByName(RoleModel.Values.USER.name());
 
         var userExists = userRepository.findByEmail(userCreateDTO.email());
         if (userExists.isPresent()){
@@ -39,12 +35,21 @@ public class UserService {
         var user = new UserModel();
         user.setEmail(userCreateDTO.email());
         user.setPassword(passwordEncoder.encode(userCreateDTO.password()));
-        user.setRoles(Set.of(userRole));
+
+        String roleName = (userCreateDTO.role() != null && !userCreateDTO.role().isBlank())
+                ? userCreateDTO.role().toUpperCase()
+                : RoleModel.Values.USER.name();
+
+        var targetRole = roleRepository.findByName(roleName);
+        if (targetRole == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role inválida ou não encontrada: " + roleName);
+        }
+
+        user.setRoles(Set.of(targetRole));
         userRepository.save(user);
     }
 
     public List<UserModel> findAll(){
         return this.userRepository.findAll();
     }
-
 }
