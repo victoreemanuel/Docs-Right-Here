@@ -9,7 +9,7 @@ import { response } from 'express';
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080';
+  private readonly apiUrl = 'https://back-end-production-fa4d.up.railway.app';
   private readonly tokenKey = 'access_token';
 
   login(request: LoginRequest): Observable<LoginResponse> {

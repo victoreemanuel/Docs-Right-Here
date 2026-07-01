@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class CardsService {
 
-  private apiUrl = 'http://localhost:8080/cards';
+  private apiUrl = 'https://back-end-production-fa4d.up.railway.app/cards';
 
   constructor(private http: HttpClient) { }
 
@@ -44,6 +44,6 @@ export class CardsService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get('http://localhost:8080/cards', { headers });
+    return this.http.get('https://back-end-production-fa4d.up.railway.app/cards', { headers });
   }
 }
