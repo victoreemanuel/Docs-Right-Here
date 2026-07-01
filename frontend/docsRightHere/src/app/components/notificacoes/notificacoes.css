@@ -1,0 +1,17 @@
+.notificacao-card {
+  background: #5c6b7a;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+.notificacao-card:hover { background: #6a7a8a; }
+
+.badge-user { background: #0dcaf0; color: #fff; padding: 6px 15px; border-radius: 4px; font-weight: 500; }
+.badge-role { background: #198754; color: #fff; padding: 6px 15px; border-radius: 4px; }
+
+.filtro { padding: 8px 20px; border-radius: 25px; color: #fff; font-size: 14px; background: #8a8a8a; }
+.filtro::before { content: "●"; margin-right: 8px; }
+.f-prof::before { color: #3b5bdb; }
+.f-sec::before { color: #b533f1; }
+.f-dir::before { color: #f03e3e; }
