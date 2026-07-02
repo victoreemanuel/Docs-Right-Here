@@ -19,7 +19,7 @@
 .area-perfil {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 .info-usuario {
@@ -54,6 +54,15 @@ html, body {
 
 .sidebar-header {
     height: 56px; 
+}
+
+.bimestre {
+  background-color: #6c757d; /* cinza padrão Bootstrap */
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
 }
 
 
