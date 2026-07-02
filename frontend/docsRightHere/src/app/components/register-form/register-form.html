@@ -2,7 +2,7 @@
   class="d-flex align-items-center justify-content-center w-100 h-100 flex-column relative background-dark"
 >
   <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
-    <div class="mb-4">
+    <div class="text-center mb-4">
       <h1 class="text-gradient fs-2 fw-bold m-0">Cadastro</h1>
     </div>
 
@@ -33,6 +33,7 @@
           type="text"
           class="form-control form-input-dark"
           placeholder="000.000.000-00"
+          mask="000.000.000-00"
           formControlName="cpf"
         />
 
@@ -54,6 +55,7 @@
           type="text"
           class="form-control form-input-dark"
           placeholder="00/00/0000"
+          mask="00/00/0000"
           formControlName="dataNascimento"
         />
 
@@ -77,6 +79,7 @@
           type="text"
           class="form-control form-input-dark"
           placeholder="(00) 00000-0000"
+          mask="(00) 00000-0000"
           formControlName="celular"
         />
 
@@ -105,7 +108,7 @@
 
       <div class="text-center mt-3">
         <span class="text-light opacity-75">Já possui conta?</span>
-        <a routerLink="" class="link-brand ms-1 text-decoration-none fw-bold">Entrar</a>
+        <a routerLink="/auth/login" class="link-brand ms-1 text-decoration-none fw-bold">Entrar</a>
       </div>
     </form>
   </div>
