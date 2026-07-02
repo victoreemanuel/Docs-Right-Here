@@ -1,0 +1,176 @@
+import 'package:flutter/material.dart';
+import 'widgets/custom_app_bar.dart';
+import 'widgets/custom_sidebar.dart';
+import 'widgets/card_documento_widget.dart';
+import 'widgets/modal_criacao_card.dart';
+import 'widgets/modal_detalhes_card.dart';
+
+class MeusCardsPage extends StatefulWidget {
+  const MeusCardsPage({super.key});
+
+  @override
+  State<MeusCardsPage> createState() => _MeusCardsPageState();
+}
+
+class _MeusCardsPageState extends State<MeusCardsPage> {
+  final List<Map<String, dynamic>> _meusCards = [];
+
+  void _abrirModalCriacao() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ModalCriacaoCard(
+          onCardCriado: (titulo, descricao, icone, cor) {
+            setState(() {
+              _meusCards.add({
+                'id': DateTime.now().toString(),
+                'alunoNome': titulo,
+                'remetente': 'Paula Schmitt',
+                'descricao': descricao,
+                'icone': icone,
+                'iconeCor': cor,
+              });
+            });
+          },
+        );
+      },
+    );
+  }
+
+  void _abrirModalDetalhes(Map<String, dynamic> card) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ModalDetalhesCard(
+          alunoNome: card['alunoNome'],
+          icone: card['icone'],
+          iconeCor: card['iconeCor'],
+          onExcluirCardCompleto: () {
+            setState(() {
+              _meusCards.removeWhere((c) => c['id'] == card['id']);
+            });
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: const CustomAppBar(),
+      drawer: const CustomSidebar(),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                _buildTopBadge('Paula Schmitt', const Color(0xFF00C4CC), hasImage: true),
+                const SizedBox(width: 8),
+                _buildTopBadge('Professor(a)', const Color(0xFF17A2B8), hasImage: false),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF495057),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                icon: const Icon(Icons.delete_outline, size: 18),
+                label: const Text('Cards Excluidos'),
+                onPressed: () {},
+              ),
+            ),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: _abrirModalCriacao,
+                    child: Container(
+                      height: 105,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF495057), 
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white, size: 45),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Container(
+                    height: 105,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF495057), 
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Acessar todos\nCards (${_meusCards.length})',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
+            if (_meusCards.isNotEmpty) ...[
+              const Text(
+                'Meus Cards', 
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2C343E)),
+              ),
+              const SizedBox(height: 15),
+              Column(
+                children: _meusCards.map((card) {
+                  return CardDocumentoWidget(
+                    alunoNome: card['alunoNome'],
+                    remetente: card['remetente'],
+                    icone: card['icone'],
+                    iconeCor: card['iconeCor'],
+                    onAbrir: () => _abrirModalDetalhes(card),
+                    onExcluir: () {
+                      setState(() {
+                        _meusCards.removeWhere((c) => c['id'] == card['id']);
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+            ]
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopBadge(String text, Color color, {required bool hasImage}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(5)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (hasImage) ...[
+            const CircleAvatar(
+              radius: 8, 
+              backgroundImage: NetworkImage('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50'),
+            ),
+            const SizedBox(width: 6),
+          ],
+          Text(text, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+}
