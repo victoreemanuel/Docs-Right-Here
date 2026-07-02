@@ -16,7 +16,7 @@ class MeusCardsPage extends StatefulWidget {
 }
 
 class _MeusCardsPageState extends State<MeusCardsPage> {
-  final List<Map<String, dynamic>> _meusCards = [];
+   List<dynamic> _meusCards = [];
 
   late CardRepository cardRepository;
 
@@ -27,7 +27,19 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
     cardRepository = CardRepository(
     dioClient: DioClient(authService: AuthService()),
     );
+
+    carregarCards();
   }
+
+  void carregarCards() async {
+    final response = await cardRepository.getCards();
+
+     setState(() {
+       _meusCards = response;
+     });
+
+  }
+
 
   void _abrirModalCriacao() {
     showDialog(
