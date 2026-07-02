@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/services/dio_client.dart';
+import 'package:flutter_application/services/auth_service.dart';
+import 'package:flutter_application/repository/card_repository.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/custom_sidebar.dart';
 import 'widgets/card_documento_widget.dart';
@@ -14,6 +17,17 @@ class MeusCardsPage extends StatefulWidget {
 
 class _MeusCardsPageState extends State<MeusCardsPage> {
   final List<Map<String, dynamic>> _meusCards = [];
+
+  late CardRepository cardRepository;
+
+  @override
+  initState(){
+    super.initState();
+
+    cardRepository = CardRepository(
+    dioClient: DioClient(authService: AuthService()),
+    );
+  }
 
   void _abrirModalCriacao() {
     showDialog(

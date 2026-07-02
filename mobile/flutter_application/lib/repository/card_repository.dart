@@ -1,8 +1,6 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+
+
 import 'package:flutter_application/services/dio_client.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class CardRepository {
 
@@ -10,7 +8,6 @@ class CardRepository {
 
   CardRepository({required DioClient dioClient}) : _dioClient = dioClient;
 
-  @override
   Future<List<Map<String, dynamic>>> getCards() async{
 
     try{
