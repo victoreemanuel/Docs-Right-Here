@@ -47,6 +47,4 @@ class DioClient {
     );
   }
 
-
-
 }
