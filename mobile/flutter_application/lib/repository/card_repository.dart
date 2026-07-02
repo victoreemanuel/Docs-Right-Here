@@ -1,5 +1,3 @@
-
-
 import 'package:flutter_application/services/dio_client.dart';
 
 class CardRepository {
@@ -27,4 +25,22 @@ class CardRepository {
       throw Exception('Falha na conexão com o Back-End');
     }
   }
+
+  Future<Map<String, dynamic>> criarCard(Map<String, dynamic> cardDados) async {
+    try {
+      final cardResponse = await _dioClient.dio.post('/cards', data: cardDados);
+
+      if (cardResponse.statusCode == 200 || cardResponse.statusCode == 201) {
+  
+        return cardResponse.data as Map<String, dynamic>;
+
+      } else {
+        throw Exception('Falha ao criar o card no servidor');
+      }
+    } catch (e) {
+      
+      throw Exception('Falha na conexão com o Back-End ao criar card: $e');
+    }
+  }
+
 }
