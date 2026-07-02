@@ -19,6 +19,7 @@
 .area-perfil {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .info-usuario {
@@ -50,3 +51,9 @@ html, body {
   overflow: hidden;
   background-color: #f8f9fa;
 }
+
+.sidebar-header {
+    height: 56px; 
+}
+
+
