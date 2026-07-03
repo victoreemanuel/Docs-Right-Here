@@ -17,6 +17,7 @@ export interface RequestAvisoDTO {
   titulo: string,
   desc: string,
   exp: string,
+  visualizado: boolean,
   visibilidade: AvisoVisibilidade,
   nome_criador: string,
   na_lixeira: boolean
