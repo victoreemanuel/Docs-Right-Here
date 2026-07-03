@@ -16,15 +16,10 @@ public class AvisoCriadoListner {
     @Async
     @EventListener
     public void handleAvisoCriado(AvisoCriadoEvent event){
-        String assunto = String.format(
-                "Novo aviso: %s", event.aviso().getTitulo()
-        );
-        String texto = String.format(
-                "Um novo aviso criado por: %s\n\nDescrição: %s",
+        this.emailService.sendHtmlEmail(
+                event.aviso().getTitulo(),
                 event.aviso().getCriadoPor(),
                 event.aviso().getDescricao()
         );
-
-        emailService.sendTextEmail(assunto, texto);
     }
 }
