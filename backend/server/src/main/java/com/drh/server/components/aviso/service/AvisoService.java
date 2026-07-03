@@ -5,10 +5,12 @@ import com.drh.server.auth.service.UserService;
 import com.drh.server.components.aviso.dto.CreateAvisoDTO;
 import com.drh.server.components.aviso.dto.ResponseAvisoDTO;
 import com.drh.server.components.aviso.dto.UpdateAvisoDTO;
+import com.drh.server.components.aviso.events.AvisoCriadoEvent;
 import com.drh.server.components.aviso.model.AvisoModel;
 import com.drh.server.components.aviso.repository.AvisoRepository;
 import com.drh.server.exception.GenericException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class AvisoService {
     private AvisoRepository avisoRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     public List<ResponseAvisoDTO> listarAvisos(Boolean naLixeira){
         if (naLixeira == null) naLixeira = false;
@@ -48,6 +52,7 @@ public class AvisoService {
         );
 
         AvisoModel saved = this.avisoRepository.save(newAviso);
+        applicationEventPublisher.publishEvent(new AvisoCriadoEvent(saved));
         return ResponseAvisoDTO.of(saved);
     }
 
