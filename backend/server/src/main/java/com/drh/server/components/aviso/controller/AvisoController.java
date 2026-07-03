@@ -43,10 +43,14 @@ public class AvisoController {
         return ResponseEntity.ok(response);
     }
 
-//    @DeleteMapping("/aviso/{id}")
-//    public ResponseEntity<ResponseAvisoDTO> deletarAviso(@PathVariable("id") Long idAviso){
-//
-//    }
+    @DeleteMapping("/aviso/{id}")
+    public ResponseEntity<ResponseAvisoDTO> deletarAviso(
+            @PathVariable("id") Long idAviso,
+            @AuthenticationPrincipal Jwt jwt){
+
+        ResponseAvisoDTO response = this.avisoService.deletarAviso(idAviso, UUID.fromString(jwt.getSubject()));
+        return ResponseEntity.ok(response);
+    }
 //
 //    @PutMapping("/aviso/visto")
 //    public ResponseEntity<ResponseAvisoDTO> marcarComoVisto(@RequestBody UpdateAvisoDTO updateAvisoDTO){

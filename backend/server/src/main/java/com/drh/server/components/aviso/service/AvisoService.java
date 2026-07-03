@@ -4,14 +4,17 @@ import com.drh.server.auth.repository.UserRepository;
 import com.drh.server.auth.service.UserService;
 import com.drh.server.components.aviso.dto.CreateAvisoDTO;
 import com.drh.server.components.aviso.dto.ResponseAvisoDTO;
+import com.drh.server.components.aviso.dto.UpdateAvisoDTO;
 import com.drh.server.components.aviso.model.AvisoModel;
 import com.drh.server.components.aviso.repository.AvisoRepository;
+import com.drh.server.exception.GenericException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -46,6 +49,25 @@ public class AvisoService {
 
         AvisoModel saved = this.avisoRepository.save(newAviso);
         return ResponseAvisoDTO.of(saved);
+    }
+
+    public ResponseAvisoDTO deletarAviso(Long avisoDTO, UUID idUser){
+        String subject = this.userRepository.findById(idUser).get().getEmail();
+        AvisoModel aviso = this.avisoRepository.findById(avisoDTO)
+                .orElseThrow( ()-> new GenericException("Aviso não encontrado", HttpStatus.BAD_REQUEST) );
+
+        if (!Objects.equals(aviso.getCriadoPor(), subject)){
+            throw new GenericException("Apenas o autor tem esta permissão", HttpStatus.FORBIDDEN);
+        }
+
+        if (aviso.isNaLixeira()) {
+            this.avisoRepository.delete(aviso);
+        }else {
+            aviso.setNaLixeira(true);
+            this.avisoRepository.save(aviso);
+        }
+
+        return ResponseAvisoDTO.of(aviso);
     }
 
 }
