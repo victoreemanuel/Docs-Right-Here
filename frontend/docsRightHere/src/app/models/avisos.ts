@@ -12,7 +12,7 @@ export interface CreateAviso {
   visibilidade: AvisoVisibilidade
 }
 
-export interface RequestAvisoDTO {
+export interface RequestAviso {
   id: number,
   titulo: string,
   desc: string,
