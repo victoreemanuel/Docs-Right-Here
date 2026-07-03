@@ -11,6 +11,7 @@ public record RequestAvisoDTO(
         String titulo,
         String desc,
         LocalDate exp,
+        boolean visualizado,
         AvisoVisibilidade visibilidade,
         String nome_criador,
         boolean na_lixeira
