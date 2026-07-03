@@ -22,11 +22,12 @@ public class AvisoService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<AvisoModel> listarAvisos(Boolean naLixeira){
-        if (naLixeira != null) {
-            return this.avisoRepository.findByNaLixeira(naLixeira);
-        }
-        return this.avisoRepository.findByNaLixeira(false);
+    public List<ResponseAvisoDTO> listarAvisos(Boolean naLixeira){
+        List<AvisoModel> response = this.avisoRepository.findByNaLixeira(naLixeira);
+
+        return response.stream()
+                .map(ResponseAvisoDTO::of)
+                .toList();
     }
 
     public ResponseAvisoDTO criarAviso(CreateAvisoDTO avisoDTO, UUID idUser){
