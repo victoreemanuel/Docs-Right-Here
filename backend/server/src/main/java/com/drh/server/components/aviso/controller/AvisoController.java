@@ -57,9 +57,13 @@ public class AvisoController {
 //
 //    }
 //
-//    @PutMapping("/aviso/restaurar")
-//    public ResponseEntity<ResponseAvisoDTO> restaurarAviso(@RequestBody UpdateAvisoDTO updateAvisoDTO){
-//
-//    }
+    @PutMapping("/aviso/restaurar")
+    public ResponseEntity<ResponseAvisoDTO> restaurarAviso(
+            @RequestBody UpdateAvisoDTO updateAvisoDTO,
+            @AuthenticationPrincipal Jwt jwt){
+        ResponseAvisoDTO response = this.avisoService.restaurarAviso(updateAvisoDTO, UUID.fromString(jwt.getSubject()));
+        return ResponseEntity.ok(response);
+
+    }
 
 }
