@@ -1,0 +1,23 @@
+<div class="d-flex align-items-center justify-content-center w-100 h-100 flex-column background-dark">
+  <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
+    <div class="text-center mb-4">
+      <h1 class="text-gradient fs-2 fw-bold m-0">Cadastro</h1>
+    </div>
+
+    <form class="w-100 mt-4" (ngSubmit)="retornarLogin()">
+      <div class="text-center mt-5 mb-5">
+        <p class="custom-instruction-text">Confirme sua conta pelo e-mail enviado.</p>
+
+        <div class="d-flex justify-content-center mt-5">
+          <button routerLink="/auth/login" type="submit" class="btn-background w-75 p-2 rounded-pill fs-5 border-0 text-white fw-bold">Retornar
+            para o login</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="text-light opacity-50 copyright-text" style="font-size: 0.8rem">
+      © 2025 DocsRightHere. Todos os direitos reservados.
+    </p>
+  </div>

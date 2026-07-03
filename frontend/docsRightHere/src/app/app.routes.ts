@@ -9,6 +9,9 @@ import { Cards } from './components/cards/cards';
 import { Suporte } from './components/suporte/suporte';
 import { Mural } from './components/mural/mural';
 import { Relatorios } from './components/relatorios/relatorios';
+import { Endereco } from './components/endereco/endereco';
+import { DadosPessoais } from './components/dados-pessoais/dados-pessoais';
+import { ReturnLogin } from './components/return-login/return-login';
 
 export const routes: Routes = [
 
@@ -20,7 +23,9 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: LoginForm },
       { path: 'cadastro', component: RegisterForm },
-      { path: 'mural', component: Mural }
+      { path: 'endereco', component: Endereco },
+      { path: 'dados-pessoais', component: DadosPessoais},
+      { path: 'retorno-login', component: ReturnLogin},
     ]
   },
 
