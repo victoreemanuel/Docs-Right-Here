@@ -23,11 +23,14 @@ public class AvisoController {
     @Autowired
     private AvisoService avisoService;
 
-//    @GetMapping("/avisos")
-//    public ResponseEntity<List<ResponseAvisoDTO>> listarAvisos(
-//            @RequestParam(value = "lixeira", required = false) Boolean naLixeira){
-//
-//    }
+    @GetMapping("/avisos")
+    public ResponseEntity<List<ResponseAvisoDTO>> listarAvisos(
+            @RequestParam(value = "lixeira", required = false) Boolean naLixeira){
+
+        List<ResponseAvisoDTO> response = this.avisoService.listarAvisos(naLixeira);
+
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/aviso")
     public ResponseEntity<ResponseAvisoDTO> criarAviso(

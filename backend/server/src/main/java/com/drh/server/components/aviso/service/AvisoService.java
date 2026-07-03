@@ -23,6 +23,7 @@ public class AvisoService {
     private UserRepository userRepository;
 
     public List<ResponseAvisoDTO> listarAvisos(Boolean naLixeira){
+        if (naLixeira == null) naLixeira = false;
         List<AvisoModel> response = this.avisoRepository.findByNaLixeira(naLixeira);
 
         return response.stream()
