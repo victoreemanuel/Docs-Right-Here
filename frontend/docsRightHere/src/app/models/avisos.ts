@@ -7,7 +7,7 @@ export enum AvisoVisibilidade {
 
 export interface CreateAviso {
   titulo: string,
-  desc: string,
+  descricao: string,
   exp: string,
   visibilidade: AvisoVisibilidade
 }
@@ -15,7 +15,7 @@ export interface CreateAviso {
 export interface RequestAviso {
   id: number,
   titulo: string,
-  desc: string,
+  descricao: string,
   exp: string,
   visualizado: boolean,
   visibilidade: AvisoVisibilidade,
