@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  HttpHeaders  } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class CardsService {
 
-  private apiUrl = 'https://back-end-production-fa4d.up.railway.app/cards';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -44,6 +45,6 @@ export class CardsService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get('https://back-end-production-fa4d.up.railway.app/cards', { headers });
+    return this.http.get(`${environment.apiUrl}/cards`, { headers });
   }
 }
