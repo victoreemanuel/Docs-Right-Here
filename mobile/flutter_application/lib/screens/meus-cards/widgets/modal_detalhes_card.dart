@@ -54,6 +54,9 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
 
   void _dispararScanner() async {
     var status = await Permission.camera.request();
+
+    if (!mounted) return;
+
     if (status.isPermanentlyDenied) {
       showDialog(
         context: context,

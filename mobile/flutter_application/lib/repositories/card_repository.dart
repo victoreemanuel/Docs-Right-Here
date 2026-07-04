@@ -47,4 +47,21 @@ class CardRepository {
       throw Exception('Falha na conexão com o Back-End ao Excluir o card: $e');
     }
   }
+
+  Future<List<Map<String, dynamic>>> getCardsExcluidos() async {
+    try {
+      final response = await _dioClient.dio.get('/cards/excluidos');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+
+        return data.map((item) => item as Map<String, dynamic>).toList();
+      } else {
+        throw Exception('Falha ao carregar ');
+      }
+    } catch (e) {
+      throw Exception('Falha na conexão com o Back-End');
+    }
+  }
+
 }
