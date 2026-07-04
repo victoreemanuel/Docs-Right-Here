@@ -8,17 +8,6 @@ body {
   gap: 2px;
 }
 
-.badge-perfil {
-  display: flex;
-  gap: 10px;
-  height: 60px;
-  background: linear-gradient(to right, #2b76b9, #09d37f);
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 35px;
-}
-
 .titulo-secao {
   font-size: 45px;
   font-weight: bold;
@@ -30,7 +19,6 @@ body {
   font-size: 20px;
   margin-top: 30px;
 }
-
 
 .grid-acoes-rapidas {
   margin-top: -15px;
