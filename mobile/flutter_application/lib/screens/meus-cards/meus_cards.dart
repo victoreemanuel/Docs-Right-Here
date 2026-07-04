@@ -123,6 +123,29 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
     );
   }
 
+  void _abrirModalLixeira() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF3A3F44),
+          title: const Text('Lixeira', style: TextStyle(color: Colors.white)),
+          content: const Text(
+            'Conexão com o botão feita com sucesso! Próximo passo: carregar a lista aqui.',
+            style: TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Fechar', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,7 +175,22 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                 ),
                 icon: const Icon(Icons.delete_outline, size: 18),
                 label: const Text('Cards Excluidos'),
-                onPressed: () {},
+                onPressed: () {
+                  Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF495057),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                icon: const Icon(Icons.delete_outline, size: 18),
+                label: const Text('Cards Excluidos'),
+                onPressed: _abrirModalLixeira, 
+              ),
+            );
+
+                },
               ),
             ),
             const SizedBox(height: 15),
