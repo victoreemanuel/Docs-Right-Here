@@ -5,6 +5,13 @@ export enum AvisoVisibilidade {
   DIRETORES = 'DIRETORES'
 }
 
+export interface AvisoEvento {
+  tipo: 'CRIADO' | 'MOVIDO_PARA_LIXEIRA' | 'RESTAURADO' | 'EXCLUIDO';
+  avisoId: number;
+  aviso: RequestAviso
+}
+
+
 export interface CreateAviso {
   titulo: string,
   descricao: string,
