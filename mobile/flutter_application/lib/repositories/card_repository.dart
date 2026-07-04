@@ -64,4 +64,20 @@ class CardRepository {
     }
   }
 
+  Future<void> restaurarCard() async {
+    try {
+      final response = await _dioClient.dio.get('/cards/excluidos');
+
+      if (response.statusCode == 200) {
+        
+        throw Exception('Falha ao restaurar o card no servidor');
+      }
+    } catch (e) {
+
+      throw Exception('Falha na conexão com o Back-End ao restaurar o card: $e');
+
+    }
+  }
+
+
 }

@@ -26,7 +26,7 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
 
   void _anexarArquivoLocal() async {
     try {
-      // Chamada direta moderna e oficial do FilePicker
+
       FilePickerResult? res = await FilePicker.pickFiles(
         type: FileType.any, 
         allowMultiple: false,
@@ -34,7 +34,7 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
 
       if (res != null && res.files.isNotEmpty) {
         var arq = res.files.first;
-        // Se der erro no 'arq.name', use 'arq.files.single.name' ou mude para a linha abaixo:
+
         String nome = arq.name;
         String caminho = arq.path ?? "";
 
