@@ -15,13 +15,13 @@
         <!-- Checa o campo email para ser validado -->
         @if (LoginForm.get('email')?.invalid && LoginForm.get('email')?.touched){
 
-        @if(LoginForm.get('email')?.hasError('email')){
-        <small class="text-danger">Email invalido</small>
-        }
+          @if(LoginForm.get('email')?.hasError('email')){
+            <small class="text-danger">Email invalido</small>
+          }
 
-        @if(LoginForm.get('email')?.hasError('required')){
-        <small class="text-danger">Email obrigatório</small>
-        }
+          @if(LoginForm.get('email')?.hasError('required')){
+            <small class="text-danger">Email obrigatório</small>
+          }
         }
 
       </div>
@@ -33,14 +33,16 @@
         <!-- Checa o campo email para ser validado -->
         @if (LoginForm.get('password')?.invalid && LoginForm.get('password')?.touched){
 
-        @if(LoginForm.get('password')?.hasError('minlength')){
-        <small class="text-danger">Minimo de 6 digitos</small>
+          @if(LoginForm.get('password')?.hasError('minlength')){
+            <small class="text-danger">Minimo de 6 digitos</small>
+          }
+
+          @if(LoginForm.get('password')?.hasError('required')){
+            <small class="text-danger">Senha obrigatória</small>
+          }
         }
 
-        @if(LoginForm.get('password')?.hasError('required')){
-        <small class="text-danger">Senha obrigatória</small>
-        }
-        }
+
 
 
       </div>
