@@ -40,4 +40,11 @@ public class GlobalExceptionHandler {
                 .body(ErrorDTO.of(exception.getMessage()));
     }
 
+    @ExceptionHandler(GenericException.class)
+    public ResponseEntity<ErrorDTO> handleGeneric(GenericException exception) {
+        return ResponseEntity
+                .status(exception.getStatus())
+                .body(ErrorDTO.of(exception.getMessage()));
+    }
+
 }
