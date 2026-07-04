@@ -38,3 +38,14 @@
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
+
+.link-brand {
+  color: #15bf92;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.link-brand:hover {
+  color: #2a80b5;
+  text-decoration: underline !important;
+}

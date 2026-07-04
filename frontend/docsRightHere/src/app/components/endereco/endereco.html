@@ -1,0 +1,97 @@
+<div class="d-flex align-items-center justify-content-center w-100 h-100 flex-column relative background-dark">
+  <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
+    <div class="text-center mb-4">
+      <h1 class="text-gradient fs-2 fw-bold m-0">Cadastro</h1>
+    </div>
+
+    <form class="w-100 mt-4" [formGroup]="formEndereco" (ngSubmit)="realizarCadastro2()">
+      <div class="row mb-3">
+        <div class="col-sm-8">
+          <label for="endereco" class="form-label custom-label opacity-75">Endereço</label>
+          <input type="text" class="form-control form-input-dark custom-input" id="endereco" placeholder="Rua Limeira" formControlName="endereco">
+
+          @if (endereco?.invalid && endereco?.touched) {
+            @if (endereco?.hasError('required')) {
+              <small class="text-danger">Endereco é obrigatório</small>
+            }
+
+            @if (endereco?.hasError('minLength')) {
+              <small class="text-danger">Endereco muito curto</small>
+            }
+          }
+        </div>
+
+        <div class="col-sm-4 mt-3 mt-sm-0">
+          <label for="numero" class="form-label custom-label opacity-75">Numero</label>
+          <input type="text" class="form-control form-input-dark custom-input" id="numero" placeholder="36" formControlName="numero">
+
+          @if (numero?.invalid && numero?.touched) {
+            @if (numero?.hasError('required')) {
+              <small class="text-danger">Numero é obrigatório</small>
+            }
+          }
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="bairro" class="form-label custom-label opacity-75">Bairro</label>
+        <input type="text" class="form-control form-input-dark custom-input" id="bairro" placeholder="Jardim Ipiranga" formControlName="bairro">
+
+          @if (bairro?.invalid && bairro?.touched) {
+              @if (bairro?.hasError('required')) {
+                <small class="text-danger">Bairro é obrigatório</small>
+              }
+
+              @if (bairro?.hasError('minLength')) {
+                <small class="text-danger">Bairro muito curto</small>
+              }
+            }
+      </div>
+
+      <div class="form-group row mb-3">
+        <div class="col-sm-6">
+          <label for="cidade" class="form-label custom-label opacity-75">Cidade</label>
+          <input type="text" class="form-control custom-input form-input-dark" id="cidade" placeholder="Maringá" formControlName="cidade">
+
+            @if (cidade?.invalid && cidade?.touched) {
+              @if (cidade?.hasError('required')) {
+                <small class="text-danger">Cidade é obrigatório</small>
+              }
+            }
+        </div>
+        <div class="col-sm-6 mt-3 mt-sm-0">
+          <label for="estado" class="form-label custom-label opacity-75">Estado</label>
+          <input type="text" class="form-control custom-input form-input-dark" id="estado" placeholder="PR" formControlName="estado">
+
+            @if (estado?.invalid && estado?.touched) {
+              @if (estado?.hasError('required')) {
+                <small class="text-danger">Estado é obrigatório</small>
+              }
+            }
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="profissao" class="form-label custom-label opacity-75">Profissão</label>
+        <input type="text" class="form-control custom-input form-input-dark" id="profissao" placeholder="Professor" formControlName="profissao"/>
+
+          @if (profissao?.invalid && profissao?.touched) {
+              @if (profissao?.hasError('required')) {
+                <small class="text-danger">Profissão é obrigatório</small>
+              }
+            }
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" [disabled]="formEndereco.invalid" class=" btn-background w-50 p-2 rounded-pill fs-5 border-0 text-white fw-bold">
+          Proximo
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="text-light opacity-50 copyright-text" style="font-size: 0.8rem">
+      © 2025 DocsRightHere. Todos os direitos reservados.
+    </p>
+  </div>
