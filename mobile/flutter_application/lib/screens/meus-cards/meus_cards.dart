@@ -40,25 +40,44 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
 
   }
 
-
   void _abrirModalCriacao() {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return ModalCriacaoCard(
-          onCardCriado: (titulo, descricao, icone, cor) {
-            setState(() {
-              _meusCards.add({
-                'id': DateTime.now().toString(),
-                'alunoNome': titulo,
-                'remetente': 'Paula Schmitt',
-                'descricao': descricao,
-                'icone': icone,
-                'iconeCor': cor,
-              });
-            });
-          },
+            onCardCriado: (titulo, descricao, icone, cor) async{
+              try{
+                final Map<String,dynamic> novoCardDados = {
+                  'alunoNome': titulo,
+                  'descricao': descricao,
+                  'icone': icone.codePoint.toString(),
+                  'iconeCor': '#${cor.toARGB32().toRadixString(16).substring(2)}',
+                };
+
+                   final cardSalvoNoBanco = await cardRepository.criarCard(novoCardDados);   
+
+                   setState(() {
+                     _meusCards.insert(0, {
+
+                      'id': cardSalvoNoBanco['id'].toString(),
+                      'titulo': cardSalvoNoBanco['titulo'],
+                      'remetente': 'Paula Schmitt',
+                      'descricao': cardSalvoNoBanco['descricao'],
+                      'icone': icone, 
+                      'iconeCor': cor,
+                      
+                     });
+                   });
+
+                }catch (e){
+
+               if (!mounted) return; 
+
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao salvar o card no banco: $e')),
+                 );   
+              }
+            }
         );
       },
     );

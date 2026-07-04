@@ -31,9 +31,10 @@ class CardRepository {
       final cardResponse = await _dioClient.dio.post('/cards', data: cardDados);
 
       if (cardResponse.statusCode == 200 || cardResponse.statusCode == 201) {
+      
   
         return cardResponse.data as Map<String, dynamic>;
-
+        
       } else {
         throw Exception('Falha ao criar o card no servidor');
       }
