@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/services/dio_client.dart';
 import 'package:flutter_application/services/auth_service.dart';
-import 'package:flutter_application/repository/card_repository.dart';
+import 'package:flutter_application/repositories/card_repository.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/custom_sidebar.dart';
 import 'widgets/card_documento_widget.dart';
@@ -47,6 +47,9 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
       builder: (BuildContext context) {
         return ModalCriacaoCard(
             onCardCriado: (titulo, descricao, icone, cor) async{
+
+              final messenger = ScaffoldMessenger.of(context);
+
               try{
                 final Map<String,dynamic> novoCardDados = {
                   'alunoNome': titulo,
@@ -66,7 +69,7 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                       'descricao': cardSalvoNoBanco['descricao'],
                       'icone': icone, 
                       'iconeCor': cor,
-                      
+
                      });
                    });
 
@@ -74,8 +77,9 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
 
                if (!mounted) return; 
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao salvar o card no banco: $e')),
-                 );   
+              messenger.showSnackBar(
+                SnackBar(content: Text('Erro ao salvar o card no banco: $e')),
+              ); 
               }
             }
         );
@@ -179,15 +183,28 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
               Column(
                 children: _meusCards.map((card) {
                   return CardDocumentoWidget(
-                    alunoNome: card['alunoNome'],
+                    alunoNome: card['titulo'] ?? card['titulo'] ?? 'Sem nome',
                     remetente: card['remetente'],
                     icone: card['icone'],
                     iconeCor: card['iconeCor'],
                     onAbrir: () => _abrirModalDetalhes(card),
-                    onExcluir: () {
+                    onExcluir: () async {
+
+                      final messenger = ScaffoldMessenger.of(context);
+
+                      try{
+
+                        await cardRepository.lixeiraCard(card['id'].toString());
+
                       setState(() {
                         _meusCards.removeWhere((c) => c['id'] == card['id']);
                       });
+
+                      } catch (e){
+
+                        messenger.showSnackBar(SnackBar(content: Text('Não foi possivel enviar para a lixeira: $e')),);
+                      }
+
                     },
                   );
                 }).toList(),
