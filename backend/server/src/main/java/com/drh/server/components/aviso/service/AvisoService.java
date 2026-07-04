@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -116,15 +115,8 @@ public class AvisoService {
     public List<AvisoDetalheDTO> buscarDetalhesDoDia(LocalDate data){
         List<AvisoModel> avisos = avisoRepository.buscarPorDiaExato(data.getDayOfMonth(), data.getMonthValue(), data.getYear());
 
-        DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
-
-        return avisos.stream().map(aviso -> new AvisoDetalheDTO(
-                aviso.getId(),
-                aviso.getDataHoraEvento().format(formatadorHora),
-                aviso.getTitulo(),
-                aviso.getDescricao(),
-                aviso.getVisibilidade()
-        ))
+        return avisos.stream()
+                .map(AvisoDetalheDTO::of)
                 .toList();
     }
 
