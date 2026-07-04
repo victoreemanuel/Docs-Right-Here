@@ -175,22 +175,7 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                 ),
                 icon: const Icon(Icons.delete_outline, size: 18),
                 label: const Text('Cards Excluidos'),
-                onPressed: () {
-                  Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF495057),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                icon: const Icon(Icons.delete_outline, size: 18),
-                label: const Text('Cards Excluidos'),
                 onPressed: _abrirModalLixeira, 
-              ),
-            );
-
-                },
               ),
             ),
             const SizedBox(height: 15),
@@ -243,19 +228,13 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                     iconeCor: card['iconeCor'],
                     onAbrir: () => _abrirModalDetalhes(card),
                     onExcluir: () async {
-
                       final messenger = ScaffoldMessenger.of(context);
-
                       try{
-
                         await cardRepository.lixeiraCard(card['id'].toString());
-
                       setState(() {
                         _meusCards.removeWhere((c) => c['id'] == card['id']);
                       });
-
                       } catch (e){
-
                         messenger.showSnackBar(SnackBar(content: Text('Não foi possivel enviar para a lixeira: $e')),);
                       }
 
