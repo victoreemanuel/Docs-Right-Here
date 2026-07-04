@@ -64,11 +64,11 @@ class CardRepository {
     }
   }
 
-  Future<void> restaurarCard() async {
+  Future<void> restaurarCard(String id) async {
     try {
-      final response = await _dioClient.dio.get('/cards/excluidos');
+      final cardResponse = await _dioClient.dio.put('/cards/$id/restaurar');
 
-      if (response.statusCode == 200) {
+      if (cardResponse.statusCode != 200) {
         
         throw Exception('Falha ao restaurar o card no servidor');
       }
@@ -79,5 +79,19 @@ class CardRepository {
     }
   }
 
+  Future<void> deletarCardDefinitivo(String id) async {
+    try {
+      final cardResponse = await _dioClient.dio.delete('/cards/$id');
+
+      if (cardResponse.statusCode != 200 && cardResponse.statusCode != 204) {
+        
+        throw Exception('Falha ao deletar o card definitivamente no servidor');
+      }
+    } catch (e) {
+
+      throw Exception('Falha na conexão com o Back-End ao deletar o card: $e');
+
+    }
+  }
 
 }
