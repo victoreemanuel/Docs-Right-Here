@@ -1,18 +1,18 @@
 package com.drh.server.components.aviso.controller;
 
-import com.drh.server.components.aviso.dto.CreateAvisoDTO;
-import com.drh.server.components.aviso.dto.ResponseAvisoDTO;
-import com.drh.server.components.aviso.dto.UpdateAvisoDTO;
+import com.drh.server.components.aviso.dto.*;
 import com.drh.server.components.aviso.service.AvisoService;
 import com.nimbusds.jwt.JWT;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +30,23 @@ public class AvisoController {
         List<ResponseAvisoDTO> response = this.avisoService.listarAvisos(naLixeira);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/calendario")
+    public ResponseEntity<List<AvisoCalendarioDTO>> buscarCalendario(
+            @RequestParam int mes,
+            @RequestParam int ano) {
+
+        List<AvisoCalendarioDTO> resposta = avisoService.buscarParaCalendario(mes, ano);
+        return ResponseEntity.ok(resposta);
+    }
+
+    @GetMapping("/calendario/dia")
+    public ResponseEntity<List<AvisoDetalheDTO>> buscarDetalhesDia(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate data){
+
+        List<AvisoDetalheDTO> resposta = avisoService.buscarDetalhesDoDia(data);
+        return ResponseEntity.ok(resposta);
     }
 
     @PostMapping("/aviso")

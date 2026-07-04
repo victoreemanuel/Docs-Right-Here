@@ -1,12 +1,10 @@
 package com.drh.server.components.aviso.service;
 
 import com.drh.server.auth.repository.UserRepository;
-import com.drh.server.auth.service.UserService;
-import com.drh.server.components.aviso.dto.CreateAvisoDTO;
-import com.drh.server.components.aviso.dto.ResponseAvisoDTO;
-import com.drh.server.components.aviso.dto.UpdateAvisoDTO;
+import com.drh.server.components.aviso.dto.*;
 import com.drh.server.components.aviso.events.AvisoCriadoEvent;
 import com.drh.server.components.aviso.model.AvisoModel;
+import com.drh.server.components.aviso.model.AvisoVisibilidade;
 import com.drh.server.components.aviso.repository.AvisoRepository;
 import com.drh.server.exception.GenericException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AvisoService {
@@ -95,6 +95,37 @@ public class AvisoService {
 
         return ResponseAvisoDTO.of(aviso);
 
+    }
+
+    public List<AvisoCalendarioDTO> buscarParaCalendario(int mes, int ano){
+
+        List<AvisoModel> avisos = avisoRepository.buscarPorMesEAno(mes, ano);
+
+        return avisos.stream()
+                .collect(Collectors.groupingBy(
+                        aviso -> aviso.getDataHoraEvento().toLocalDate(),
+                Collectors.mapping(AvisoModel::getVisibilidade, Collectors.toList())
+        )).entrySet().stream().map(entry ->{
+            List<AvisoVisibilidade> visibilidadesUnicas = entry.getValue().stream().distinct().toList();
+
+            return new AvisoCalendarioDTO(entry.getKey(), visibilidadesUnicas);
+        })
+                .toList();
+    }
+
+    public List<AvisoDetalheDTO> buscarDetalhesDoDia(LocalDate data){
+        List<AvisoModel> avisos = avisoRepository.buscarPorDiaExato(data.getDayOfMonth(), data.getMonthValue(), data.getYear());
+
+        DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm");
+
+        return avisos.stream().map(aviso -> new AvisoDetalheDTO(
+                aviso.getId(),
+                aviso.getDataHoraEvento().format(formatadorHora),
+                aviso.getTitulo(),
+                aviso.getDescricao(),
+                aviso.getVisibilidade()
+        ))
+                .toList();
     }
 
 }
