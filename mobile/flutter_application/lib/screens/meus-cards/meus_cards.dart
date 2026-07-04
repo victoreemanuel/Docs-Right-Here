@@ -32,11 +32,27 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
   }
 
   void carregarCards() async {
+    try{
     final response = await cardRepository.getCards();
 
      setState(() {
-       _meusCards = response;
+       _meusCards = response.map((card) {
+       return {
+        'id': card['id'].toString(),
+        'titulo': card['titulo'] ?? 'Sem titulo',
+        'remetente': card['Paula Schimitt'] ?? '',
+        'icone': _converterStringParaIcone(card['icone']),
+        'iconeCor': _converterStringParaCor(card['cor']),
+       };
+       }).toList();
+
      });
+    } catch (e){
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao carregar os cards: $e')),
+      );
+    }
 
   }
 
@@ -235,4 +251,19 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
       ),
     );
   }
+
+  Color _converterStringParaCor(String? hexColor){
+    if(hexColor == null || hexColor.isEmpty) return const Color(0xFF495057);
+    String limpa = hexColor.replaceAll('#', '');
+    if(limpa.length != 6) return Color(0xFF495057);
+    return Color(int.parse('FF$limpa', radix: 16));
+  }
+
+  IconData _converterStringParaIcone(String? codePointStr) {
+    if (codePointStr == null || codePointStr.isEmpty) return Icons.help_outline;
+    int? codePoint = int.tryParse(codePointStr);
+    if (codePoint == null) return Icons.help_outline;
+    return IconData(codePoint, fontFamily: 'MaterialIcons');
+  }
+
 }
