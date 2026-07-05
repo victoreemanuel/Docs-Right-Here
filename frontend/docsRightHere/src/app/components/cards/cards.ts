@@ -157,10 +157,10 @@ export class Cards implements OnInit {
     return this.meusCards.slice(0, 4);
   }
 
-  anexarArquivo(event: any) {
+ anexarArquivo(event: any) {
     const arquivoDoPC = event.target.files[0];
 
-    if (arquivoDoPC && this.cardSelecionado) {
+    if (arquivoDoPC && this.cardSelecionado && this.cardSelecionado.id) {
       if (!this.cardSelecionado.arquivos) {
         this.cardSelecionado.arquivos = [];
       }
@@ -168,10 +168,28 @@ export class Cards implements OnInit {
       const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
       const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
 
-      this.cardSelecionado.arquivos = [
+      const novosArquivos = [
         ...this.cardSelecionado.arquivos,
         { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
       ];
+
+      const cardComArquivo = {
+        ...this.cardSelecionado,
+        arquivos: novosArquivos
+      };
+
+  
+      this.cardService.atualizarCard(this.cardSelecionado.id, cardComArquivo).subscribe({
+        next: (cardSalvo: any) => { 
+          if (this.cardSelecionado) {
+            this.cardSelecionado.arquivos = cardSalvo.arquivos;
+          }
+          this.detectorDeAlteracoes.detectChanges();
+        },
+        error: (erro: any) => { 
+          console.error('Erro ao salvar arquivo no card:', erro);
+        }
+      });
 
       event.target.value = '';
     }
@@ -197,10 +215,27 @@ export class Cards implements OnInit {
     }
   }
 
-  excluirArquivo(index: number) {
-    if (this.cardSelecionado && this.cardSelecionado.arquivos) {
-      this.cardSelecionado.arquivos.splice(index, 1);
-      this.cardSelecionado.arquivos = [...this.cardSelecionado.arquivos];
+  excluirArquivo(arquivo: CardArquivo) { 
+    if (this.cardSelecionado && this.cardSelecionado.arquivos && this.cardSelecionado.id) {
+      
+      const novosArquivos = this.cardSelecionado.arquivos.filter(
+        arq => arq.nome !== arquivo.nome
+      );
+
+      const cardSemArquivo = {
+        ...this.cardSelecionado,
+        arquivos: novosArquivos
+      };
+
+      this.cardService.atualizarCard(this.cardSelecionado.id, cardSemArquivo).subscribe({
+        next: (cardSalvo) => {
+          if (this.cardSelecionado) {
+            this.cardSelecionado.arquivos = cardSalvo.arquivos;
+          }
+          this.detectorDeAlteracoes.detectChanges();
+        },
+        error: (erro) => console.error('Erro ao remover arquivo:', erro)
+      });
     }
   }
 
@@ -273,4 +308,7 @@ export class Cards implements OnInit {
       });
     }
   }
+
+  
+
 }
