@@ -1,0 +1,73 @@
+<section class="financeiro-container">
+
+  <h1 class="titulo-pagina">Planos e Benefícios</h1>
+
+  <div class="planos-grid">
+
+    <div
+      class="plano-card"
+      *ngFor="let plano of planos"
+      [class.plano-recomendado]="plano.recomendado">
+
+      <div class="badge-recomendado" *ngIf="plano.recomendado">Recomendado</div>
+
+      <div class="plano-header">
+        <h2 class="plano-nome">{{ plano.nome }}</h2>
+        <span class="plano-anual" *ngIf="plano.anual">Anual</span>
+      </div>
+
+      <!-- Bloco de preço: plano gratuito (Básico) -->
+      <ng-container *ngIf="plano.precoGratis">
+        <p class="preco-gratis">{{ plano.precoGratis }}</p>
+        <p class="plano-desc">{{ plano.descricaoBasico }}</p>
+      </ng-container>
+
+      <!-- Bloco de preço: planos pagos (Intermediario / Profissional) -->
+      <ng-container *ngIf="!plano.precoGratis">
+        <p class="parcelas-texto">{{ plano.parcelasTexto }}</p>
+        <p class="preco-parcela">{{ plano.precoParcela }}</p>
+        <p class="preco-vista">ou <strong>{{ plano.precoVistaValor }}</strong> à vista</p>
+        <p class="desconto-texto">{{ plano.descontoTexto }}</p>
+      </ng-container>
+
+      <button class="btn-escolher" (click)="onEscolherPlano(plano.id)">
+        Escolher e continuar
+      </button>
+
+      <div class="beneficios">
+        <p class="beneficios-titulo">{{ plano.beneficiosTitulo }}</p>
+        <ul>
+          <li *ngFor="let beneficio of plano.beneficios">
+            {{ beneficio.texto }}
+            <strong *ngIf="beneficio.destaque"> {{ beneficio.destaque }}</strong>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Card Exclusivo (estrutura própria, sem preço/benefícios em lista) -->
+    <div class="plano-card plano-exclusivo">
+
+      <div class="plano-header">
+        <h2 class="plano-nome">Exclusivo</h2>
+      </div>
+
+      <p class="preco-gratis">Consulte-nos</p>
+
+      <p class="exclusivo-texto">
+        Entre em contato com nossa consultoria e tire suas duvidas.
+      </p>
+      <p class="exclusivo-texto">
+        A equipe DocsRightHere agradece pelo seu interesse.
+      </p>
+
+      <button class="btn-escolher btn-contato" (click)="onEntrarEmContato()">
+        Entrar em contato
+      </button>
+
+    </div>
+
+  </div>
+
+</section>

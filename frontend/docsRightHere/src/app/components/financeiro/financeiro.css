@@ -1,0 +1,213 @@
+.financeiro-container {
+  --cor-azul: #1f3fce;
+  --cor-badge-azul: #2f6feb;
+  --cor-verde: #17a374;
+  --cor-verde-texto: #1aa15a;
+  --cor-fundo-card: #e9e9eb;
+  --cor-texto-titulo: #1c1c1e;
+  --cor-texto-secundario: #4b4b4d;
+  --cor-borda-radius: 18px;
+
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 24px 32px 48px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Título fica abaixo do badge do professor, que é um componente separado */
+.titulo-pagina {
+  margin: 24px 0 28px;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cor-texto-titulo);
+}
+
+.planos-grid {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.plano-card {
+  position: relative;
+  background-color: var(--cor-fundo-card);
+  border-radius: var(--cor-borda-radius);
+  padding: 24px 22px;
+  width: 240px;
+  flex: 1 1 240px;
+  min-height: 420px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.plano-recomendado {
+  padding-top: 40px;
+}
+
+.badge-recomendado {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--cor-badge-azul);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.plano-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.plano-nome {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cor-texto-titulo);
+  margin: 0;
+}
+
+.plano-anual {
+  font-size: 13px;
+  color: var(--cor-texto-secundario);
+  white-space: nowrap;
+}
+
+/* Plano gratuito / exclusivo */
+.preco-gratis {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--cor-azul);
+  margin: 4px 0 6px;
+}
+
+.plano-desc {
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+  margin: 0 0 16px;
+}
+
+/* Planos pagos */
+.parcelas-texto {
+  font-size: 13px;
+  color: var(--cor-texto-secundario);
+  margin: 6px 0 0;
+}
+
+.preco-parcela {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--cor-azul);
+  margin: 2px 0 2px;
+}
+
+.preco-vista {
+  font-size: 13px;
+  color: var(--cor-texto-secundario);
+  margin: 0 0 8px;
+}
+
+.preco-vista strong {
+  font-weight: 700;
+  color: var(--cor-texto-secundario);
+}
+
+.desconto-texto {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cor-verde-texto);
+  margin: 0 0 16px;
+  line-height: 1.35;
+}
+
+/* Botão */
+.btn-escolher {
+  background-color: var(--cor-verde);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 18px;
+  transition: filter 0.15s ease;
+}
+
+.btn-escolher:hover {
+  filter: brightness(0.92);
+}
+
+/* Benefícios */
+.beneficios {
+  margin-top: auto;
+}
+
+.beneficios-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-texto-titulo);
+  margin: 0 0 8px;
+}
+
+.beneficios ul {
+  margin: 0;
+  padding-left: 18px;
+  list-style-type: disc;
+}
+
+.beneficios li {
+  font-size: 13.5px;
+  color: var(--cor-texto-titulo);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.beneficios li strong {
+  font-weight: 700;
+}
+
+/* Card Exclusivo */
+.plano-exclusivo .exclusivo-texto {
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+
+.plano-exclusivo .btn-contato {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+/* Responsivo */
+@media (max-width: 1100px) {
+  .planos-grid {
+    flex-wrap: wrap;
+  }
+
+  .plano-card {
+    width: calc(50% - 10px);
+    flex: 1 1 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 620px) {
+  .plano-card {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .plano-recomendado {
+    padding-top: 40px;
+  }
+}
