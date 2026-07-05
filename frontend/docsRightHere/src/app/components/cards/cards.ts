@@ -177,13 +177,13 @@ export class Cards implements OnInit {
     }
   }
 
-  verArquivo(arquivo: CardArquivo) { 
-  if (arquivo.url) {
-    window.open(arquivo.url, '_blank');
-  } else {
-    alert('Link do arquivo não encontrado.');
+  verArquivo(arquivo: CardArquivo) {
+    if (arquivo.url) {
+      window.open(arquivo.url, '_blank');
+    } else {
+      alert('Link do arquivo não encontrado.');
+    }
   }
-}
 
   baixarArquivo(arquivo: any) {
     if (arquivo && arquivo.url) {
@@ -229,6 +229,9 @@ export class Cards implements OnInit {
   }
 
   alternarEdicao() {
+    if (!this.cardSelecionado) {
+      return;
+    }
     if (!this.modoEdicao) {
       this.tituloEdicao = this.cardSelecionado.titulo;
       this.descricaoEdicao = this.cardSelecionado.descricao;
