@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardsService } from './cardservice';
-
+import { Card, CardArquivo } from '../../models/card-model';
 
 @Component({
   selector: 'app-meus-cards',
@@ -17,9 +17,9 @@ export class Cards implements OnInit {
   exibirJanelaExcluir: boolean = false;
   exibirJanelaCards: boolean = false;
 
-  meusCards: any[] = [];
-  cardsExcluidos: any[] = [];
-  cardSelecionado: any = null;
+  meusCards: Card[] = [];
+  cardsExcluidos: Card[] = [];
+  cardSelecionado: Card | null = null;
 
   novoTitulo: string = '';
   novaDescricao: string = '';
@@ -90,7 +90,7 @@ export class Cards implements OnInit {
   criarNovoCard() {
 
     if (!this.novoTitulo.trim() || !this.novaDescricao.trim()) {
-      console.warn("⚠️ Não é possível criar um card com campos vazios!");
+      console.warn("Não é possível criar um card com campos vazios!");
       return;
     }
 
@@ -120,40 +120,39 @@ export class Cards implements OnInit {
     });
   }
 
-excluirCard(card: any) {
-  // 🔍 Rastreador para ver o que o botão do HTML está injetando aqui
-  console.log('📦 Objeto recebido no excluirCard:', card);
-  
-  if (!card || !card.id) {
-    console.error('❌ Erro: O botão do HTML passou um dado inválido ou sem ID!', card);
-    alert('🚨 Erro no HTML: O botão de excluir passou um índice ou texto em vez do objeto do Card completo.');
-    return;
+  excluirCard(card: any) {
+
+    console.log('Objeto recebido no excluirCard:', card);
+
+    if (!card || !card.id) {
+      console.error('Erro: O botão do HTML passou um dado inválido ou sem ID!', card);
+      alert('Erro no HTML: O botão de excluir passou um índice ou texto em vez do objeto do Card completo.');
+      return;
+    }
+
+    this.cardService.moverParaLixeira(card.id).subscribe({
+      next: () => {
+
+        this.meusCards = this.meusCards.filter(item => item.id !== card.id);
+
+        this.cardsExcluidos.unshift(card);
+
+        this.detectorDeAlteracoes.detectChanges();
+      },
+      error: (erro) => {
+        console.error('Erro ao mover para a lixeira:', erro);
+        alert('Não foi possível excluir o card no servidor.');
+      }
+    });
   }
 
-  this.cardService.moverParaLixeira(card.id).subscribe({
-    next: () => {
- 
-      this.meusCards = this.meusCards.filter(item => item.id !== card.id);
-      
-      this.cardsExcluidos.unshift(card);
-      
-      this.detectorDeAlteracoes.detectChanges();
-    },
-    error: (erro) => {
-      console.error('Erro ao mover para a lixeira:', erro);
-      alert('Não foi possível excluir o card no servidor.');
-    }
-  });
-}
-
-  abrirCard(Card: any) {
-    this.cardSelecionado = Card;
+  abrirCard(card: Card) {
+    this.cardSelecionado = card;
     this.exibirJanelaCards = true;
     this.modoEdicao = false;
     this.termoBuscaArquivo = '';
     this.filtroTipoSelecionado = 'TODOS';
   }
-
   get cardsRecentes() {
     return this.meusCards.slice(0, 4);
   }
@@ -178,13 +177,13 @@ excluirCard(card: any) {
     }
   }
 
-  verArquivo(arquivo: any) {
-    if (arquivo.url) {
-      window.open(arquivo.url, '_blank');
-    } else {
-      alert('Link do arquivo não encontrado.');
-    }
+  verArquivo(arquivo: CardArquivo) { 
+  if (arquivo.url) {
+    window.open(arquivo.url, '_blank');
+  } else {
+    alert('Link do arquivo não encontrado.');
   }
+}
 
   baixarArquivo(arquivo: any) {
     if (arquivo && arquivo.url) {
