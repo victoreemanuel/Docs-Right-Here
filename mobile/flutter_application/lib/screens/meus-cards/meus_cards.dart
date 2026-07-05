@@ -7,6 +7,7 @@ import 'widgets/custom_sidebar.dart';
 import 'widgets/card_documento_widget.dart';
 import 'widgets/modal_criacao_card.dart';
 import 'widgets/modal_detalhes_card.dart';
+import 'widgets/modal_lixeira_card.dart';
 
 class MeusCardsPage extends StatefulWidget {
   const MeusCardsPage({super.key});
@@ -123,27 +124,16 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
     );
   }
 
-  void _abrirModalLixeira() {
+void _abrirModalLixeira() {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF3A3F44),
-          title: const Text('Lixeira', style: TextStyle(color: Colors.white)),
-          content: const Text(
-            'Conexão com o botão feita com sucesso! Próximo passo: carregar a lista aqui.',
-            style: TextStyle(color: Colors.white70),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Fechar', style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        );
+        return ModalLixeiraCard(repository: cardRepository);
       },
-    );
+    ).then((_) {
+      carregarCards();
+    });
   }
 
   @override
