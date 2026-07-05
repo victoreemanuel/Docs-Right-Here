@@ -36,6 +36,10 @@ export class CardsService {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 
+  atualizarCard(id: number, card: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, card);
+  }
+
   buscarCards() {
 
     const token = localStorage.getItem('seuTokenAqui');
