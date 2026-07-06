@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_application/repositories/card_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ModalDetalhesCard extends StatefulWidget {
 final String cardId;              
@@ -38,18 +39,27 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
     for (var arq in widget.arquivosIniciais) {
       _arquivos.add({
         'nome': arq['nome']?.toString() ?? 'Sem nome',
-        'caminho': arq['url']?.toString() ?? '', // No banco guardamos como URL do MinIO
+        'caminho': arq['url']?.toString() ?? '', 
       });
     }
   }
 
-
   void _msg(String txt) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(txt)));
 
-  void _abrirArquivo(String path) async {
+ void _abrirArquivo(String path) async {
     if (path.isEmpty) return _msg('Caminho não disponível.');
-    var res = await OpenFilex.open(path);
-    if (res.type != ResultType.done) _msg('Não foi possível abrir: ${res.message}');
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      final Uri url = Uri.parse(path);
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        _msg('Não foi possível abrir o link do arquivo.');
+      }
+    } 
+
+    else {
+      var res = await OpenFilex.open(path);
+      if (res.type != ResultType.done) _msg('Não foi possível abrir: ${res.message}');
+    }
   }
 
   void _anexarArquivoLocal() async {

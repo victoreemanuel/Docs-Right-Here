@@ -79,7 +79,7 @@ public class CardController {
     @DeleteMapping("/{id}/arquivos/{nomeArquivo}")
     public ResponseEntity<CardDTO> excluirArquivoCompleto(@PathVariable Long id, @PathVariable String nomeArquivo) {
         CardDTO cardAtualizadoDto = service.excluirArquivo(id, nomeArquivo);
-        
+
         return ResponseEntity.ok().body(cardAtualizadoDto);
     }
 }
