@@ -12,8 +12,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
-resources/
-src/resources/
+src/main/resources/
+src/main/resources/
 application.properties
 app.key
 app.pub

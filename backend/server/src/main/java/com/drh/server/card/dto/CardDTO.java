@@ -1,14 +1,16 @@
-package com.drh.server.components.card.dto;
+package com.drh.server.card.dto;
 
-import com.drh.server.components.card.model.Card;
+import com.drh.server.card.model.Card;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class CardDTO {
     private Long id;
     private String titulo;
@@ -17,6 +19,8 @@ public class CardDTO {
     private String cor;
     private boolean excluido;
 
+    private List<CardArquivoDTO> arquivos = new ArrayList<>();
+
     public CardDTO(Card entity) {
         this.id = entity.getId();
         this.titulo = entity.getTitulo();
@@ -24,5 +28,11 @@ public class CardDTO {
         this.icone = entity.getIcone();
         this.cor = entity.getCor();
         this.excluido = entity.isExcluido();
+
+        if (entity.getArquivos() != null) {
+            this.arquivos = entity.getArquivos().stream()
+                    .map(CardArquivoDTO::new)
+                    .collect(Collectors.toList());
+        }
     }
 }

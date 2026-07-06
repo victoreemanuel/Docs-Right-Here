@@ -1,8 +1,8 @@
-package com.drh.server.components.card.Service;
+package com.drh.server.card.Service;
 
-import com.drh.server.components.card.dto.CardDTO;
-import com.drh.server.components.card.model.Card;
-import com.drh.server.components.card.repository.CardRepository;
+import com.drh.server.card.dto.CardDTO;
+import com.drh.server.card.model.Card;
+import com.drh.server.card.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

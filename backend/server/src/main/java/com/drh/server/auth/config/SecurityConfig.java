@@ -31,9 +31,9 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    @Value("${JWT_PUBLIC_KEY}")
+    @Value("${jwt.public.key}")
     private RSAPublicKey rsaPublicKey;
-    @Value("${JWT_PRIVATE_KEY}")
+    @Value("${jwt.private.key}")
     private RSAPrivateKey rsaPrivateKey;
 
     @Value("${cors.allowed-origins}")

@@ -1,7 +1,7 @@
-package com.drh.server.components.card.controller;
+package com.drh.server.card.controller;
 
-import com.drh.server.components.card.dto.CardDTO;
-import com.drh.server.components.card.Service.CardService;
+import com.drh.server.card.dto.CardDTO;
+import com.drh.server.card.Service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
