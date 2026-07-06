@@ -40,8 +40,8 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
         _meusCards = response.map((card) {
           return {
             'id': card['id'].toString(),
-            'titulo': card['titulo'] ?? 'Sem título', 
-            'remetente': 'Paula Schmitt', 
+            'titulo': card['titulo'] ?? 'Sem título',
+            'remetente': 'Paula Schmitt',
             'icone': _converterStringParaIcone(card['icone']),
             'iconeCor': _converterStringParaCor(card['cor']),
             'arquivos': card['arquivos'] ?? [],
@@ -51,9 +51,9 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao carregar os cards: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao carregar os cards: $e')));
     }
   }
 
@@ -102,14 +102,14 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
     );
   }
 
-void _abrirModalDetalhes(Map<String, dynamic> card) {
+  void _abrirModalDetalhes(Map<String, dynamic> card) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return ModalDetalhesCard(
-          cardId: card['id'].toString(), 
-          repository: cardRepository,    
+          cardId: card['id'].toString(),
+          repository: cardRepository,
           alunoNome: card['titulo'] ?? 'Sem nome',
           icone: card['icone'],
           iconeCor: card['iconeCor'],
@@ -219,130 +219,140 @@ void _abrirModalDetalhes(Map<String, dynamic> card) {
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(),
       drawer: const CustomSidebar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                _buildTopBadge(
-                  'Paula Schmitt',
-                  const Color(0xFF00C4CC),
-                  hasImage: true,
-                ),
-                const SizedBox(width: 8),
-                _buildTopBadge(
-                  'Professor(a)',
-                  const Color(0xFF17A2B8),
-                  hasImage: false,
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF495057),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+      body: RefreshIndicator(
+        color: const Color(0xFF00C4CC), 
+        onRefresh: () async {
+          carregarCards();
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  _buildTopBadge(
+                    'Paula Schmitt',
+                    const Color(0xFF00C4CC),
+                    hasImage: true,
                   ),
-                ),
-                icon: const Icon(Icons.delete_outline, size: 18),
-                label: const Text('Cards Excluidos'),
-                onPressed: _abrirModalLixeira,
+                  const SizedBox(width: 8),
+                  _buildTopBadge(
+                    'Professor(a)',
+                    const Color(0xFF17A2B8),
+                    hasImage: false,
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 15),
-            
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: _abrirModalCriacao,
-                    child: Container(
-                      height: 105,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF495057),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 45,
-                      ),
+              const SizedBox(height: 15),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF495057),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  icon: const Icon(Icons.delete_outline, size: 18),
+                  label: const Text('Cards Excluidos'),
+                  onPressed: _abrirModalLixeira,
                 ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: _verTodosOsCards,
-                    child: Container(
-                      height: 105,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF495057),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Acessar todos\nCards (${_meusCards.length})',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: _abrirModalCriacao,
+                      child: Container(
+                        height: 105,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF495057),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Icon(
+                          Icons.add,
                           color: Colors.white,
-                          fontWeight: FontWeight.w500,
+                          size: 45,
                         ),
                       ),
                     ),
                   ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: _verTodosOsCards,
+                      child: Container(
+                        height: 105,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF495057),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Acessar todos\nCards (${_meusCards.length})',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 25),
+              if (_meusCards.isNotEmpty) ...[
+                const Text(
+                  'Meus Cards',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C343E),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Column(
+                  children: _meusCards.map((card) {
+                    return CardDocumentoWidget(
+                      alunoNome: card['titulo'] ?? 'Sem nome',
+                      remetente: card['remetente'] ?? 'Paula Schmitt',
+                      icone: card['icone'],
+                      iconeCor: card['iconeCor'],
+                      onAbrir: () => _abrirModalDetalhes(card),
+                      onExcluir: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        try {
+                          await cardRepository.lixeiraCard(
+                            card['id'].toString(),
+                          );
+                          if (!mounted) return;
+
+                          setState(() {
+                            _meusCards.removeWhere(
+                              (c) => c['id'] == card['id'],
+                            );
+                          });
+                        } catch (e) {
+                          messenger.showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Não foi possivel enviar para a lixeira: $e',
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }).toList(),
                 ),
               ],
-            ),
-            const SizedBox(height: 25),
-            if (_meusCards.isNotEmpty) ...[
-              const Text(
-                'Meus Cards',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2C343E),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Column(
-                children: _meusCards.map((card) {
-                  return CardDocumentoWidget(
-                    alunoNome: card['titulo'] ?? 'Sem nome', 
-                    remetente: card['remetente'] ?? 'Paula Schmitt',
-                    icone: card['icone'],
-                    iconeCor: card['iconeCor'],
-                    onAbrir: () => _abrirModalDetalhes(card),
-                    onExcluir: () async {
-                      final messenger = ScaffoldMessenger.of(context);
-                      try {
-                        await cardRepository.lixeiraCard(card['id'].toString());
-                        if (!mounted) return; // Segurança contra o Async Gap
-                        
-                        setState(() {
-                          _meusCards.removeWhere((c) => c['id'] == card['id']);
-                        });
-                      } catch (e) {
-                        messenger.showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Não foi possivel enviar para a lixeira: $e',
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  );
-                }).toList(),
-              ),
             ],
-          ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ package com.drh.server.card.Service;
 
 import com.drh.server.card.dto.CardDTO;
 import com.drh.server.card.model.Card;
+import com.drh.server.card.model.CardArquivo;
 import com.drh.server.card.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,4 +91,30 @@ public class CardService {
             );
         }
     }
+
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    public CardDTO anexarArquivo(Long id, org.springframework.web.multipart.MultipartFile file) {
+        Card entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Card não encontrado. ID: " + id));
+
+        String urlMinio = fileStorageService.uploadFile(file);
+
+        String nomeOriginal = file.getOriginalFilename();
+        String tipo = "ARQUIVO";
+        if (nomeOriginal != null && nomeOriginal.contains(".")) {
+            tipo = nomeOriginal.substring(nomeOriginal.lastIndexOf(".") + 1).toUpperCase();
+        }
+
+        CardArquivo novoArquivo = new CardArquivo(nomeOriginal, tipo, urlMinio);
+
+
+        entity.getArquivos().add(novoArquivo);
+
+        entity = repository.save(entity);
+
+        return new CardDTO(entity);
+    }
+
 }

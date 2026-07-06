@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/screens/meus-cards/meus_cards.dart';
+import 'package:flutter_application/screens/login/login_screen.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart'; // Importação oficial v8
 
 void main() async {
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MeusCardsPage(), // Tela de login do colega preservada
+      home: const LoginScreen(), // Tela de login do colega preservada
     );
   }
 }

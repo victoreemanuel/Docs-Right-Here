@@ -66,4 +66,14 @@ public class CardController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping(value = "/{id}/arquivos")
+    public ResponseEntity<CardDTO> anexarArquivo(
+            @PathVariable Long id,
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+
+        CardDTO dto = service.anexarArquivo(id, file);
+        return ResponseEntity.ok().body(dto);
+    }
+
 }

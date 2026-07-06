@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
+import io.minio.SetBucketPolicyArgs;
 
 @Service
 public class FileStorageService {
@@ -28,6 +29,21 @@ public class FileStorageService {
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }
+            String publicPolicyJson = "{\n" +
+                    "    \"Version\": \"2012-10-17\",\n" +
+                    "    \"Statement\": [\n" +
+                    "        {\n" +
+                    "            \"Effect\": \"Allow\",\n" +
+                    "            \"Principal\": {\"AWS\": [\"*\"]},\n" +
+                    "            \"Action\": [\"s3:GetObject\"],\n" +
+                    "            \"Resource\": [\"arn:aws:s3:::" + bucketName + "/*\"]\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
+
+            minioClient.setBucketPolicy(
+                    SetBucketPolicyArgs.builder().bucket(bucketName).config(publicPolicyJson).build()
+            );
 
             String novoNome = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
