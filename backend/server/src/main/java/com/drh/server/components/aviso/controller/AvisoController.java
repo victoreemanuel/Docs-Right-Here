@@ -32,6 +32,12 @@ public class AvisoController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/aviso/{id}")
+    public ResponseEntity<ResponseAvisoDTO> listarAviso(@PathVariable("id") Long id){
+        ResponseAvisoDTO response = this.avisoService.listarAviso(id);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/aviso")
     public ResponseEntity<ResponseAvisoDTO> criarAviso(
             @Valid @RequestBody CreateAvisoDTO avisoDTO,

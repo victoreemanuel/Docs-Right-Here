@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,6 +41,13 @@ public class AvisoService {
         return response.stream()
                 .map(ResponseAvisoDTO::of)
                 .toList();
+    }
+
+    public ResponseAvisoDTO listarAviso(Long id){
+        Optional<AvisoModel> response = this.avisoRepository.findById(id);
+        if (response.isEmpty()) throw new GenericException("Aviso não encontrado", HttpStatus.NOT_FOUND);
+
+        return ResponseAvisoDTO.of(response.get());
     }
 
     public ResponseAvisoDTO criarAviso(CreateAvisoDTO avisoDTO, UUID idUser){
