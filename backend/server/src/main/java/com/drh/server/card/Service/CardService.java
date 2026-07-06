@@ -78,5 +78,16 @@ public class CardService {
         entity.setDescricao(dto.getDescricao());
         entity.setIcone(dto.getIcone());
         entity.setCor(dto.getCor());
+
+        if (dto.getArquivos() != null) {
+            entity.getArquivos().clear();
+            dto.getArquivos().forEach(arqDto ->
+                    entity.getArquivos().add(new com.drh.server.card.model.CardArquivo(
+                            arqDto.getNome(),
+                            arqDto.getTipo(),
+                            arqDto.getUrl()
+                    ))
+            );
+        }
     }
 }
