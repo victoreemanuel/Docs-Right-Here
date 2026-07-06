@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 interface Beneficio {
   texto: string;
@@ -29,6 +30,11 @@ interface Plano {
   styleUrls: ['./financeiro.css']
 })
 export class Financeiro {
+
+  carregandoPlanoId: string | null = null;
+  erroCheckout: string | null = null;
+
+  private readonly apiUrl = 'http://localhost:8080/api/v1/financeiro/checkout';
 
   planos: Plano[] = [
     {
@@ -79,8 +85,30 @@ export class Financeiro {
     }
   ];
 
+  constructor(private http: HttpClient) {}
+
   onEscolherPlano(planoId: string): void {
-    console.log('Plano escolhido:', planoId);
+    this.erroCheckout = null;
+
+    // Plano Básico é gratuito, não precisa chamar o gateway de pagamento
+    if (planoId === 'basico') {
+      console.log('Plano básico selecionado — ativar sem checkout.');
+      return;
+    }
+
+    this.carregandoPlanoId = planoId;
+
+    this.http.post<{ urlCheckout: string }>(this.apiUrl, { planoId }).subscribe({
+      next: (resposta) => {
+        this.carregandoPlanoId = null;
+        window.location.href = resposta.urlCheckout;
+      },
+      error: (erro) => {
+        this.carregandoPlanoId = null;
+        this.erroCheckout = 'Não foi possível iniciar o pagamento. Tente novamente em instantes.';
+        console.error('Erro ao criar checkout:', erro);
+      }
+    });
   }
 
   onEntrarEmContato(): void {
