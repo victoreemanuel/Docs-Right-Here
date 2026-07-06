@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_application/services/dio_client.dart';
 
 class CardRepository {
@@ -91,6 +92,27 @@ class CardRepository {
 
       throw Exception('Falha na conexão com o Back-End ao deletar o card: $e');
 
+    }
+  }
+
+  Future<Map<String, dynamic>> uploadArquivo(String cardId, String caminhoLocal, String nomeArquivo) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(caminhoLocal, filename: nomeArquivo),
+      });
+
+      final response = await _dioClient.dio.post(
+        '/cards/$cardId/arquivos',
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data as Map<String, dynamic>;
+      } else {
+        throw Exception('Falha ao enviar arquivo para o servidor');
+      }
+    } catch (e) {
+      throw Exception('Erro no upload do arquivo: $e');
     }
   }
 

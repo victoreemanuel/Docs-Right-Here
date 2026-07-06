@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/screens/login/login_screen.dart';
 import 'package:flutter_application/screens/meus-cards/meus_cards.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart'; // Importação oficial v8
 

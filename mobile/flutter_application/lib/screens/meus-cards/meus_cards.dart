@@ -101,13 +101,15 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
     );
   }
 
-  void _abrirModalDetalhes(Map<String, dynamic> card) {
+void _abrirModalDetalhes(Map<String, dynamic> card) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return ModalDetalhesCard(
-          alunoNome: card['alunoNome'] ?? card['titulo'] ?? 'Sem nome',
+          cardId: card['id'].toString(), 
+          repository: cardRepository,    
+          alunoNome: card['titulo'] ?? 'Sem nome',
           icone: card['icone'],
           iconeCor: card['iconeCor'],
           onExcluirCardCompleto: () {
