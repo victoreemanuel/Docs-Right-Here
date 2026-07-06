@@ -151,7 +151,6 @@ class _ModalLixeiraCardState extends State<ModalLixeiraCard> {
                             tooltip: 'Restaurar',
                             onPressed: () => _restaurar(idStr),
                           ),
-                          // Botão de Apagar para Sempre
                           IconButton(
                             icon: const Icon(Icons.delete_forever, color: Colors.redAccent, size: 20),
                             tooltip: 'Excluir definitivamente',
