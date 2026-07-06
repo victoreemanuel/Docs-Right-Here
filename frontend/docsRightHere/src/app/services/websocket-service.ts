@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Client, IMessage} from '@stomp/stompjs';
 import SockJs from 'sockjs-client';
 import { Subject } from 'rxjs';
@@ -9,24 +10,31 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class WebsocketService {
-  private client: Client;
+  private client!: Client;
   private evento$ = new Subject<AvisoEvento>();
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(){
-    this.client = new Client({
-      webSocketFactory: () => new SockJs(this.apiUrl),
-      reconnectDelay: 5000
-    })
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.client = new Client({
+        webSocketFactory: () => new SockJs(`${this.apiUrl}/ws`),
+        reconnectDelay: 5000
+      })
 
-    this.client.onConnect = () => {
-      this.client.subscribe('/topic/avisos', (message: IMessage) => {
-        const evento: AvisoEvento = JSON.parse(message.body);
-        this.evento$.next(evento);
-      });
-    };
+      this.client.onConnect = () => {
+        console.log('WebSocket conectado!');
+        this.client.subscribe('/topic/avisos', (message: IMessage) => {
+          const evento: AvisoEvento = JSON.parse(message.body);
+          this.evento$.next(evento);
+        });
+      };
 
-    this.client.activate();
+      this.client.onStompError = (frame) => {
+        console.error('Erro STOMP:', frame);
+      };
+
+      this.client.activate();
+    }
   }
 
   onEvento() {
@@ -34,7 +42,8 @@ export class WebsocketService {
   }
 
   desconectar(): void {
-    this.client.deactivate();
+    if (isPlatformBrowser(this.platformId) && this.client) {
+      this.client.deactivate();
+    }
   }
-
 }

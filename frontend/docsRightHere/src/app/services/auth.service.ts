@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { LoginRequest, LoginResponse } from '../models/auth-model';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -13,6 +14,8 @@ export class AuthService {
   private readonly apiUrl = environment.apiUrl;
   private readonly tokenKey = 'access_token';
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   login(request: LoginRequest): Observable<LoginResponse> {
     this.logout();
 
@@ -23,11 +26,16 @@ export class AuthService {
   }
 
   logout(): void{
-    localStorage.removeItem(this.tokenKey);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.tokenKey);
+    }
   }
 
   getToken(): string | null{
-    return localStorage.getItem(this.tokenKey);
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.tokenKey);
+    }
+    return null;
   }
 
   isAuthenticated(): boolean{
@@ -35,6 +43,8 @@ export class AuthService {
   }
 
   private storeToken(token: string): void{
-    localStorage.setItem(this.tokenKey, token);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.tokenKey, token);
+    }
   }
 }
