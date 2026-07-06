@@ -31,29 +31,30 @@
   </section>
 
   <div class="grid-layout-scroll">
-    @for (item of avisosExibidos; track item.titulo) {
+    @for (item of listaAvisos(); track item.id) {
     <article class="card-aviso">
       <div class="card-header w-100 d-flex justify-content-between align-items-start">
         <div class="d-flex gap-2">
-          <i class="bi bi-circle-fill" [ngClass]="{
+          <i class="bi bi-circle-fill dot-prof"></i>
+          <!-- <i class="bi bi-circle-fill" [ngClass]="{
                  'dot-prof': item.cargo === 'professor',
                  'dot-sec': item.cargo === 'secretaria',
                  'dot-dir': item.cargo === 'diretor'
-               }"></i>
+               }"></i> -->
           <div class="info">
             <h6>{{ item.titulo }}</h6>
-            <small>por {{ item.criador }}</small>
+            <small>por {{ item.nome_criador }}</small>
           </div>
         </div>
-        <i class="bi bi-trash-fill icone-lixeira" (click)="excluirAviso(item)"></i>
+        <i class="bi bi-trash-fill icone-lixeira" (click)="excluirAviso(item.id)"></i>
       </div>
       <div class="card-body-text">
         <p>{{ item.descricao }}</p>
-        <p>{{ item.data }}</p>
+        <p>{{ item.exp }}</p>
       </div>
       <div class="card-footer-icons">
         <i class="bi bi-check-all c-pointer" [ngClass]="item.visualizado ? 'check-ativado' : 'check-desativado'"
-          (click)="marcarComoVisualizado(item)"></i>
+          (click)="marcarComoVisualizado(item.id)"></i>
       </div>
     </article>
     }
@@ -103,17 +104,17 @@
 
       @if (tipoPrazoSelecionado === 'calendario') {
       <input type="date" class="form-control bg-dark text-white border-secondary mt-2"
-        [(ngModel)]="novoAviso.dataValidade">
+        [(ngModel)]="novoAviso.exp">
       }
     </div>
 
     <div class="mb-4">
       <label class="text-white-50 small d-block mb-1">Visibilidade:</label>
       <select class="form-select bg-dark text-white border-secondary" [(ngModel)]="novoAviso.visibilidade">
-        <option value="todos">Todos</option>
-        <option value="professores">Professores</option>
-        <option value="secretaria">Secretaria</option>
-        <option value="diretor">Diretor</option>
+        <option value="TODOS">Todos</option>
+        <option value="">PROFESSORES</option>
+        <option value="secretaria">SECRETARIA</option>
+        <option value="diretor">DIRETORES</option>
       </select>
     </div>
 
@@ -134,24 +135,25 @@
     </div>
 
     <div class="lista-historico-scroll">
-      @for (item of historicoAvisos; track item.titulo) {
+      @for (item of listaAvisosHistorico(); track item.id) {
       <div class="item-historico-linha d-flex justify-content-between align-items-center p-3 mb-2 rounded">
         <div class="d-flex align-items-center gap-2">
-          <i class="bi bi-circle-fill small" [ngClass]="{
+          <i class="bi bi-circle-fill small dot-prof"></i>
+          <!-- <i class="bi bi-circle-fill small" [ngClass]="{
                    'dot-prof': item.cargo === 'professor',
                    'dot-sec': item.cargo === 'secretaria',
                    'dot-dir': item.cargo === 'diretor'
-                 }"></i>
+                 }"></i> -->
           <div>
             <strong class="text-dark d-block fs-6">{{ item.titulo }}</strong>
-            <small class="text-muted">Por {{ item.criador }} - {{ item.data }}</small>
+            <small class="text-muted">Por {{ item.nome_criador }} - {{ item.exp }}</small>
           </div>
         </div>
         <div class="d-flex gap-2">
-          <button class="btn btn-success btn-sm d-flex align-items-center gap-1" (click)="recuperarAviso(item)">
+          <button class="btn btn-success btn-sm d-flex align-items-center gap-1" (click)="recuperarAviso(item.id)">
             <i class="bi bi-arrow-counterclockwise"></i> Recuperar
           </button>
-          <button class="btn btn-outline-danger btn-sm" (click)="deletarDefinitivamente(item)">
+          <button class="btn btn-outline-danger btn-sm" (click)="deletarDefinitivamente(item.id)">
             <i class="bi bi-trash3-fill"></i>
           </button>
         </div>

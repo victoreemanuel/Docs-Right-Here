@@ -1,17 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AvisoService } from './../../services/aviso-service';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AvisoVisibilidade, CreateAviso, RequestAviso, UpdateAviso } from '../../models/avisos';
 
-export interface Aviso {
-  titulo: string;
-  criador: string;
-  cargo: 'professor' | 'secretaria' | 'diretor';
-  descricao: string;
-  data: string;
-  dataValidade: string;
-  visibilidade: string;
-  visualizado: boolean;
-}
 
 @Component({
   selector: 'app-mural',
@@ -20,115 +12,193 @@ export interface Aviso {
   templateUrl: './mural.html',
   styleUrls: ['./mural.css']
 })
-export class Mural implements OnInit {
+export class Mural implements OnInit, OnDestroy {
+  private readonly avisoService = inject(AvisoService);
 
-  usuarioLogado = {
-    nome: 'Paula Schmitt',
-    role: 'professor'
-  };
+  ngOnInit(): void {
+    this.loadAvisos();
+    this.loadHistorico();
+  }
 
-  listaCompleta: Aviso[] = [];
-  avisosExibidos: Aviso[] = [];
-  historicoAvisos: Aviso[] = [];
+  ngOnDestroy(): void {
+    // ws desconect aqui
+  }
+
+  listaAvisos = signal<RequestAviso[]>([]);
+  listaAvisosHistorico = signal<RequestAviso[]>([]);
+
 
   filtroAtivo: string = 'todos';
   exibirModal: boolean = false;
   exibirModalHistorico: boolean = false;
   tipoPrazoSelecionado: 'botoes' | 'calendario' = 'botoes';
   prazoDiasRapido: number = 2;
-  novoAviso: Aviso = this.resetarFormulario();
+  novoAviso: CreateAviso = this.resetarFormulario();
+  usuarioLogado = {
+    nome: 'Paula Schmitt',
+    role: 'professor'
+  };
 
-  ngOnInit(): void {
-    this.carregarDadosIniciais();
-    this.verificarAvisosExpirados();
+
+// METODOS REST
+  loadAvisos() {
+    this.avisoService.listarAvisos(false).subscribe({
+      next: (response) => this.listaAvisos.set(response),
+      error: (er) => console.log(er)
+    });
   }
 
-  carregarDadosIniciais() {
-    this.listaCompleta = [
-      {
-        titulo: 'Agendamento - Prova',
-        criador: 'Professora Paula',
-        cargo: 'professor',
-        descricao: 'Prova de Literatura',
-        data: 'Validade: 14/06/2026',
-        dataValidade: '2026-06-14',
-        visibilidade: 'todos',
-        visualizado: false
+  loadHistorico(){
+    this.avisoService.listarAvisos(true).subscribe({
+      next: (response) => this.listaAvisosHistorico.set(response),
+      error: (er) => console.log(er)
+    });
+  }
+
+  excluirAviso(avisoId: number) {
+    const aviso: UpdateAviso = {aviso_id: avisoId};
+    this.avisoService.deletarAviso(aviso).subscribe({
+      next: (res) => this.moverParaHistorico(res.id, res),
+      error: (er) => console.log(er)
+    });
+  }
+
+  deletarDefinitivamente(avisoId: number) {
+    const aviso: UpdateAviso = {aviso_id: avisoId};
+    this.avisoService.deletarAviso(aviso).subscribe({
+      next: () => this.removerDoHistorico(avisoId),
+      error: (er) => console.log(`ER: ${er}`)
+    });
+  }
+
+  recuperarAviso(avisoId: number){
+    this.avisoService.restaurarAviso({aviso_id: avisoId}).subscribe({
+      next: () => this.restaurarDoHistorico(avisoId),
+      error: (er) => console.log(er)
+    });
+  }
+
+  salvarNovoAviso() {
+    const avisoNovo = this.montarAviso()
+    if (!avisoNovo){
+      alert("Por favor, revise o aviso");
+      return;
+    }
+
+    this.avisoService.criarAviso(avisoNovo).subscribe({
+      next: (response) => {
+        this.adicionarAvisoNaLista(response);
       },
-      {
-        titulo: 'Reunião Geral',
-        criador: 'Diretor Carlos',
-        cargo: 'diretor',
-        descricao: 'Alinhamento pedagógico no auditório',
-        data: 'Validade: 20/06/2026',
-        dataValidade: '2026-06-20',
-        visibilidade: 'todos',
-        visualizado: false
+      error: (er) => {
+        console.log(er);
+        alert("Verifique a conexão com a internet!");
       }
-    ];
-    this.avisosExibidos = this.listaCompleta.slice();
+    });
+
+    this.fecharNovoAviso();
   }
 
-  verificarAvisosExpirados() {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-    const ativos: Aviso[] = [];
 
-    for (let aviso of this.listaCompleta) {
-      const limite = new Date(aviso.dataValidade + 'T23:59:59');
-      if (limite < hoje) {
-        this.historicoAvisos.push(aviso);
-      } else {
-        ativos.push(aviso);
-      }
+
+
+
+
+  // Metodos aux para REST e ws
+  moverParaHistorico(id:number, avisoCompleto?:RequestAviso){
+    const lista = this.listaAvisos()
+    const index = lista.findIndex(i => i.id == id);
+    let aviso: RequestAviso | undefined;
+
+    if (index !== -1){
+      aviso = { ...lista[index], na_lixeira: true};
+      this.listaAvisos.update(l => l.filter(i => i.id !== id));
+    } else if (avisoCompleto) {
+      aviso = avisoCompleto;
     }
 
-    this.listaCompleta = ativos;
-    this.filtrar(this.filtroAtivo);
+    if (!aviso) return;
+
+    const estaNoHistorico = this.listaAvisosHistorico().some(i => i.id === id);
+    if(!estaNoHistorico){
+      this.listaAvisosHistorico.update(h => [aviso, ...h])
+    }
   }
 
-  marcarComoVisualizado(aviso: Aviso) {
-    aviso.visualizado = !aviso.visualizado;
+  removerDoHistorico(id: number){
+    this.listaAvisosHistorico.update(h => h.filter(i => i.id !== id));
   }
 
-  excluirAviso(aviso: Aviso) {
-    this.historicoAvisos.unshift(aviso);
-    this.listaCompleta = this.listaCompleta.filter(a => a !== aviso);
-    this.filtrar(this.filtroAtivo);
+  restaurarDoHistorico(id: number){
+    const lista = this.listaAvisosHistorico();
+    const avisoRestaurar = lista.find(i => i.id === id);
+
+    if (!avisoRestaurar) return;
+
+    const avisoAtualizado = { ...avisoRestaurar, na_lixeira: false};
+
+    this.listaAvisosHistorico.update(h =>
+      h.filter(i => i.id !== id)
+    );
+    const estaNosAvisos = this.listaAvisos().some(i => i.id === id);
+    if (!estaNosAvisos){
+      this.listaAvisos.update(l => [avisoAtualizado, ...l]);
+    }
   }
 
-  filtrar(tipo: string) {
-    this.filtroAtivo = tipo;
-    if (tipo === 'todos') {
-      this.avisosExibidos = this.listaCompleta.slice();
+  montarAviso(): CreateAviso | null{
+    if (!this.novoAviso.titulo || !this.novoAviso.descricao) {
+      alert('Preencha o título e a descrição!');
+      return null;
+    }
+
+    let dataFinal = '';
+
+    if (this.tipoPrazoSelecionado === 'botoes') {
+      const dataCalculada = new Date();
+      dataCalculada.setDate(dataCalculada.getDate() + this.prazoDiasRapido);
+      dataFinal = dataCalculada.toISOString().split('T')[0];
     } else {
-      this.avisosExibidos = this.listaCompleta.filter(a => a.cargo === tipo);
+      if (!this.novoAviso.exp) {
+        alert('Por favor, selecione uma data no calendário!');
+        return null;
+      }
+      dataFinal = this.novoAviso.exp;
     }
+
+    const partes = dataFinal.split('-');
+    const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
+
+    const avisoNovo: CreateAviso = {
+      titulo: this.novoAviso.titulo,
+      descricao: this.novoAviso.descricao,
+      visibilidade: this.novoAviso.visibilidade,
+      exp: dataFinal,
+    };
+    return avisoNovo;
   }
 
+  adicionarAvisoNaLista(aviso: RequestAviso){
+    const existe = this.listaAvisos().some(i => i.id === aviso.id);
+    if (existe) return;
+    this.listaAvisos.update(l => [aviso, ...l]);
+  }
+
+
+
+
+
+
+
+
+
+
+// ESTE PERMANECE
   abrirHistorico() {
     this.exibirModalHistorico = true;
   }
 
   fecharHistorico() {
     this.exibirModalHistorico = false;
-  }
-
-  recuperarAviso(aviso: Aviso) {
-    const amanha = new Date();
-    amanha.setDate(amanha.getDate() + 1);
-    aviso.dataValidade = amanha.toISOString().split('T')[0];
-    aviso.data = 'Validade: ' + amanha.toLocaleDateString('pt-BR');
-    this.listaCompleta.unshift(aviso);
-    this.historicoAvisos = this.historicoAvisos.filter(a => a !== aviso);
-    this.filtrar(this.filtroAtivo);
-  }
-
-  deletarDefinitivamente(aviso: Aviso) {
-    const confirmou = confirm('Deseja mesmo apagar o aviso "' + aviso.titulo + '" para sempre?');
-    if (confirmou) {
-      this.historicoAvisos = this.historicoAvisos.filter(a => a !== aviso);
-    }
   }
 
   abrirNovoAviso() {
@@ -141,56 +211,42 @@ export class Mural implements OnInit {
     this.tipoPrazoSelecionado = 'botoes';
     this.prazoDiasRapido = 2;
   }
+// -------------------------------------
+// ESSE TEM INTERAÇÃO
 
-  salvarNovoAviso() {
-    if (!this.novoAviso.titulo || !this.novoAviso.descricao) {
-      alert('Preencha o título e a descrição!');
-      return;
-    }
 
-    let dataFinal = '';
-
-    if (this.tipoPrazoSelecionado === 'botoes') {
-      const dataCalculada = new Date();
-      dataCalculada.setDate(dataCalculada.getDate() + this.prazoDiasRapido);
-      dataFinal = dataCalculada.toISOString().split('T')[0];
-    } else {
-      if (!this.novoAviso.dataValidade) {
-        alert('Por favor, selecione uma data no calendário!');
-        return;
-      }
-      dataFinal = this.novoAviso.dataValidade;
-    }
-
-    const partes = dataFinal.split('-');
-    const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
-
-    const avisoNovo: Aviso = {
-      titulo: this.novoAviso.titulo,
-      descricao: this.novoAviso.descricao,
-      visibilidade: this.novoAviso.visibilidade,
-      dataValidade: dataFinal,
-      data: 'Validade: ' + dataFormatada,
-      criador: this.usuarioLogado.nome,
-      cargo: this.usuarioLogado.role as any,
-      visualizado: false
-    };
-
-    this.listaCompleta.unshift(avisoNovo);
-    this.filtrar(this.filtroAtivo);
-    this.fecharNovoAviso();
+  marcarComoVisualizado(avisoId: number) {
+    // Desativado por enquanto
   }
 
-  private resetarFormulario(): Aviso {
-    return {
-      titulo: '',
-      criador: '',
-      cargo: 'professor',
-      descricao: '',
-      data: '',
-      dataValidade: '',
-      visibilidade: 'todos',
-      visualizado: false
-    };
+
+
+
+
+
+
+// -------------------------------------
+
+
+
+
+// Ainda não sei esses aqui v
+  private resetarFormulario(): CreateAviso {
+    return{
+        titulo: '',
+        descricao: '',
+        exp: '',
+        visibilidade: AvisoVisibilidade.TODOS
+    }
+  }
+
+    filtrar(tipo: string) {
+      return;
+    // this.filtroAtivo = tipo;
+    // if (tipo === 'todos') {
+    //   this.avisosExibidos = this.listaCompleta.slice();
+    // } else {
+    //   this.avisosExibidos = this.listaCompleta.filter(a => a.cargo === tipo);
+    // }
   }
 }
