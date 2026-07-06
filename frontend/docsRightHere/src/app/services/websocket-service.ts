@@ -1,10 +1,9 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Client, IMessage} from '@stomp/stompjs';
-import SockJs from 'sockjs-client';
+// import SockJs from 'sockjs-client';
 import { Subject } from 'rxjs';
 import { AvisoEvento } from '../models/avisos';
 import { environment } from '../../environments/environment';
-import { platform } from 'os';
 import { AuthService } from './auth.service';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -28,8 +27,10 @@ export class WebsocketService {
   }
 
   conectar(): void{
+    const wsUrl = environment.apiUrl.replace(/^http/, 'ws')
+
     this.client = new Client({
-      webSocketFactory: () => new SockJs(`${this.apiUrl}/ws`),
+      brokerURL: `${wsUrl}/ws/websocket`,
       connectHeaders: {
         Authorization: `Bearer ${this.authService.getToken()}`
       },
@@ -42,6 +43,10 @@ export class WebsocketService {
       this.evento$.next(evento);
     });
   };
+
+  this.client.onStompError = (frame) => {
+    console.error('Erro STOMP: ', frame.headers['message']);
+  }
 
   this.client.activate();
   }

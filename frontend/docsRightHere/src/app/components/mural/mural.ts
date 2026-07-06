@@ -3,6 +3,8 @@ import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvisoVisibilidade, CreateAviso, RequestAviso, UpdateAviso } from '../../models/avisos';
+import { WebsocketService } from '../../services/websocket-service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,14 +16,17 @@ import { AvisoVisibilidade, CreateAviso, RequestAviso, UpdateAviso } from '../..
 })
 export class Mural implements OnInit, OnDestroy {
   private readonly avisoService = inject(AvisoService);
+  private readonly websocketService = inject(WebsocketService);
+  private wsSubscription?: Subscription;
 
   ngOnInit(): void {
     this.loadAvisos();
     this.loadHistorico();
+    this.conectarWebSocket();
   }
 
   ngOnDestroy(): void {
-    // ws desconect aqui
+    this.wsSubscription?.unsubscribe();
   }
 
   listaAvisos = signal<RequestAviso[]>([]);
@@ -183,6 +188,25 @@ export class Mural implements OnInit, OnDestroy {
     this.listaAvisos.update(l => [aviso, ...l]);
   }
 
+  conectarWebSocket(): void{
+    this.wsSubscription = this.websocketService.onEvento().subscribe( (message) => {
+      switch (message.tipo){
+        case 'CRIADO':
+          if (message.aviso) this.adicionarAvisoNaLista(message.aviso);
+          break;
+        case 'MOVIDO_PARA_LIXEIRA':
+          console.log("ws lixeira")
+          this.moverParaHistorico(message.avisoId);
+          break;
+        case 'RESTAURADO':
+          this.restaurarDoHistorico(message.avisoId);
+          break;
+        case 'EXCLUIDO':
+          this.removerDoHistorico(message.avisoId);
+          break;
+      }
+    })
+  }
 
 
 

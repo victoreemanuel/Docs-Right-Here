@@ -8,7 +8,7 @@ export enum AvisoVisibilidade {
 export interface AvisoEvento {
   tipo: 'CRIADO' | 'MOVIDO_PARA_LIXEIRA' | 'RESTAURADO' | 'EXCLUIDO';
   avisoId: number;
-  aviso: RequestAviso
+  aviso: RequestAviso | null
 }
 
 
