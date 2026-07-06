@@ -44,6 +44,7 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
             'remetente': 'Paula Schmitt', 
             'icone': _converterStringParaIcone(card['icone']),
             'iconeCor': _converterStringParaCor(card['cor']),
+            'arquivos': card['arquivos'] ?? [],
           };
         }).toList();
       });
@@ -112,6 +113,7 @@ void _abrirModalDetalhes(Map<String, dynamic> card) {
           alunoNome: card['titulo'] ?? 'Sem nome',
           icone: card['icone'],
           iconeCor: card['iconeCor'],
+          arquivosIniciais: card['arquivos'] ?? [],
           onExcluirCardCompleto: () {
             setState(() {
               _meusCards.removeWhere((c) => c['id'] == card['id']);

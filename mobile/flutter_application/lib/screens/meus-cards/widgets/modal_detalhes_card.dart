@@ -11,6 +11,7 @@ final String cardId;
   final String alunoNome;
   final IconData icone;
   final Color iconeCor;
+  final List<dynamic> arquivosIniciais;
   final VoidCallback onExcluirCardCompleto;
 
   const ModalDetalhesCard({
@@ -20,6 +21,7 @@ final String cardId;
     required this.alunoNome, 
     required this.icone,
     required this.iconeCor, 
+    required this.arquivosIniciais,
     required this.onExcluirCardCompleto,
   });
 
@@ -30,17 +32,26 @@ final String cardId;
 class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
   final List<Map<String, String>> _arquivos = [];
 
-  // Exibe balões de aviso rápidos (SnackBars) na tela
+  @override
+  void initState() {
+    super.initState();
+    for (var arq in widget.arquivosIniciais) {
+      _arquivos.add({
+        'nome': arq['nome']?.toString() ?? 'Sem nome',
+        'caminho': arq['url']?.toString() ?? '', // No banco guardamos como URL do MinIO
+      });
+    }
+  }
+
+
   void _msg(String txt) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(txt)));
 
-  // Abre os documentos locais salvos
   void _abrirArquivo(String path) async {
     if (path.isEmpty) return _msg('Caminho não disponível.');
     var res = await OpenFilex.open(path);
     if (res.type != ResultType.done) _msg('Não foi possível abrir: ${res.message}');
   }
 
-  // Seleciona arquivo do celular e faz upload para o servidor
   void _anexarArquivoLocal() async {
     try {
       FilePickerResult? res = await FilePicker.pickFiles(type: FileType.any, allowMultiple: false);
@@ -52,7 +63,6 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
 
         _msg('Fazendo upload de $nome...');
 
-        // Executa o upload real para o Spring Boot / MinIO
         await widget.repository.uploadArquivo(widget.cardId, caminho, nome);
 
         setState(() => _arquivos.add({'nome': nome, 'caminho': caminho}));
@@ -63,7 +73,6 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
     }
   }
 
-  // Dispara o Scanner da Scanbot, gera PDF e faz upload para o servidor
   void _dispararScanner() async {
     var status = await Permission.camera.request();
 
@@ -99,7 +108,6 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
 
           _msg('Salvando documento escaneado...');
           
-          // Envia o PDF digitalizado direto para o servidor
           await widget.repository.uploadArquivo(widget.cardId, path, nome);
 
           setState(() => _arquivos.add({'nome': nome, 'caminho': path}));
