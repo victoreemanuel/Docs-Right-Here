@@ -11,24 +11,24 @@
 
       <div class="badge-recomendado" *ngIf="plano.recomendado">Recomendado</div>
 
-      <div class="plano-header">
-        <h2 class="plano-nome">{{ plano.nome }}</h2>
-        <span class="plano-anual" *ngIf="plano.anual">Anual</span>
+      <div class="plano-topo">
+        <div class="plano-header">
+          <h2 class="plano-nome">{{ plano.nome }}</h2>
+          <span class="plano-anual" *ngIf="plano.anual">Anual</span>
+        </div>
+
+        <ng-container *ngIf="plano.precoGratis">
+          <p class="preco-gratis">{{ plano.precoGratis }}</p>
+          <p class="plano-desc">{{ plano.descricaoBasico }}</p>
+        </ng-container>
+
+        <ng-container *ngIf="!plano.precoGratis">
+          <p class="parcelas-texto">{{ plano.parcelasTexto }}</p>
+          <p class="preco-parcela">{{ plano.precoParcela }}</p>
+          <p class="preco-vista">ou <strong>{{ plano.precoVistaValor }}</strong> à vista</p>
+          <p class="desconto-texto">{{ plano.descontoTexto }}</p>
+        </ng-container>
       </div>
-
-      <!-- Bloco de preço: plano gratuito (Básico) -->
-      <ng-container *ngIf="plano.precoGratis">
-        <p class="preco-gratis">{{ plano.precoGratis }}</p>
-        <p class="plano-desc">{{ plano.descricaoBasico }}</p>
-      </ng-container>
-
-      <!-- Bloco de preço: planos pagos (Intermediario / Profissional) -->
-      <ng-container *ngIf="!plano.precoGratis">
-        <p class="parcelas-texto">{{ plano.parcelasTexto }}</p>
-        <p class="preco-parcela">{{ plano.precoParcela }}</p>
-        <p class="preco-vista">ou <strong>{{ plano.precoVistaValor }}</strong> à vista</p>
-        <p class="desconto-texto">{{ plano.descontoTexto }}</p>
-      </ng-container>
 
       <button class="btn-escolher" (click)="onEscolherPlano(plano.id)">
         Escolher e continuar
@@ -46,21 +46,22 @@
 
     </div>
 
-    <!-- Card Exclusivo (estrutura própria, sem preço/benefícios em lista) -->
     <div class="plano-card plano-exclusivo">
 
-      <div class="plano-header">
-        <h2 class="plano-nome">Exclusivo</h2>
+      <div class="plano-topo">
+        <div class="plano-header">
+          <h2 class="plano-nome">Exclusivo</h2>
+        </div>
+
+        <p class="preco-gratis">Consulte-nos</p>
+
+        <p class="exclusivo-texto">
+          Entre em contato com nossa consultoria e tire suas duvidas.
+        </p>
+        <p class="exclusivo-texto">
+          A equipe DocsRightHere agradece pelo seu interesse.
+        </p>
       </div>
-
-      <p class="preco-gratis">Consulte-nos</p>
-
-      <p class="exclusivo-texto">
-        Entre em contato com nossa consultoria e tire suas duvidas.
-      </p>
-      <p class="exclusivo-texto">
-        A equipe DocsRightHere agradece pelo seu interesse.
-      </p>
 
       <button class="btn-escolher btn-contato" (click)="onEntrarEmContato()">
         Entrar em contato

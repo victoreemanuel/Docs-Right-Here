@@ -10,11 +10,10 @@
 
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   padding: 24px 32px 48px;
-  background-color: #ffffff;
+  background-color: #f8f9fa;
   box-sizing: border-box;
 }
 
-/* Título fica abaixo do badge do professor, que é um componente separado */
 .titulo-pagina {
   margin: 24px 0 28px;
   font-size: 30px;
@@ -23,10 +22,10 @@
 }
 
 .planos-grid {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
-  flex-wrap: wrap;
+  align-items: stretch;
 }
 
 .plano-card {
@@ -34,16 +33,17 @@
   background-color: var(--cor-fundo-card);
   border-radius: var(--cor-borda-radius);
   padding: 24px 22px;
-  width: 240px;
-  flex: 1 1 240px;
-  min-height: 420px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
 }
 
-.plano-recomendado {
-  padding-top: 40px;
+.plano-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
 .badge-recomendado {
@@ -60,6 +60,12 @@
   white-space: nowrap;
 }
 
+/* Bloco de topo com altura fixa: garante que o botão comece
+   sempre na mesma posição vertical, independente do plano */
+.plano-topo {
+  min-height: 172px;
+}
+
 .plano-header {
   display: flex;
   align-items: baseline;
@@ -73,6 +79,7 @@
   font-weight: 700;
   color: var(--cor-texto-titulo);
   margin: 0;
+  line-height: 1.2;
 }
 
 .plano-anual {
@@ -87,12 +94,14 @@
   font-weight: 700;
   color: var(--cor-azul);
   margin: 4px 0 6px;
+  line-height: 1.2;
 }
 
 .plano-desc {
   font-size: 14px;
   color: var(--cor-texto-secundario);
-  margin: 0 0 16px;
+  line-height: 1.4;
+  margin: 0;
 }
 
 /* Planos pagos */
@@ -100,6 +109,7 @@
   font-size: 13px;
   color: var(--cor-texto-secundario);
   margin: 6px 0 0;
+  line-height: 1.3;
 }
 
 .preco-parcela {
@@ -107,12 +117,14 @@
   font-weight: 700;
   color: var(--cor-azul);
   margin: 2px 0 2px;
+  line-height: 1.2;
 }
 
 .preco-vista {
   font-size: 13px;
   color: var(--cor-texto-secundario);
   margin: 0 0 8px;
+  line-height: 1.3;
 }
 
 .preco-vista strong {
@@ -124,11 +136,12 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--cor-verde-texto);
-  margin: 0 0 16px;
+  margin: 0;
   line-height: 1.35;
 }
 
-/* Botão */
+/* Botão — mesma posição em todos os cards, pois vem
+   logo após o .plano-topo de altura fixa */
 .btn-escolher {
   background-color: var(--cor-verde);
   color: #ffffff;
@@ -139,8 +152,10 @@
   padding: 12px 16px;
   cursor: pointer;
   width: 100%;
+  margin-top: 16px;
   margin-bottom: 18px;
   transition: filter 0.15s ease;
+  flex-shrink: 0;
 }
 
 .btn-escolher:hover {
@@ -149,7 +164,8 @@
 
 /* Benefícios */
 .beneficios {
-  margin-top: auto;
+  margin-top: 0;
+  flex-grow: 1;
 }
 
 .beneficios-titulo {
@@ -180,34 +196,22 @@
 .plano-exclusivo .exclusivo-texto {
   font-size: 14px;
   color: var(--cor-texto-secundario);
-  line-height: 1.5;
-  margin: 0 0 14px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+}
+
+.plano-exclusivo {
+  justify-content: flex-start;
+  align-self: start;
+  height: auto;
 }
 
 .plano-exclusivo .btn-contato {
-  margin-top: auto;
-  margin-bottom: 0;
-}
-
-/* Responsivo */
-@media (max-width: 1100px) {
-  .planos-grid {
-    flex-wrap: wrap;
-  }
-
-  .plano-card {
-    width: calc(50% - 10px);
-    flex: 1 1 calc(50% - 10px);
-  }
+  margin-top: 16px;
 }
 
 @media (max-width: 620px) {
-  .plano-card {
-    width: 100%;
-    flex: 1 1 100%;
-  }
-
-  .plano-recomendado {
-    padding-top: 40px;
+  .planos-grid {
+    grid-template-columns: 1fr;
   }
 }
