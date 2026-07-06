@@ -40,6 +40,13 @@ export class CardsService {
     return this.http.put<any>(`${this.apiUrl}/${id}`, card);
   }
 
+  uploadArquivo(id: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file); 
+
+    return this.http.post<any>(`${this.apiUrl}/${id}/arquivos`, formData);
+  }
+
   buscarCards() {
 
     const token = localStorage.getItem('seuTokenAqui');

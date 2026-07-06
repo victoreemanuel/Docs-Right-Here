@@ -157,37 +157,21 @@ export class Cards implements OnInit {
     return this.meusCards.slice(0, 4);
   }
 
- anexarArquivo(event: any) {
+  anexarArquivo(event: any) {
     const arquivoDoPC = event.target.files[0];
 
     if (arquivoDoPC && this.cardSelecionado && this.cardSelecionado.id) {
-      if (!this.cardSelecionado.arquivos) {
-        this.cardSelecionado.arquivos = [];
-      }
 
-      const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
-      const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
-
-      const novosArquivos = [
-        ...this.cardSelecionado.arquivos,
-        { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
-      ];
-
-      const cardComArquivo = {
-        ...this.cardSelecionado,
-        arquivos: novosArquivos
-      };
-
-  
-      this.cardService.atualizarCard(this.cardSelecionado.id, cardComArquivo).subscribe({
-        next: (cardSalvo: any) => { 
+      this.cardService.uploadArquivo(this.cardSelecionado.id, arquivoDoPC).subscribe({
+        next: (cardSalvo: any) => {
           if (this.cardSelecionado) {
             this.cardSelecionado.arquivos = cardSalvo.arquivos;
           }
           this.detectorDeAlteracoes.detectChanges();
         },
-        error: (erro: any) => { 
-          console.error('Erro ao salvar arquivo no card:', erro);
+        error: (erro: any) => {
+          console.error('Erro ao enviar arquivo para o MinIO:', erro);
+          alert('Não foi possível fazer o upload do arquivo.');
         }
       });
 
@@ -215,9 +199,9 @@ export class Cards implements OnInit {
     }
   }
 
-  excluirArquivo(arquivo: CardArquivo) { 
+  excluirArquivo(arquivo: CardArquivo) {
     if (this.cardSelecionado && this.cardSelecionado.arquivos && this.cardSelecionado.id) {
-      
+
       const novosArquivos = this.cardSelecionado.arquivos.filter(
         arq => arq.nome !== arquivo.nome
       );
@@ -228,13 +212,13 @@ export class Cards implements OnInit {
       };
 
       this.cardService.atualizarCard(this.cardSelecionado.id, cardSemArquivo).subscribe({
-        next: (cardSalvo) => {
+        next: (cardSalvo: any) => { 
           if (this.cardSelecionado) {
             this.cardSelecionado.arquivos = cardSalvo.arquivos;
           }
           this.detectorDeAlteracoes.detectChanges();
         },
-        error: (erro) => console.error('Erro ao remover arquivo:', erro)
+        error: (erro: any) => console.error('Erro ao remover arquivo:', erro)
       });
     }
   }
@@ -264,17 +248,37 @@ export class Cards implements OnInit {
   }
 
   alternarEdicao() {
-    if (!this.cardSelecionado) {
+
+    if (!this.cardSelecionado || !this.cardSelecionado.id) {
       return;
     }
     if (!this.modoEdicao) {
+
       this.tituloEdicao = this.cardSelecionado.titulo;
       this.descricaoEdicao = this.cardSelecionado.descricao;
       this.modoEdicao = true;
     } else {
-      this.cardSelecionado.titulo = this.tituloEdicao;
-      this.cardSelecionado.descricao = this.descricaoEdicao;
-      this.modoEdicao = false;
+
+      const cardAtualizado = {
+        ...this.cardSelecionado,
+        titulo: this.tituloEdicao,
+        descricao: this.descricaoEdicao
+      };
+      this.cardService.atualizarCard(this.cardSelecionado.id, cardAtualizado).subscribe({
+        next: (cardSalvo: any) => {
+          if (this.cardSelecionado) {
+            this.cardSelecionado.titulo = cardSalvo.titulo;
+            this.cardSelecionado.descricao = cardSalvo.descricao;
+            this.cardSelecionado.arquivos = cardSalvo.arquivos;
+          }
+          this.modoEdicao = false;
+          this.carregarCardsAtivos();
+        },
+        error: (erro: any) => {
+          console.error('Erro ao salvar as edições do card no servidor:', erro);
+          alert('Não foi possível salvar as alterações.');
+        }
+      });
     }
   }
 
@@ -309,6 +313,6 @@ export class Cards implements OnInit {
     }
   }
 
-  
+
 
 }
