@@ -26,3 +26,16 @@ export interface RequestAviso {
 export interface UpdateAviso {
   aviso_id: number
 }
+
+export interface AvisoCalendario{
+  data: string,
+  visibilidade: string []
+}
+
+export interface AvisoDetalhe{
+  id: number,
+  horario: string,
+  titulo: string,
+  descricao: string,
+  visibilidade: string
+}
