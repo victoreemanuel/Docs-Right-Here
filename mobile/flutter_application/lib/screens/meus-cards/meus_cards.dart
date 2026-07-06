@@ -18,11 +18,10 @@ class MeusCardsPage extends StatefulWidget {
 
 class _MeusCardsPageState extends State<MeusCardsPage> {
   List<dynamic> _meusCards = [];
-
   late CardRepository cardRepository;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
 
     cardRepository = CardRepository(
@@ -40,20 +39,20 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
         _meusCards = response.map((card) {
           return {
             'id': card['id'].toString(),
-            'titulo': card['titulo'] ?? 'Sem título',
-            'remetente': 'Paula Schmitt',
+            'titulo': card['titulo'] ?? 'Sem título', 
+            'remetente': 'Paula Schmitt', 
             'icone': _converterStringParaIcone(card['icone']),
             'iconeCor': _converterStringParaCor(card['cor']),
-            'arquivos': card['arquivos'] ?? [],
+            'arquivos': card['arquivos'] ?? [], 
           };
         }).toList();
       });
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Erro ao carregar os cards: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar os cards: $e')),
+      );
     }
   }
 
@@ -70,7 +69,7 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
               final Map<String, dynamic> novoCardDados = {
                 'titulo': titulo,
                 'descricao': descricao,
-                'icone': icone.codePoint.toString(),
+                'icone': icone,
                 'cor': '#${cor.toARGB32().toRadixString(16).substring(2)}',
               };
 
@@ -85,13 +84,12 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                   'alunoNome': cardSalvoNoBanco['titulo'],
                   'remetente': 'Paula Schmitt',
                   'descricao': cardSalvoNoBanco['descricao'],
-                  'icone': icone,
+                  'icone': _converterStringParaIcone(icone), 
                   'iconeCor': cor,
+                  'arquivos': [],
                 });
               });
             } catch (e) {
-              if (!mounted) return;
-
               messenger.showSnackBar(
                 SnackBar(content: Text('Erro ao salvar o card no banco: $e')),
               );
@@ -108,12 +106,12 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return ModalDetalhesCard(
-          cardId: card['id'].toString(),
-          repository: cardRepository,
-          alunoNome: card['titulo'] ?? 'Sem nome',
+          cardId: card['id'].toString(),      
+          repository: cardRepository,          
+          alunoNome: card['alunoNome'] ?? card['titulo'] ?? 'Sem nome',
           icone: card['icone'],
           iconeCor: card['iconeCor'],
-          arquivosIniciais: card['arquivos'] ?? [],
+          arquivosIniciais: card['arquivos'] ?? [], 
           onExcluirCardCompleto: () {
             setState(() {
               _meusCards.removeWhere((c) => c['id'] == card['id']);
@@ -220,12 +218,12 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
       appBar: const CustomAppBar(),
       drawer: const CustomSidebar(),
       body: RefreshIndicator(
-        color: const Color(0xFF00C4CC), 
+        color: const Color(0xFF00C4CC),
         onRefresh: () async {
           carregarCards();
         },
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(), 
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,6 +260,7 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                 ),
               ),
               const SizedBox(height: 15),
+              
               Row(
                 children: [
                   Expanded(
@@ -319,7 +318,7 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                 Column(
                   children: _meusCards.map((card) {
                     return CardDocumentoWidget(
-                      alunoNome: card['titulo'] ?? 'Sem nome',
+                      alunoNome: card['titulo'] ?? 'Sem nome', 
                       remetente: card['remetente'] ?? 'Paula Schmitt',
                       icone: card['icone'],
                       iconeCor: card['iconeCor'],
@@ -327,15 +326,11 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
                       onExcluir: () async {
                         final messenger = ScaffoldMessenger.of(context);
                         try {
-                          await cardRepository.lixeiraCard(
-                            card['id'].toString(),
-                          );
+                          await cardRepository.lixeiraCard(card['id'].toString());
                           if (!mounted) return;
-
+                          
                           setState(() {
-                            _meusCards.removeWhere(
-                              (c) => c['id'] == card['id'],
-                            );
+                            _meusCards.removeWhere((c) => c['id'] == card['id']);
                           });
                         } catch (e) {
                           messenger.showSnackBar(
@@ -393,14 +388,25 @@ class _MeusCardsPageState extends State<MeusCardsPage> {
   Color _converterStringParaCor(String? hexColor) {
     if (hexColor == null || hexColor.isEmpty) return const Color(0xFF495057);
     String limpa = hexColor.replaceAll('#', '');
-    if (limpa.length != 6) return Color(0xFF495057);
+    if (limpa.length != 6) return const Color(0xFF495057);
     return Color(int.parse('FF$limpa', radix: 16));
   }
 
-  IconData _converterStringParaIcone(String? codePointStr) {
-    if (codePointStr == null || codePointStr.isEmpty) return Icons.help_outline;
-    int? codePoint = int.tryParse(codePointStr);
-    if (codePoint == null) return Icons.help_outline;
-    return IconData(codePoint, fontFamily: 'MaterialIcons');
+  IconData _converterStringParaIcone(String? iconeKey) {
+    if (iconeKey == null || iconeKey.isEmpty) return Icons.help_outline;
+    
+    const mapa = {
+      'school': Icons.school,
+      'book': Icons.book,
+      'calendar': Icons.calendar_month,
+      'email': Icons.email,
+      'camera': Icons.camera_alt,
+      'eye': Icons.visibility,
+      'document': Icons.description,
+      'image': Icons.image,
+      'groups': Icons.groups,
+      'workspace': Icons.group,
+    };
+    return mapa[iconeKey] ?? Icons.help_outline;
   }
 }

@@ -1,15 +1,11 @@
 package com.drh.server.card.Service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
-import io.minio.SetBucketPolicyArgs;
 
 @Service
 public class FileStorageService {
@@ -60,5 +56,20 @@ public class FileStorageService {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao fazer upload do ficheiro para o MinIO: " + e.getMessage(), e);
         }
+
     }
+
+    public void deletarArquivoFisico(String nomeArquivo) {
+        try {
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(nomeArquivo)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao remover arquivo do MinIO: " + e.getMessage());
+        }
+    }
+
 }

@@ -117,4 +117,23 @@ public class CardService {
         return new CardDTO(entity);
     }
 
+    public CardDTO excluirArquivo(Long id, String nomeArquivo) {
+        Card entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Card não encontrado. ID: " + id));
+
+        CardArquivo arquivoParaDeletar = entity.getArquivos().stream()
+                .filter(arq -> arq.getNome().equals(nomeArquivo))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Arquivo não encontrado no card: " + nomeArquivo));
+        String url = arquivoParaDeletar.getUrl();
+        String nomeUnicoMinio = url.substring(url.lastIndexOf("/") + 1);
+
+        fileStorageService.deletarArquivoFisico(nomeUnicoMinio);
+
+        entity.getArquivos().remove(arquivoParaDeletar);
+
+        entity = repository.save(entity);
+        return new CardDTO(entity);
+    }
+
 }

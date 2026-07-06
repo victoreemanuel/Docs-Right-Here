@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ModalCriacaoCard extends StatefulWidget {
-  
-  final void Function(String titulo, String descricao, IconData icone, Color cor) onCardCriado;
+  final void Function(String titulo, String descricao, String icone, Color cor) onCardCriado;
 
   const ModalCriacaoCard({super.key, required this.onCardCriado});
 
@@ -14,13 +13,21 @@ class _ModalCriacaoCardState extends State<ModalCriacaoCard> {
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
-  IconData _iconeSelecionado = Icons.school;
-  Color _corSelecionada = Colors.red;
-
-  final List<IconData> _icones = [
-    Icons.school, Icons.book, Icons.calendar_month, Icons.email, Icons.camera_alt,
-    Icons.visibility, Icons.description, Icons.image, Icons.groups, Icons.group
+  final List<Map<String, dynamic>> _iconesConfig = [
+    {'key': 'school', 'icon': Icons.school},
+    {'key': 'book', 'icon': Icons.book},
+    {'key': 'calendar', 'icon': Icons.calendar_month},
+    {'key': 'email', 'icon': Icons.email},
+    {'key': 'camera', 'icon': Icons.camera_alt},
+    {'key': 'eye', 'icon': Icons.visibility},
+    {'key': 'document', 'icon': Icons.description},
+    {'key': 'image', 'icon': Icons.image},
+    {'key': 'groups', 'icon': Icons.groups},
+    {'key': 'workspace', 'icon': Icons.group}
   ];
+
+  String _chaveIconeSelecionado = 'school';
+  Color _corSelecionada = Colors.red;
 
   final List<Color> _cores = [
     Colors.red, Colors.orange, Colors.green, Colors.cyan, Colors.purple
@@ -82,17 +89,18 @@ class _ModalCriacaoCardState extends State<ModalCriacaoCard> {
                 mainAxisSpacing: 8, 
                 crossAxisSpacing: 8,
               ),
-              itemCount: _icones.length,
+              itemCount: _iconesConfig.length,
               itemBuilder: (context, index) {
-                bool isSel = _iconeSelecionado == _icones[index];
+                final item = _iconesConfig[index];
+                bool isSel = _chaveIconeSelecionado == item['key'];
                 return GestureDetector(
-                  onTap: () => setState(() => _iconeSelecionado = _icones[index]),
+                  onTap: () => setState(() => _chaveIconeSelecionado = item['key']),
                   child: Container(
                     decoration: BoxDecoration(
                       color: isSel ? Colors.white24 : Colors.transparent, 
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(_icones[index], color: Colors.white, size: 24),
+                    child: Icon(item['icon'], color: Colors.white, size: 24),
                   ),
                 );
               },
@@ -138,7 +146,7 @@ class _ModalCriacaoCardState extends State<ModalCriacaoCard> {
                       widget.onCardCriado(
                         _tituloController.text, 
                         _descController.text, 
-                        _iconeSelecionado, 
+                        _chaveIconeSelecionado, 
                         _corSelecionada
                       );
                       Navigator.pop(context);

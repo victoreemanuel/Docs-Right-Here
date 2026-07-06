@@ -57,4 +57,9 @@ export class CardsService {
 
     return this.http.get('http://localhost:8080/cards', { headers });
   }
+
+  excluirArquivoFisico(id: number, nomeArquivo: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}/arquivos/${nomeArquivo}`);
+  }
+
 }

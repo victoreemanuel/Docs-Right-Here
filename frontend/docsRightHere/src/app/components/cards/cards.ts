@@ -46,7 +46,7 @@ export class Cards implements OnInit {
   ];
 
   iconesDisponiveis: string[] = [
-    'school', 'book', 'calendar', 'email', 'camera', 
+    'school', 'book', 'calendar', 'email', 'camera',
     'eye', 'document', 'image', 'groups', 'workspace'
   ];
 
@@ -204,36 +204,40 @@ export class Cards implements OnInit {
 
   baixarArquivo(arquivo: any) {
     if (arquivo && arquivo.url) {
-      const link = document.createElement('a');
-      link.href = arquivo.url;
-      link.download = arquivo.nome;
+      fetch(arquivo.url)
+        .then(response => {
+          if (!response.ok) throw new Error('Erro na resposta do servidor');
+          return response.blob();
+        })
+        .then(blob => {
+          const urlMemoria = window.URL.createObjectURL(blob);
+          const linkVirtual = document.createElement('a');
+          linkVirtual.href = urlMemoria;
+          linkVirtual.download = arquivo.nome;
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+          document.body.appendChild(linkVirtual);
+          linkVirtual.click();
+
+          document.body.removeChild(linkVirtual);
+          window.URL.revokeObjectURL(urlMemoria);
+        })
+        .catch(err => {
+          console.error('Erro ao baixar o arquivo via Blob:', err);
+          window.open(arquivo.url, '_blank');
+        });
     }
   }
 
   excluirArquivo(arquivo: CardArquivo) {
-    if (this.cardSelecionado && this.cardSelecionado.arquivos && this.cardSelecionado.id) {
-
-      const novosArquivos = this.cardSelecionado.arquivos.filter(
-        arq => arq.nome !== arquivo.nome
-      );
-
-      const cardSemArquivo = {
-        ...this.cardSelecionado,
-        arquivos: novosArquivos
-      };
-
-      this.cardService.atualizarCard(this.cardSelecionado.id, cardSemArquivo).subscribe({
-        next: (cardSalvo: any) => { 
+    if (this.cardSelecionado && this.cardSelecionado.id) {
+      this.cardService.excluirArquivoFisico(this.cardSelecionado.id, arquivo.nome).subscribe({
+        next: (cardSalvo: any) => {
           if (this.cardSelecionado) {
             this.cardSelecionado.arquivos = cardSalvo.arquivos;
           }
           this.detectorDeAlteracoes.detectChanges();
         },
-        error: (erro: any) => console.error('Erro ao remover arquivo:', erro)
+        error: (erro: any) => console.error('Erro ao remover arquivo do servidor e MinIO:', erro)
       });
     }
   }
@@ -327,7 +331,5 @@ export class Cards implements OnInit {
       });
     }
   }
-
-
 
 }
