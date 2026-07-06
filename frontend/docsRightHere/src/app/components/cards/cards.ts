@@ -46,10 +46,25 @@ export class Cards implements OnInit {
   ];
 
   iconesDisponiveis: string[] = [
-    'bi-mortarboard', 'bi-book', 'bi-calendar3', 'bi-envelope',
-    'bi-camera', 'bi-eye', 'bi-file-earmark-text', 'bi-image',
-    'bi-people', 'bi-person-workspace'
+    'school', 'book', 'calendar', 'email', 'camera', 
+    'eye', 'document', 'image', 'groups', 'workspace'
   ];
+
+  getIconeClasse(iconeKey: string): string {
+    const mapa: { [key: string]: string } = {
+      'school': 'bi-mortarboard',
+      'book': 'bi-book',
+      'calendar': 'bi-calendar3',
+      'email': 'bi-envelope',
+      'camera': 'bi-camera',
+      'eye': 'bi-eye',
+      'document': 'bi-file-earmark-text',
+      'image': 'bi-image',
+      'groups': 'bi-people',
+      'workspace': 'bi-person-workspace'
+    };
+    return mapa[iconeKey] || 'bi-file-earmark-text';
+  }
 
   constructor(
     private cardService: CardsService,
