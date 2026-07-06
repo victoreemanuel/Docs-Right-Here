@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ModalCriacaoCard extends StatefulWidget {
-  // CORREÇÃO: Definida a assinatura estrita do callback exigida pelo Dart moderno
+  
   final void Function(String titulo, String descricao, IconData icone, Color cor) onCardCriado;
 
   const ModalCriacaoCard({super.key, required this.onCardCriado});
