@@ -32,7 +32,6 @@ export class Mural implements OnInit, OnDestroy {
   listaAvisos = signal<RequestAviso[]>([]);
   listaAvisosHistorico = signal<RequestAviso[]>([]);
 
-
   filtroAtivo: string = 'todos';
   exibirModal: boolean = false;
   exibirModalHistorico: boolean = false;
@@ -102,10 +101,6 @@ export class Mural implements OnInit, OnDestroy {
 
     this.fecharNovoAviso();
   }
-
-
-
-
 
 
   // Metodos aux para REST e ws
@@ -209,14 +204,7 @@ export class Mural implements OnInit, OnDestroy {
   }
 
 
-
-
-
-
-
-
-
-// ESTE PERMANECE
+// Manipula os modais
   abrirHistorico() {
     this.exibirModalHistorico = true;
   }
@@ -236,25 +224,11 @@ export class Mural implements OnInit, OnDestroy {
     this.prazoDiasRapido = 2;
   }
 // -------------------------------------
-// ESSE TEM INTERAÇÃO
-
 
   marcarComoVisualizado(avisoId: number) {
     // Desativado por enquanto
   }
 
-
-
-
-
-
-
-// -------------------------------------
-
-
-
-
-// Ainda não sei esses aqui v
   private resetarFormulario(): CreateAviso {
     return{
         titulo: '',
