@@ -3,13 +3,12 @@ import 'package:flutter_application/screens/login/login_screen.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart'; // Importação oficial v8
 
 void main() async {
-  // 1. Garante que os canais nativos do celular funcionem antes do app abrir
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    // SINTAXE OFICIAL V8: Configuração correta sem métodos depreciados
+
     var config = SdkConfiguration(
-      licenseKey: "", // Modo trial automático de testes (60 segundos por sessão)
+      licenseKey: "", 
       loggingEnabled: true,
     );
     
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginScreen(), // Tela de login do colega preservada
+      home: const LoginScreen(), 
     );
   }
 }

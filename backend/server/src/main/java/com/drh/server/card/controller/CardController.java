@@ -1,7 +1,7 @@
-package com.drh.server.components.card.controller;
+package com.drh.server.card.controller;
 
-import com.drh.server.components.card.dto.CardDTO;
-import com.drh.server.components.card.Service.CardService;
+import com.drh.server.card.dto.CardDTO;
+import com.drh.server.card.Service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,5 +65,21 @@ public class CardController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/arquivos")
+    public ResponseEntity<CardDTO> anexarArquivo(
+            @PathVariable Long id,
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+
+        CardDTO dto = service.anexarArquivo(id, file);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @DeleteMapping("/{id}/arquivos/{nomeArquivo}")
+    public ResponseEntity<CardDTO> excluirArquivoCompleto(@PathVariable Long id, @PathVariable String nomeArquivo) {
+        CardDTO cardAtualizadoDto = service.excluirArquivo(id, nomeArquivo);
+
+        return ResponseEntity.ok().body(cardAtualizadoDto);
     }
 }

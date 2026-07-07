@@ -37,6 +37,17 @@ export class CardsService {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 
+  atualizarCard(id: number, card: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, card);
+  }
+
+  uploadArquivo(id: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file); 
+
+    return this.http.post<any>(`${this.apiUrl}/${id}/arquivos`, formData);
+  }
+
   buscarCards() {
 
     const token = localStorage.getItem('seuTokenAqui');
@@ -47,4 +58,9 @@ export class CardsService {
 
     return this.http.get(`${environment.apiUrl}/cards`, { headers });
   }
+
+  excluirArquivoFisico(id: number, nomeArquivo: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}/arquivos/${nomeArquivo}`);
+  }
+
 }

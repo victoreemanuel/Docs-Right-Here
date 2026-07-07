@@ -5,7 +5,7 @@ class DioClient {
   final Dio dio;
   final AuthService _authService;
 
-  static const baseUrl = 'http://192.168.100.109:8080';
+  static const baseUrl = 'http://192.168.100.240:8080';
 
   DioClient({required AuthService authService}) 
   : _authService = authService,
@@ -46,7 +46,5 @@ class DioClient {
       ),
     );
   }
-
-
 
 }
