@@ -1,12 +1,10 @@
 package com.drh.server.components.aviso.service;
 
 import com.drh.server.auth.repository.UserRepository;
-import com.drh.server.auth.service.UserService;
-import com.drh.server.components.aviso.dto.CreateAvisoDTO;
-import com.drh.server.components.aviso.dto.ResponseAvisoDTO;
-import com.drh.server.components.aviso.dto.UpdateAvisoDTO;
+import com.drh.server.components.aviso.dto.*;
 import com.drh.server.components.aviso.events.AvisoCriadoEvent;
 import com.drh.server.components.aviso.model.AvisoModel;
+import com.drh.server.components.aviso.model.AvisoVisibilidade;
 import com.drh.server.components.aviso.repository.AvisoRepository;
 import com.drh.server.config.ws.AvisoEvento;
 import com.drh.server.exception.GenericException;
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AvisoService {
@@ -119,10 +118,28 @@ public class AvisoService {
 
     }
 
-    private void publicarEventoWebSocket(AvisoEvento.TipoEvento tipo, Long avisoId){
-        this.messagingTemplate.convertAndSend(
-                "/topic/avisos",
-                AvisoEvento.manter(tipo, avisoId)
-        );
+    public List<AvisoCalendarioDTO> buscarParaCalendario(int mes, int ano){
+
+        List<AvisoModel> avisos = avisoRepository.buscarPorMesEAno(mes, ano);
+
+        return avisos.stream()
+                .collect(Collectors.groupingBy(
+                        aviso -> aviso.getDataHoraEvento().toLocalDate(),
+                Collectors.mapping(AvisoModel::getVisibilidade, Collectors.toList())
+        )).entrySet().stream().map(entry ->{
+            List<AvisoVisibilidade> visibilidadesUnicas = entry.getValue().stream().distinct().toList();
+
+            return new AvisoCalendarioDTO(entry.getKey(), visibilidadesUnicas);
+        })
+                .toList();
     }
+
+    public List<AvisoDetalheDTO> buscarDetalhesDoDia(LocalDate data){
+        List<AvisoModel> avisos = avisoRepository.buscarPorDiaExato(data.getDayOfMonth(), data.getMonthValue(), data.getYear());
+
+        return avisos.stream()
+                .map(AvisoDetalheDTO::of)
+                .toList();
+    }
+
 }

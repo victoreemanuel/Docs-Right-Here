@@ -33,6 +33,7 @@ public class AvisoModel {
 
     @Future(message = "A expiração só pode ser uma data futura")
     private LocalDate exp;
+    private LocalDateTime dataHoraEvento;
 
     private AvisoVisibilidade visibilidade;
     private String criadoPor;
