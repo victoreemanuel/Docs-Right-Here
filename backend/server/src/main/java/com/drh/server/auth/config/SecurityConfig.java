@@ -50,6 +50,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/calendario/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/users").hasAuthority("SCOPE_admin")
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
