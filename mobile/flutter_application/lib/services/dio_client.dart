@@ -5,7 +5,7 @@ class DioClient {
   final Dio dio;
   final AuthService _authService;
 
-  static const baseUrl = 'http://192.168.100.240:8080';
+  static const baseUrl = 'https://back-end-production-fa4d.up.railway.app';
 
   DioClient({required AuthService authService}) 
   : _authService = authService,
