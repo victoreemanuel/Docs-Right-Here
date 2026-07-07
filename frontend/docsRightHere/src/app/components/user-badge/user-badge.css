@@ -1,0 +1,6 @@
+.TopoPagina {
+  position: fixed !important;
+  top: 80px !important;    
+  left: 294px !important;  
+  z-index: 1050 !important;
+}

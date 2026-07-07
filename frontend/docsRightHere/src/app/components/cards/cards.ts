@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardsService } from './cardservice';
-
+import { Card, CardArquivo } from '../../models/card-model';
 
 @Component({
   selector: 'app-meus-cards',
@@ -17,9 +17,9 @@ export class Cards implements OnInit {
   exibirJanelaExcluir: boolean = false;
   exibirJanelaCards: boolean = false;
 
-  meusCards: any[] = [];
-  cardsExcluidos: any[] = [];
-  cardSelecionado: any = null;
+  meusCards: Card[] = [];
+  cardsExcluidos: Card[] = [];
+  cardSelecionado: Card | null = null;
 
   novoTitulo: string = '';
   novaDescricao: string = '';
@@ -46,10 +46,25 @@ export class Cards implements OnInit {
   ];
 
   iconesDisponiveis: string[] = [
-    'bi-mortarboard', 'bi-book', 'bi-calendar3', 'bi-envelope',
-    'bi-camera', 'bi-eye', 'bi-file-earmark-text', 'bi-image',
-    'bi-people', 'bi-person-workspace'
+    'school', 'book', 'calendar', 'email', 'camera',
+    'eye', 'document', 'image', 'groups', 'workspace'
   ];
+
+  getIconeClasse(iconeKey: string): string {
+    const mapa: { [key: string]: string } = {
+      'school': 'bi-mortarboard',
+      'book': 'bi-book',
+      'calendar': 'bi-calendar3',
+      'email': 'bi-envelope',
+      'camera': 'bi-camera',
+      'eye': 'bi-eye',
+      'document': 'bi-file-earmark-text',
+      'image': 'bi-image',
+      'groups': 'bi-people',
+      'workspace': 'bi-person-workspace'
+    };
+    return mapa[iconeKey] || 'bi-file-earmark-text';
+  }
 
   constructor(
     private cardService: CardsService,
@@ -90,7 +105,7 @@ export class Cards implements OnInit {
   criarNovoCard() {
 
     if (!this.novoTitulo.trim() || !this.novaDescricao.trim()) {
-      console.warn("⚠️ Não é possível criar um card com campos vazios!");
+      console.warn("Não é possível criar um card com campos vazios!");
       return;
     }
 
@@ -120,40 +135,39 @@ export class Cards implements OnInit {
     });
   }
 
-excluirCard(card: any) {
-  // 🔍 Rastreador para ver o que o botão do HTML está injetando aqui
-  console.log('📦 Objeto recebido no excluirCard:', card);
-  
-  if (!card || !card.id) {
-    console.error('❌ Erro: O botão do HTML passou um dado inválido ou sem ID!', card);
-    alert('🚨 Erro no HTML: O botão de excluir passou um índice ou texto em vez do objeto do Card completo.');
-    return;
+  excluirCard(card: any) {
+
+    console.log('Objeto recebido no excluirCard:', card);
+
+    if (!card || !card.id) {
+      console.error('Erro: O botão do HTML passou um dado inválido ou sem ID!', card);
+      alert('Erro no HTML: O botão de excluir passou um índice ou texto em vez do objeto do Card completo.');
+      return;
+    }
+
+    this.cardService.moverParaLixeira(card.id).subscribe({
+      next: () => {
+
+        this.meusCards = this.meusCards.filter(item => item.id !== card.id);
+
+        this.cardsExcluidos.unshift(card);
+
+        this.detectorDeAlteracoes.detectChanges();
+      },
+      error: (erro) => {
+        console.error('Erro ao mover para a lixeira:', erro);
+        alert('Não foi possível excluir o card no servidor.');
+      }
+    });
   }
 
-  this.cardService.moverParaLixeira(card.id).subscribe({
-    next: () => {
- 
-      this.meusCards = this.meusCards.filter(item => item.id !== card.id);
-      
-      this.cardsExcluidos.unshift(card);
-      
-      this.detectorDeAlteracoes.detectChanges();
-    },
-    error: (erro) => {
-      console.error('Erro ao mover para a lixeira:', erro);
-      alert('Não foi possível excluir o card no servidor.');
-    }
-  });
-}
-
-  abrirCard(Card: any) {
-    this.cardSelecionado = Card;
+  abrirCard(card: Card) {
+    this.cardSelecionado = card;
     this.exibirJanelaCards = true;
     this.modoEdicao = false;
     this.termoBuscaArquivo = '';
     this.filtroTipoSelecionado = 'TODOS';
   }
-
   get cardsRecentes() {
     return this.meusCards.slice(0, 4);
   }
@@ -161,24 +175,26 @@ excluirCard(card: any) {
   anexarArquivo(event: any) {
     const arquivoDoPC = event.target.files[0];
 
-    if (arquivoDoPC && this.cardSelecionado) {
-      if (!this.cardSelecionado.arquivos) {
-        this.cardSelecionado.arquivos = [];
-      }
+    if (arquivoDoPC && this.cardSelecionado && this.cardSelecionado.id) {
 
-      const urlRealDoArquivo = URL.createObjectURL(arquivoDoPC);
-      const extensao = arquivoDoPC.name.split('.').pop()?.toUpperCase() || 'ARQUIVO';
-
-      this.cardSelecionado.arquivos = [
-        ...this.cardSelecionado.arquivos,
-        { nome: arquivoDoPC.name, tipo: extensao, url: urlRealDoArquivo },
-      ];
+      this.cardService.uploadArquivo(this.cardSelecionado.id, arquivoDoPC).subscribe({
+        next: (cardSalvo: any) => {
+          if (this.cardSelecionado) {
+            this.cardSelecionado.arquivos = cardSalvo.arquivos;
+          }
+          this.detectorDeAlteracoes.detectChanges();
+        },
+        error: (erro: any) => {
+          console.error('Erro ao enviar arquivo para o MinIO:', erro);
+          alert('Não foi possível fazer o upload do arquivo.');
+        }
+      });
 
       event.target.value = '';
     }
   }
 
-  verArquivo(arquivo: any) {
+  verArquivo(arquivo: CardArquivo) {
     if (arquivo.url) {
       window.open(arquivo.url, '_blank');
     } else {
@@ -188,20 +204,41 @@ excluirCard(card: any) {
 
   baixarArquivo(arquivo: any) {
     if (arquivo && arquivo.url) {
-      const link = document.createElement('a');
-      link.href = arquivo.url;
-      link.download = arquivo.nome;
+      fetch(arquivo.url)
+        .then(response => {
+          if (!response.ok) throw new Error('Erro na resposta do servidor');
+          return response.blob();
+        })
+        .then(blob => {
+          const urlMemoria = window.URL.createObjectURL(blob);
+          const linkVirtual = document.createElement('a');
+          linkVirtual.href = urlMemoria;
+          linkVirtual.download = arquivo.nome;
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+          document.body.appendChild(linkVirtual);
+          linkVirtual.click();
+
+          document.body.removeChild(linkVirtual);
+          window.URL.revokeObjectURL(urlMemoria);
+        })
+        .catch(err => {
+          console.error('Erro ao baixar o arquivo via Blob:', err);
+          window.open(arquivo.url, '_blank');
+        });
     }
   }
 
-  excluirArquivo(index: number) {
-    if (this.cardSelecionado && this.cardSelecionado.arquivos) {
-      this.cardSelecionado.arquivos.splice(index, 1);
-      this.cardSelecionado.arquivos = [...this.cardSelecionado.arquivos];
+  excluirArquivo(arquivo: CardArquivo) {
+    if (this.cardSelecionado && this.cardSelecionado.id) {
+      this.cardService.excluirArquivoFisico(this.cardSelecionado.id, arquivo.nome).subscribe({
+        next: (cardSalvo: any) => {
+          if (this.cardSelecionado) {
+            this.cardSelecionado.arquivos = cardSalvo.arquivos;
+          }
+          this.detectorDeAlteracoes.detectChanges();
+        },
+        error: (erro: any) => console.error('Erro ao remover arquivo do servidor e MinIO:', erro)
+      });
     }
   }
 
@@ -230,14 +267,37 @@ excluirCard(card: any) {
   }
 
   alternarEdicao() {
+
+    if (!this.cardSelecionado || !this.cardSelecionado.id) {
+      return;
+    }
     if (!this.modoEdicao) {
+
       this.tituloEdicao = this.cardSelecionado.titulo;
       this.descricaoEdicao = this.cardSelecionado.descricao;
       this.modoEdicao = true;
     } else {
-      this.cardSelecionado.titulo = this.tituloEdicao;
-      this.cardSelecionado.descricao = this.descricaoEdicao;
-      this.modoEdicao = false;
+
+      const cardAtualizado = {
+        ...this.cardSelecionado,
+        titulo: this.tituloEdicao,
+        descricao: this.descricaoEdicao
+      };
+      this.cardService.atualizarCard(this.cardSelecionado.id, cardAtualizado).subscribe({
+        next: (cardSalvo: any) => {
+          if (this.cardSelecionado) {
+            this.cardSelecionado.titulo = cardSalvo.titulo;
+            this.cardSelecionado.descricao = cardSalvo.descricao;
+            this.cardSelecionado.arquivos = cardSalvo.arquivos;
+          }
+          this.modoEdicao = false;
+          this.carregarCardsAtivos();
+        },
+        error: (erro: any) => {
+          console.error('Erro ao salvar as edições do card no servidor:', erro);
+          alert('Não foi possível salvar as alterações.');
+        }
+      });
     }
   }
 
@@ -271,4 +331,5 @@ excluirCard(card: any) {
       });
     }
   }
+
 }

@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/calendario/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/users").hasAuthority("SCOPE_admin")
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf( csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))

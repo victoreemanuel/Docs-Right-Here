@@ -7,7 +7,7 @@ class CustomSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: const Color(0xFF2C343E), // Fundo escuro
+        color: const Color(0xFF2C343E), 
         child: Column(
           children: [
             DrawerHeader(

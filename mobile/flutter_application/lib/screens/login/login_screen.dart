@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/models/login_request.dart';
 import 'package:flutter_application/repositories/auth_repository.dart';
-import 'package:flutter_application/screens/example_screen.dart';
 import 'package:flutter_application/screens/login/widgets/email_field.dart';
 import 'package:flutter_application/screens/login/widgets/login_header.dart';
 import 'package:flutter_application/screens/login/widgets/password_field.dart';
+import 'package:flutter_application/screens/meus-cards/meus_cards.dart';
 import 'package:flutter_application/services/auth_service.dart';
 import 'package:flutter_application/services/dio_client.dart';
 
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ExampleScreen()),
+          MaterialPageRoute(builder: (context) => MeusCardsPage()),
         );
       }
       //

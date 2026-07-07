@@ -6,15 +6,18 @@ import com.drh.server.components.aviso.events.AvisoCriadoEvent;
 import com.drh.server.components.aviso.model.AvisoModel;
 import com.drh.server.components.aviso.model.AvisoVisibilidade;
 import com.drh.server.components.aviso.repository.AvisoRepository;
+import com.drh.server.config.ws.AvisoEvento;
 import com.drh.server.exception.GenericException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,8 @@ public class AvisoService {
     private UserRepository userRepository;
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     public List<ResponseAvisoDTO> listarAvisos(Boolean naLixeira){
         if (naLixeira == null) naLixeira = false;
@@ -35,6 +40,13 @@ public class AvisoService {
         return response.stream()
                 .map(ResponseAvisoDTO::of)
                 .toList();
+    }
+
+    public ResponseAvisoDTO listarAviso(Long id){
+        Optional<AvisoModel> response = this.avisoRepository.findById(id);
+        if (response.isEmpty()) throw new GenericException("Aviso não encontrado", HttpStatus.NOT_FOUND);
+
+        return ResponseAvisoDTO.of(response.get());
     }
 
     public ResponseAvisoDTO criarAviso(CreateAvisoDTO avisoDTO, UUID idUser){
@@ -51,8 +63,15 @@ public class AvisoService {
         );
 
         AvisoModel saved = this.avisoRepository.save(newAviso);
+        ResponseAvisoDTO response = ResponseAvisoDTO.of(saved);
+
+        this.messagingTemplate.convertAndSend(
+                "/topic/avisos",
+                AvisoEvento.criado(response)
+        );
         applicationEventPublisher.publishEvent(new AvisoCriadoEvent(saved));
-        return ResponseAvisoDTO.of(saved);
+
+        return response;
     }
 
     public ResponseAvisoDTO deletarAviso(Long avisoDTO, UUID idUser){
@@ -66,9 +85,11 @@ public class AvisoService {
 
         if (aviso.isNaLixeira()) {
             this.avisoRepository.delete(aviso);
+            this.publicarEventoWebSocket(AvisoEvento.TipoEvento.EXCLUIDO, aviso.getId());
         }else {
             aviso.setNaLixeira(true);
             this.avisoRepository.save(aviso);
+            this.publicarEventoWebSocket(AvisoEvento.TipoEvento.MOVIDO_PARA_LIXEIRA, aviso.getId());
         }
 
         return ResponseAvisoDTO.of(aviso);
@@ -87,6 +108,7 @@ public class AvisoService {
         if (aviso.isNaLixeira()){
             aviso.setNaLixeira(false);
             this.avisoRepository.save(aviso);
+            this.publicarEventoWebSocket(AvisoEvento.TipoEvento.RESTAURADO, aviso.getId());
         }
         else {
             throw new GenericException("O aviso não está na lixeira", HttpStatus.BAD_REQUEST);

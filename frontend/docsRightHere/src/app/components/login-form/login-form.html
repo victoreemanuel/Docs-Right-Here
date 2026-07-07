@@ -15,13 +15,13 @@
         <!-- Checa o campo email para ser validado -->
         @if (LoginForm.get('email')?.invalid && LoginForm.get('email')?.touched){
 
-        @if(LoginForm.get('email')?.hasError('email')){
-        <small class="text-danger">Email invalido</small>
-        }
+          @if(LoginForm.get('email')?.hasError('email')){
+            <small class="text-danger">Email invalido</small>
+          }
 
-        @if(LoginForm.get('email')?.hasError('required')){
-        <small class="text-danger">Email obrigatório</small>
-        }
+          @if(LoginForm.get('email')?.hasError('required')){
+            <small class="text-danger">Email obrigatório</small>
+          }
         }
 
       </div>
@@ -33,15 +33,14 @@
         <!-- Checa o campo email para ser validado -->
         @if (LoginForm.get('password')?.invalid && LoginForm.get('password')?.touched){
 
-        @if(LoginForm.get('password')?.hasError('minlength')){
-        <small class="text-danger">Minimo de 6 digitos</small>
-        }
+          @if(LoginForm.get('password')?.hasError('minlength')){
+            <small class="text-danger">Minimo de 6 digitos</small>
+          }
 
-        @if(LoginForm.get('password')?.hasError('required')){
-        <small class="text-danger">Senha obrigatória</small>
+          @if(LoginForm.get('password')?.hasError('required')){
+            <small class="text-danger">Senha obrigatória</small>
+          }
         }
-        }
-
 
       </div>
 
@@ -53,8 +52,7 @@
         <a routerLink="/recuperar-senha" class="link-brand text-decoration-none">Esqueceu a senha?</a>
       </div>
 
-      <button type="submit" [disabled]="LoginForm.invalid"
-        class="btn-background w-100 p-2 rounded-3 fs-5 border-0 text-white fw-bold mb-4">Entrar</button>
+      <button type="submit" [disabled]="LoginForm.invalid" class="btn-background w-100 p-2 rounded-3 fs-5 border-0 text-white fw-bold mb-4" >Entrar</button>
 
       <div class="text-center mt-3">
         <span class="text-light opacity-75">Não possui conta?</span>
