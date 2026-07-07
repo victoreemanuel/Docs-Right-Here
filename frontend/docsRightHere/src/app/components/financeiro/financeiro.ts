@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface Beneficio {
   texto: string;
@@ -34,7 +35,8 @@ export class Financeiro {
   carregandoPlanoId: string | null = null;
   erroCheckout: string | null = null;
 
-  private readonly apiUrl = 'http://localhost:8080/api/v1/financeiro/checkout';
+  private readonly apiUrl = 'https://back-end-production-fa4d.up.railway.app/api/v1/financeiro/checkout';
+  // private readonly apiUrl = `${environment}/api/v1/financeiro/checkout`
 
   planos: Plano[] = [
     {
