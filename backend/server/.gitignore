@@ -12,8 +12,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-resources/
-src/resources/
 application.properties
 app.key
 app.pub
@@ -38,3 +36,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+backend/server/dados_banco/

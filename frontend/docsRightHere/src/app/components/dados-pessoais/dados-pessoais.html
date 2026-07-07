@@ -1,0 +1,76 @@
+<div class="d-flex align-items-center justify-content-center w-100 h-100 flex-column relative background-dark">
+  <div class="background-gray w-75 p-5 rounded-4 text-white shadow">
+    <div class="text-center mb-4">
+      <h1 class="text-gradient fs-2 fw-bold m-0">Cadastro</h1>
+    </div>
+
+    <form class="w-100 mt-4" [formGroup]="formEmail" (ngSubmit)="realizarCadastro3()">
+      <div class="form-group mb-3">
+        <label for="email" class="form-label custom-label opacity-75">E-mail</label>
+        <input type="text" class="form-control form-input-dark custom-input" placeholder="seu@email.com" formControlName="email">
+
+        @if (email?.invalid && email?.touched) {
+              @if (email?.hasError('required')) {
+                <small class="text-danger">Email é obrigatório</small>
+              }
+              @if (checkEmail?.hasError('email')) {
+                <small class="text-danger">Email invalido</small>
+              }
+            }
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="checkEmail" class="form-label custom-label opacity-75">Confirmar o E-mail</label>
+        <input type="text" class="form-control form-input-dark custom-input" placeholder="confirme seu email" formControlName="checkEmail">
+
+        @if (checkEmail?.invalid && checkEmail?.touched) {
+              @if (checkEmail?.hasError('required')) {
+                <small class="text-danger">Email é obrigatório</small>
+              }
+              @if (checkEmail?.hasError('email')) {
+                <small class="text-danger">Email invalido</small>
+              }
+            }
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="senha" class="form-label custom-label opacity-75">Senha</label>
+        <input type="password" class="form-control form-input-dark custom-input" placeholder="******" formControlName="senha">
+
+        @if (senha?.invalid && senha?.touched) {
+              @if (senha?.hasError('required')) {
+                <small class="text-danger">Senha é obrigatório</small>
+              }
+              @if (senha?.hasError('minLength')) {
+                <small class="text-danger">Senha no minimo de 6 caracteres</small>
+              }
+            }
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="checkSenha" class="form-label custom-label opacity-75">Confirmar a Senha</label>
+        <input type="password" class="form-control form-input-dark custom-input" placeholder="******" formControlName="checkSenha">
+
+        @if (checkSenha?.invalid && checkSenha?.touched) {
+              @if (checkSenha?.hasError('required')) {
+                <small class="text-danger">Senha é obrigatório</small>
+              }
+              @if (senha?.hasError('minLength')) {
+                <small class="text-danger">Senha no minimo de 6 caracteres</small>
+              }
+            }
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn-background w-50 p-2 rounded-pill fs-5 border-0 text-white fw-bold">
+          Proximo
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="text-center mt-4">
+    <p class="text-light opacity-50 copyright-text" style="font-size: 0.8rem">
+      © 2025 DocsRightHere. Todos os direitos reservados.
+    </p>
+  </div>

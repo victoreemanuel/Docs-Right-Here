@@ -1,22 +1,16 @@
-<div class="container-fluid p-4">
-  <header class="d-flex align-items-center mb-4 gap-2">
-    <div class="badge-user">Paula Schmitt</div>
-    <div class="badge-role">Professor(a)</div>
-  </header>
+<div class="container-fluid d-flex flex-column pt-2 px-4 pb-4 h-100">
 
-  <section class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="fw-bold m-0">Notificações</h2>
-    <div class="d-flex gap-2 align-items-center">
-      <span class="filtro f-prof">Professor</span>
-      <span class="filtro f-sec">Secretaria</span>
-      <span class="filtro f-dir">Diretor</span>
+  <section class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 50px;">
+    <h2 class="fw-bold m-0 titulo-cards">Notificações</h2>
+
+    <div style="max-width: 1100px; padding-right: calc((100vw - 1100px) / 2 - 140px);">
       <button class="btn btn-light btn-sm border px-3">
         <i class="bi bi-filter"></i> Filtros
       </button>
     </div>
   </section>
 
-  <div style="max-width:1100px; margin:0 auto;">
+  <div class="grid-layout-scroll mx-auto" style="max-width: 1100px; width: 100%;">
     <div class="notificacao-card verde">
       <div class="d-flex align-items-center gap-3">
         <i class="bi bi-people-fill fs-4 text-white"></i>
@@ -52,6 +46,32 @@
             <small class="opacity-50">Ontem</small>
           </div>
           <p class="mb-0 opacity-75">Acesse a aba secretaria para mais informações sobre o envio.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notificacao-card">
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-exclamation-triangle-fill fs-4 text-white"></i>
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between">
+            <h6 class="mb-1 fw-bold">Manutenção do Sistema Programada</h6>
+            <small class="opacity-50">2 dias atrás</small>
+          </div>
+          <p class="mb-0 opacity-75">O banco de dados passará por manutenção preventiva nesta madrugada às 02:00.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notificacao-card verde">
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-file-earmark-check-fill fs-4 text-white"></i>
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between">
+            <h6 class="mb-1 fw-bold">Relatório de Fechamento de Notas</h6>
+            <small class="opacity-50">3 dias atrás</small>
+          </div>
+          <p class="mb-0 opacity-75">Os relatórios consolidados do conselho de classe já estão disponíveis para assinatura jurídica.</p>
         </div>
       </div>
     </div>

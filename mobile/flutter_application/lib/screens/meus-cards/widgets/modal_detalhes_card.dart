@@ -3,16 +3,27 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_application/repositories/card_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ModalDetalhesCard extends StatefulWidget {
+final String cardId;              
+  final CardRepository repository;
   final String alunoNome;
   final IconData icone;
   final Color iconeCor;
+  final List<dynamic> arquivosIniciais;
   final VoidCallback onExcluirCardCompleto;
 
   const ModalDetalhesCard({
-    super.key, required this.alunoNome, required this.icone,
-    required this.iconeCor, required this.onExcluirCardCompleto,
+    super.key, 
+    required this.cardId, 
+    required this.repository, 
+    required this.alunoNome, 
+    required this.icone,
+    required this.iconeCor, 
+    required this.arquivosIniciais,
+    required this.onExcluirCardCompleto,
   });
 
   @override
@@ -22,38 +33,61 @@ class ModalDetalhesCard extends StatefulWidget {
 class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
   final List<Map<String, String>> _arquivos = [];
 
-  void _msg(String txt) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(txt)));
-
-  void _anexarArquivoLocal() async {
-    try {
-      // Chamada direta moderna e oficial do FilePicker
-      FilePickerResult? res = await FilePicker.pickFiles(
-        type: FileType.any, 
-        allowMultiple: false,
-      );
-
-      if (res != null && res.files.isNotEmpty) {
-        var arq = res.files.first;
-        // Se der erro no 'arq.name', use 'arq.files.single.name' ou mude para a linha abaixo:
-        String nome = arq.name;
-        String caminho = arq.path ?? "";
-
-        setState(() => _arquivos.add({'nome': nome, 'caminho': caminho}));
-        _msg('$nome anexado com sucesso!');
-      }
-    } catch (e) { 
-      debugPrint("Erro anexo: $e"); 
+  @override
+  void initState() {
+    super.initState();
+    for (var arq in widget.arquivosIniciais) {
+      _arquivos.add({
+        'nome': arq['nome']?.toString() ?? 'Sem nome',
+        'caminho': arq['url']?.toString() ?? '', 
+      });
     }
   }
 
-  void _abrirArquivo(String path) async {
+  void _msg(String txt) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(txt)));
+
+ void _abrirArquivo(String path) async {
     if (path.isEmpty) return _msg('Caminho não disponível.');
-    var res = await OpenFilex.open(path);
-    if (res.type != ResultType.done) _msg('Não foi possível abrir: ${res.message}');
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      final Uri url = Uri.parse(path);
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        _msg('Não foi possível abrir o link do arquivo.');
+      }
+    } 
+
+    else {
+      var res = await OpenFilex.open(path);
+      if (res.type != ResultType.done) _msg('Não foi possível abrir: ${res.message}');
+    }
+  }
+
+  void _anexarArquivoLocal() async {
+    try {
+      FilePickerResult? res = await FilePicker.pickFiles(type: FileType.any, allowMultiple: false);
+
+      if (res != null && res.files.isNotEmpty) {
+        var arq = res.files.first;
+        String nome = arq.name;
+        String caminho = arq.path ?? "";
+
+        _msg('Fazendo upload de $nome...');
+
+        await widget.repository.uploadArquivo(widget.cardId, caminho, nome);
+
+        setState(() => _arquivos.add({'nome': nome, 'caminho': caminho}));
+        _msg('$nome salvo no servidor com sucesso!');
+      }
+    } catch (e) { 
+      _msg('Erro ao salvar arquivo no servidor: $e'); 
+    }
   }
 
   void _dispararScanner() async {
     var status = await Permission.camera.request();
+
+    if (!mounted) return;
+
     if (status.isPermanentlyDenied) {
       showDialog(
         context: context,
@@ -73,14 +107,24 @@ class _ModalDetalhesCardState extends State<ModalDetalhesCard> {
     try {
       var scanRes = await ScanbotSdk.document.startScanner(DocumentScanningFlow());
       if (scanRes is Ok<DocumentData>) {
-        var pdfRes = await ScanbotSdk.pdfGenerator.generateFromDocument(scanRes.value.uuid, PdfConfiguration(pageSize: PageSize.A4, pageDirection: PageDirection.PORTRAIT));
+        var pdfRes = await ScanbotSdk.pdfGenerator.generateFromDocument(
+          scanRes.value.uuid, 
+          PdfConfiguration(pageSize: PageSize.A4, pageDirection: PageDirection.PORTRAIT)
+        );
+        
         if (pdfRes is Ok<String>) {
           String path = pdfRes.value.replaceFirst('file://', '');
-          setState(() => _arquivos.add({'nome': path.split('/').last, 'caminho': path}));
-          _msg('Documento digitalizado!');
+          String nome = path.split('/').last;
+
+          _msg('Salvando documento escaneado...');
+          
+          await widget.repository.uploadArquivo(widget.cardId, path, nome);
+
+          setState(() => _arquivos.add({'nome': nome, 'caminho': path}));
+          _msg('Documento digitalizado e salvo no servidor!');
         }
       }
-    } catch (e) { _msg('Erro ao escanear: $e'); }
+    } catch (e) { _msg('Erro ao escanear e salvar: $e'); }
   }
 
   @override
