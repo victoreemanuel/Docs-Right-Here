@@ -1,11 +1,9 @@
 <div class="mural-wrapper d-flex flex-column pt-2 px-4 pb-4">
 
-  <!-- CABEÇALHO LIMPO (APENAS O TÍTULO) -->
   <section class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 50px;">
     <h2 class="fw-bold m-0 titulo-mural">Meus Cards</h2>
   </section>
 
-  <!-- LINHA DO BOTÃO EXCLUÍDOS ALINHADO À DIREITA (EM CIMA DO ACESSAR CARDS) -->
   <div class="d-flex justify-content-end col-md-10 mx-auto mb-2">
     <div class="ExcluirCard">
       <button (click)="abrirJanelaExcluir()" class="btn bi bi-trash text-white btn-lixeira gap-2 align-items-center d-flex rounded-4" type="submit">
@@ -14,7 +12,6 @@
     </div>
   </div>
 
-  <!-- GRID DOS CARDS CENTRALIZADO -->
   <div class="row g-4 justify-content-center text-wrap grid-acoes-rapidas">
     <div class="col-md-5">
       <button (click)="abrirJanelaCriar()" class="btn text-white gap-2 mb-2 fw-bold w-100 h-100 text-wrap btn-acao-criar">+</button>
@@ -25,8 +22,6 @@
       </button>
     </div>
   </div>
-
-  <!-- O restante do código de listagem dos cards e modais continua igual abaixo... -->
 
   <div class="row g-4 justify-content-center mt-2">
     <div class="col-md-10">
