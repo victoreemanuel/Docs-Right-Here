@@ -37,12 +37,11 @@ export class Calendario implements OnInit{
   mudarMes(delta: number) {
     this.mesAtual += delta;
 
-    // Se passou de dezembro, vai pro ano que vem
     if (this.mesAtual > 12) {
       this.mesAtual = 1;
       this.anoAtual++;
     }
-    // Se voltou antes de janeiro, vai pro ano passado
+
     else if (this.mesAtual < 1) {
       this.mesAtual = 12;
       this.anoAtual--;
@@ -50,7 +49,7 @@ export class Calendario implements OnInit{
 
     this.atualizarNomeDoMes();
     this.gerarDiasMes();
-    this.carregarBolinhaDoMes(); // Busca as bolinhas do novo mês!
+    this.carregarBolinhaDoMes();
   }
 
   irParaHoje() {
@@ -62,19 +61,17 @@ export class Calendario implements OnInit{
     this.gerarDiasMes();
     this.carregarBolinhaDoMes();
 
-    // Já deixa o dia de hoje selecionado
     this.selecionarDia(hoje.getDate());
   }
 
   selecionarDia(dia: number) {
-    this.diaSelecionado = dia; // Marca o dia para o HTML pintar de azul
+    this.diaSelecionado = dia;
 
-    // Formata a data para buscar os detalhes na API (ex: "2026-07-04")
     const mesFormatado = this.mesAtual.toString().padStart(2, '0');
     const diaFormatado = dia.toString().padStart(2, '0');
     const dataExata = `${this.anoAtual}-${mesFormatado}-${diaFormatado}`;
 
-    this.clicarNoDia(dataExata); // Chama a função que você já tinha criado!
+    this.clicarNoDia(dataExata);
   }
 
   gerarDiasMes(){
@@ -103,7 +100,6 @@ export class Calendario implements OnInit{
   }
 
   verificarSeTemAvisoNoDia(dia: number): string[] {
-    // Formata o mês e dia para sempre ter dois dígitos (ex: "07", "04")
     const mesFormatado = this.mesAtual.toString().padStart(2, '0');
     const diaFormatado = dia.toString().padStart(2, '0');
     const dataExata = `${this.anoAtual}-${mesFormatado}-${diaFormatado}`;
