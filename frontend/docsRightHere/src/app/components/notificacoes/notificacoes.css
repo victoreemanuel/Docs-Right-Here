@@ -1,17 +1,62 @@
+body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+.titulo-secao {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.container-fluid > div[style*="max-width"] {
+  margin-top: 40px !important;
+}
+
 .notificacao-card {
   background: #5c6b7a;
-  color: white;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 15px;
+  color: #ffffff;
+  padding: 18px 20px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid #4a5568;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease;
+  will-change: transform;
 }
-.notificacao-card:hover { background: #6a7a8a; }
 
-.badge-user { background: #0dcaf0; color: #fff; padding: 6px 15px; border-radius: 4px; font-weight: 500; }
-.badge-role { background: #198754; color: #fff; padding: 6px 15px; border-radius: 4px; }
+.notificacao-card:hover {
+  background: #6a7a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
 
-.filtro { padding: 8px 20px; border-radius: 25px; color: #fff; font-size: 14px; background: #8a8a8a; }
-.filtro::before { content: "●"; margin-right: 8px; }
-.f-prof::before { color: #3b5bdb; }
-.f-sec::before { color: #b533f1; }
-.f-dir::before { color: #f03e3e; }
+.notificacao-card.verde { border-left-color: #10b981; }
+.notificacao-card.professor { border-left-color: #3b5bdb; }
+.notificacao-card.secretaria { border-left-color: #b533f1; }
+.notificacao-card.diretor { border-left-color: #ef4444; }
+
+.notificacao-card h6 {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.1px;
+  margin-bottom: 4px;
+}
+
+.notificacao-card p {
+  color: #f1f5f9;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.notificacao-card small {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.notificacao-card .bi {
+  color: #ffffff !important;
+}
