@@ -1,12 +1,13 @@
+version: '3.8'
+
 services:
-  mysql:
-    image: mysql
+  mysql-db:
+    image: mysql:8.0
+    container_name: server-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123
     ports:
       - "3307:3306"
-    environment:
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=123
-      - MYSQL_DATABASE=mydb
-      - MYSQL_ROOT_PASSWORD=123
-    volumes:
-      - ./dados_banco:/var/lib/mysql
