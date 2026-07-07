@@ -2,14 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginRequest, LoginResponse } from '../models/auth-model';
 import { Observable, tap } from 'rxjs';
-import { response } from 'express';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080';
+  private readonly apiUrl = environment.apiUrl;
   private readonly tokenKey = 'access_token';
 
   login(request: LoginRequest): Observable<LoginResponse> {

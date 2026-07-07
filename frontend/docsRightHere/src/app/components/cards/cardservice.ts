@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  HttpHeaders  } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class CardsService {
 
-  private apiUrl = 'http://localhost:8080/cards';
+  private apiUrl = `${environment.apiUrl}/cards`;
 
   constructor(private http: HttpClient) { }
 
@@ -55,7 +56,7 @@ export class CardsService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get('http://localhost:8080/cards', { headers });
+    return this.http.get(`${environment.apiUrl}/cards`, { headers });
   }
 
   excluirArquivoFisico(id: number, nomeArquivo: string): Observable<any> {
